@@ -1,3 +1,4 @@
+from scheduler.Classes import Schedule
 class Node:
 	def __init__(self,data,sch=None):
 		self.children = []
