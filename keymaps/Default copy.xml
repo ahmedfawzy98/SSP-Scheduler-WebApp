@@ -1,8 +1,0 @@
-<keymap version="1" name="Default copy" parent="$default">
-  <action id="EditorLineEnd">
-    <keyboard-shortcut first-keystroke="ctrl semicolon" />
-  </action>
-  <action id="EditorLineStart">
-    <keyboard-shortcut first-keystroke="ctrl comma" />
-  </action>
-</keymap>
