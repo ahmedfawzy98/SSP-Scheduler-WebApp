@@ -1,18 +1,19 @@
-from scheduler.Classes import Schedule
+from scheduler.Classes.Schedule import Schedule
+
 class Node:
 	def __init__(self,data,sch=None):
 		self.children = []
 		self.parent = None
 		self.data = data
 		self.schedule = Schedule()
-		if(!sch):
+		if(sch != None):
 			self.schedule.clone(sch)
-		self.addToSchedule()
+		self.add_to_schedule()
 
 
 
 	def add_child(self,data):
-		child = Node(data,self.getSchedule())
+		child = Node(data,self.schedule)
 		child.parent=self
 		self.children.append(child)
 
@@ -40,7 +41,7 @@ class Node:
 	def all_available(self):
 		current = self
 		while(current!=None):
-			if(!current.data.available):
+			if(current.data.available == False):
 				return False
 			else:
 				current = current.parent
