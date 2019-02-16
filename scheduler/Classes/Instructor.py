@@ -1,6 +1,6 @@
 class Instructor:
     def __init__(self,name,courseName,group):
-    	self.priority = 0;
+        self.priority = 0
         self.name = name
         self.courseName = courseName
         self.groups = []
