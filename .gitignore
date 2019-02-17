@@ -128,15 +128,4 @@ dmypy.json
 
 
 .idea
-_windows/
-codestyles/
-keymaps/
-colors.scheme.xml
-databaseDrivers.xml
-debugger.xml
-gitub.xml
-ide.general.xml
-markdown.xml
-vcs.xml
-wsl.distributions.xml
 # End of https://www.gitignore.io/api/django
