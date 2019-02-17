@@ -1,0 +1,9 @@
+<application>
+  <component name="AbbreviationManager">
+    <abbreviations>
+      <action id="WelcomeScreen.Configure.Import">
+        <abbreviation name="imps" />
+      </action>
+    </abbreviations>
+  </component>
+</application>
