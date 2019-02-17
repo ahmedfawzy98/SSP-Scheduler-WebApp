@@ -9,3 +9,5 @@ class Period:
             self.type = 0
             self.time = Time
             self.length = 0
+            self.groupNum = 0
+            self.periodType = ''
