@@ -1,1 +1,10 @@
-<keymap version="1" name="Default copy 1" parent="$default" />
+<keymap version="1" name="Default copy 1" parent="$default">
+  <action id="EditorLineEnd">
+    <keyboard-shortcut first-keystroke="ctrl semicolon" />
+    <keyboard-shortcut first-keystroke="end" />
+  </action>
+  <action id="EditorLineStart">
+    <keyboard-shortcut first-keystroke="home" />
+    <keyboard-shortcut first-keystroke="ctrl comma" />
+  </action>
+</keymap>
