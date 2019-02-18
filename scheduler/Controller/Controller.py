@@ -1,4 +1,7 @@
 from operator import attrgetter
+
+from django.test import TestCase
+
 from scheduler.Classes.Node import Node
 from scheduler.Classes.Schedule import Schedule
 from scheduler.Controller.Input import Input

@@ -8,6 +8,7 @@ from scheduler.Classes.SchGroup import SchGroup
 from scheduler.Classes.Time import Time
 from scheduler.Classes.Lecture import Lecture
 
+
 class Input:
     courses = []
     instructors = []

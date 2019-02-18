@@ -3,5 +3,5 @@ from scheduler.Classes.Period import Period
 
 class Lecture(Period):
     def __init__(self):
-        Period.__init__(self)
-        super().periodType = 'Lec'
+        super().__init__(periodType='Lec')
+
