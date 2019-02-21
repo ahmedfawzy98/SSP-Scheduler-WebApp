@@ -96,22 +96,25 @@ class Input:
 
     def create(self):
         for group in self.groups:
-            self.instructors.append(Instructor(group.lecInstName, group.lecCrsName, group))
-        for i in range(len(self.instructors)):
+            self.instructors.append(Instructor(group.lecture.instName, group.lecture.courseName, group))
+        i = 0
+        while i < len(self.instructors):
             inst = self.instructors[i]
-            for j in range(i+1, len(self.instructors)):
+            j = i+1
+            while j < len(self.instructors):
                 if inst.name == self.instructors[j].name and inst.courseName == self.instructors[j].courseName:
-                    inst.add_group()
-                    self.instructors.pop(j)
-                    j -= 1
-        self.courses.append(Course(self.instructors[0].name, self.instructors[0]))
-        check = True
+                    inst.add_group(self.instructors[j].groups[0])
+                    del self.instructors[j]
+                else:
+                    j += 1
+            i += 1
+        self.courses.append(Course(self.instructors[0].courseName, self.instructors[0]))
         for i in range(1, len(self.instructors)):
             inst = self.instructors[i]
+            check = True
             for j in range(len(self.courses)):
                 if inst.courseName == self.courses[j].name:
                     self.courses[j].add_instructor(inst)
                     check = False
             if check:
                 self.courses.append(Course(inst.courseName, inst))
-            check = True

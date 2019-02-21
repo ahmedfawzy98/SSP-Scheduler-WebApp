@@ -18,13 +18,13 @@ class Node:
 
 	@staticmethod
 	def check_clash(group, sch):
-		if sch.checkClash(group.lecture):
+		if sch.check_clash(group.lecture):
 			return True
 		for i in range(len(group.tutorials)):
-			if sch.checkClash(group.tutorials[i]):
+			if sch.check_clash(group.tutorials[i]):
 				return True
 		for i in range(len(group.labs)):
-			if sch.checkClash(group.labs[i]):
+			if sch.check_clash(group.labs[i]):
 				return True
 		return False
 

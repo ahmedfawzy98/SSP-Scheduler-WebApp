@@ -1,13 +1,9 @@
+from scheduler.Classes.Period import Period
+
+
 class Schedule:
 	def __init__(self):
-		self.schedule = [
-						[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-						[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-						[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-						[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-						[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-						[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
-						]
+		self.schedule = [[Period for x in range(12)] for y in range(6)]
 		self.input = None
 		self.days = [False, False, False, False, False, False]
 		self.daysTaken = 0
