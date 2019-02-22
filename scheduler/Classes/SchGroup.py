@@ -7,6 +7,10 @@ class SchGroup:
         self.daysTaken = set()
         self.available = True
 
+    def setLecture(self, lecture):
+        self.lecture = lecture
+        self.daysTaken.add(lecture.time.day)
+
     def add_lab(self, lab):
         self.labs.append(lab)
         self.daysTaken.add(lab.time.day)

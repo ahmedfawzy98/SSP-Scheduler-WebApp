@@ -17,3 +17,13 @@ class Period:
         print(info, end='')
         for i in range(38-len(info)):
             print(end=' ')
+
+    def setTime(self, time):
+        self.time = time
+        if self.time.day == '':
+            self.time.day = 0
+        if self.time.fr == '':
+            self.time.fr = 0
+        if self.time.to == '':
+            self.time.to = 0
+        self.length = self.time.to - self.time.fr + 1

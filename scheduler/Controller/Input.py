@@ -24,6 +24,7 @@ class Input:
             g = SchGroup()
             t = Time()
             l = Lecture()
+            g.number = item.groupNum
             l.groupNum = item.groupNum
             l.instName = item.lecInstName
             l.courseName = item.lecCrsName
@@ -32,9 +33,9 @@ class Input:
             t.day = item.lecDay
             t.fr = item.lecFrom
             t.to = item.lecTo
-            l.time = t
+            l.setTime(t)
             l.periodType = item.lecPeriodType
-            g.lecture = l
+            g.setLecture(l)
 
             tut = Tutorial()
             t = Time()
@@ -45,7 +46,7 @@ class Input:
             t.day = item.tut1Day
             t.fr = item.tut1From
             t.to = item.tut1To
-            tut.time = t
+            tut.setTime(t)
             tut.periodType = item.tut1PeriodType
             if tut.courseName != '':
                 g.add_tut(tut)
@@ -59,7 +60,7 @@ class Input:
             t.day = item.tut2Day
             t.fr = item.tut2From
             t.to = item.tut2To
-            tut.time = t
+            tut.setTime(t)
             tut.periodType = item.tut2PeriodType
             if tut.courseName != '':
                 g.add_tut(tut)
@@ -73,7 +74,7 @@ class Input:
             t.day = item.lab1Day
             t.fr = item.lab1From
             t.to = item.lab1To
-            lab.time = t
+            lab.setTime(t)
             lab.periodType = item.lab1PeriodType
             if lab.courseName != '':
                 g.add_lab(lab)
@@ -87,7 +88,7 @@ class Input:
             t.day = item.lab2Day
             t.fr = item.lab2From
             t.to = item.lab2To
-            lab.time = t
+            lab.setTime(t)
             lab.periodType = item.lab2PeriodType
             if lab.courseName != '':
                 g.add_lab(lab)
