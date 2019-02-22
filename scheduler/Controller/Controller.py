@@ -71,6 +71,6 @@ class Controller:
                         tempPriority = self.completed[j+ii].schedule.priorityValue
                     break
             if len(self.completedPriorityDuplicate) != 0:
-                self.completedPriorityDuplicate.sort(key=attrgetter('schedule.daysTaken'), reverse=True)
+                self.completedPriorityDuplicate.sort(key=attrgetter('schedule.daysTaken'))
                 self.alternatives.append(self.completedPriorityDuplicate[0].schedule)
             perfect.data.available = True
