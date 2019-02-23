@@ -10,11 +10,10 @@ from scheduler.Classes.Lecture import Lecture
 
 
 class Input:
-    courses = []
-    instructors = []
-    groups = []
-
     def __init__(self):
+        self.courses = []
+        self.instructors = []
+        self.groups = []
         self.read()
         self.create()
 
@@ -119,3 +118,4 @@ class Input:
                     check = False
             if check:
                 self.courses.append(Course(inst.courseName, inst))
+

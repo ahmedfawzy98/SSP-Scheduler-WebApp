@@ -5,12 +5,13 @@ from scheduler.Controller.Input import Input
 
 
 class Controller:
-    schedule = Schedule()
-    alternatives = []
-    levels = []
-    level = []
-    completed = []
-    completedPriorityDuplicate = []
+    def __init__(self):
+        self.schedule = Schedule()
+        self.alternatives = []
+        self.levels = []
+        self.level = []
+        self.completed = []
+        self.completedPriorityDuplicate = []
 
     def makeSchedule(self):
         database = Input()
@@ -55,7 +56,6 @@ class Controller:
             self.completedPriorityDuplicate.clear()
             if i != 0:
                 perfect = perfect.parent
-            print(perfect.data.lecture.courseName)
             perfect.data.available = False
             for j in range(len(self.completed)):
                 if self.completed[j].all_available():
