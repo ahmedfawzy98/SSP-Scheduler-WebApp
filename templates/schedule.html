@@ -5,8 +5,34 @@
     <meta charset="UTF-8">
     <title>schedule</title>
     <link rel="stylesheet" href="{% static "schedule.css" %}">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+
 </head>
 <body>
+<div class="container">
+    <form action="/" method="post" >
+        {% csrf_token %}
+        {% for course in courses %}
+            <div class="input-group mb-3">
+                <label for="{{ course.name }}">{{ course.name }}:&nbsp</label>
+                <select class="custom-select" id="{{ course.name }}" name="{{ course.name }}">
+                    <option selected>Select Instructor</option>
+                    {% for inst in course.instructors %}
+                        <option value="{{ inst.name }}">{{ inst.name }}</option>
+                    {% endfor %}
+                </select>
+                <label for="myRange">Priority</label>
+    {#            <input id="number" type="number" value="0" min="0" max="10">#}
+                <input type="range" min="0" max="{{ coursesNum }}" value="0" class="slider" id="myRange" name="{{ course.name }}Pr">
+            </div>
+        {% endfor %}
+{#        <div class="form-group">#}
+{#            <div class="input-group mb-3">#}
+
+{#            </div>#}
+{#        </div>#}
+        <button type="submit" class="btn btn-primary">Submit</button>
+    </form>
 <div align="center">
     <table id="schedule">
         <tr>
@@ -115,6 +141,7 @@
             {{ p5_11| safe}}
         </tr>
     </table>
+</div>
 </div>
 <style>
     td{

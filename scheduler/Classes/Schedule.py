@@ -29,7 +29,7 @@ class Schedule:
             for j in range(12):
                 self.schedule[i][j] = sch.schedule[i][j]
 
-        self.priorityValue = sch.priorityValue
+        # self.priorityValue = sch.priorityValue
         self.daysTaken = sch.daysTaken
         for i in range(6):
             self.days[i] = sch.days[i]
