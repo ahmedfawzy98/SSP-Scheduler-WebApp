@@ -18,6 +18,7 @@ th, td {
 }
 th{
     background: #deedf7;
+    alignment: center;
 }
 .day{
     color: #990000;

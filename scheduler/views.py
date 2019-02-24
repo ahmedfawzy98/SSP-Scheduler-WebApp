@@ -1,5 +1,5 @@
 from django.shortcuts import render
-
+from operator import attrgetter
 # Create your views here.
 from scheduler.Controller.Controller import Controller
 from scheduler.Controller.Input import Input
@@ -10,6 +10,7 @@ def index(request):
         dict = {}
         input = Input()
         courses = input.courses
+        courses.sort(key=attrgetter('name'))
         dict["courses"] = courses
         dict["coursesNum"] = len(courses)
         i = 0
@@ -61,5 +62,7 @@ def index(request):
                     j += 1
 
             i += 1
+        courses.sort(key=attrgetter('name'))
+        # dict[]
         # del controller
         return render(request, 'schedule.html', context=dict)
