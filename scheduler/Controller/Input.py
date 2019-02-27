@@ -119,3 +119,5 @@ class Input:
             if check:
                 self.courses.append(Course(inst.courseName, inst))
 
+        for course in self.courses:
+            course.term = 6

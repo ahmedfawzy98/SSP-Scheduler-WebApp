@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+{% load staticfiles %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>SSP Scheduler</title>
+    <link rel="stylesheet" href="{% static "index.css" %}">
+    <link rel="stylesheet" href="{% static "bootstrap.css" %}">
+
+    <script type="text/javascript" src="{% static "jquery.js" %}"></script>
+
+
+    <!--<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>-->
+    <!--<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>-->
+    <!--<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>-->
+</head>
+<body>
+    <div id="container-nb">
+        <div id="menuBar">
+            <ul>
+                <li><a id="1st" data-term="1">1st Term</a></li>
+                <li><a id="2nd" data-term="2">2nd Term</a></li>
+                <li><a id="3rd" data-term="3">3rd Term</a></li>
+                <li><a id="4th" data-term="4">4th Term</a></li>
+                <li><a id="5th" data-term="5">5th Term</a></li>
+                <li><a id="6th" data-term="6">6th Term</a></li>
+                <li><a id="7th" data-term="7">7th Term</a></li>
+                <li><a id="8th" data-term="8">8th Term</a></li>
+                <li><a id="9th" data-term="9">9th Term</a></li>
+                <li><a id="10th" data-term="10">10th Term</a></li>
+                <li><a id="11th" data-term="11">Electives</a></li>
+                <li><a id="12th" data-term="12">Humanities</a></li>
+
+            </ul>
+        </div>
+
+        <form action="/schedule/" method="post" >
+            {% csrf_token %}
+            <div id="options" class="form-group">
+                <input type="button" id="selectAllBtn" class="btn btn-secondary" value="Select All">
+            </div   >
+        </form>
+    </div>
+    <script>
+        $("li>a").mousedown(function () {
+            return false;
+        });
+
+        let options = $('#options');
+{#         {% for courses in all_courses %}#}
+         {% for course in courses %}
+             options.append("<div class=\"form-check\" data-term=\""+ "{{ course.term }}" +"\">\n" +
+                 "                <input name=\""+ "{{ course.name }}" +"\" class=\"form-check-input position-static\" type=\"checkbox\" id=\"" + "{{ course.name }}" + "\">\n" +
+                 "                <label class=\"form-check-label\" for=\"" + "{{ course.name }}" + "\">" + "{{ course.name }}" + "</label>\n" +
+                 "            </div>");
+         {% endfor %}
+{#         {% endfor %}#}
+
+
+        options.append("<button id=\"continueBtn\" type=\"submit\" class=\"btn btn-primary\">Continue</button>");
+        options.children("div").hide();
+        $("#selectAllBtn").hide();
+        $("#continueBtn").hide();
+
+        $("li>a").click(function () {
+            let termNum = $(this).attr("data-term");
+            $("li>a").removeClass("active");
+            $(this).addClass("active");
+            let options = $('#options');
+            options.children("div").hide();
+            options.children("div[data-term='"+termNum+"']").show();
+            if(options.children("div[data-term='"+termNum+"']").length > 0){
+                $("#selectAllBtn").show();
+                $("#continueBtn").show();
+            }else{
+                $("#selectAllBtn").hide();
+                $("#continueBtn").hide();
+            }
+        });
+
+
+
+
+
+
+
+        // $("li>a").click(function () {
+        //     $("li>a").removeClass("active");
+        //     $(this).addClass("active");
+        //     let options = $('#options');
+        //     options.children().remove("div");
+        //     let random = randomIntFromInterval(4,8);
+        //     for(let i=1;i<random;i++) {
+        //         options.append("<div class=\"form-check\">\n" +
+        //             "                <input class=\"form-check-input position-static\" type=\"checkbox\" id=\"blankCheckbox"+i.toString()+"\" value=\"option1\" aria-label=\"...\">\n" +
+        //             "                <label class=\"form-check-label\" for=\"blankCheckbox"+i.toString()+"\">Course "+i.toString()+"</label>\n" +
+        //             "            </div>")
+        //     }
+        // });
+        //
+
+        $("#selectAllBtn").click(function () {
+            $("#options").children("div:visible").children("input:not(:checked)").click();
+        });
+
+
+    </script>
+</body>
+
+</html>

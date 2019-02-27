@@ -3,14 +3,14 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>schedule</title>
+    <title>SSP Scheduler</title>
     <link rel="stylesheet" href="{% static "schedule.css" %}">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
 
 </head>
 <body>
 <div class="container">
-    <form action="/" method="post" >
+    <form action="/schedule/" method="post" >
         {% csrf_token %}
         {% for course in courses %}
             <div class="input-group mb-3">
@@ -33,115 +33,115 @@
 {#        </div>#}
         <button id="generateBtn" type="submit" class="btn btn-primary">Generate</button>
     </form>
-<div >
-    <table id="schedule">
-        <tr>
-            <th></th>
-            <th>1</th>
-            <th>2</th>
-            <th>3</th>
-            <th>4</th>
-            <th>5</th>
-            <th>6</th>
-            <th>7</th>
-            <th>8</th>
-            <th>9</th>
-            <th>10</th>
-            <th>11</th>
-            <th>12</th>
-        </tr>
-        <tr>
-            <th class="day">Saturday</th>
-            {{ p0_0 | safe }}
-            {{ p0_1| safe}}
-            {{ p0_2| safe}}
-            {{ p0_3| safe}}
-            {{ p0_4| safe}}
-            {{ p0_5| safe}}
-            {{ p0_6| safe}}
-            {{ p0_7| safe}}
-            {{ p0_8| safe}}
-            {{ p0_9| safe}}
-            {{ p0_10| safe}}
-            {{ p0_11| safe}}
-        </tr>
-        <tr>
-            <th class="day">Sunday</th>
-            {{ p1_0| safe}}
-            {{ p1_1| safe}}
-            {{ p1_2| safe}}
-            {{ p1_3| safe}}
-            {{ p1_4| safe}}
-            {{ p1_5| safe}}
-            {{ p1_6| safe}}
-            {{ p1_7| safe}}
-            {{ p1_8| safe}}
-            {{ p1_9| safe}}
-            {{ p1_10| safe}}
-            {{ p1_11| safe}}
-        </tr>
-        <tr>
-            <th class="day">Monday</th>
-            {{ p2_0| safe}}
-            {{ p2_1| safe}}
-            {{ p2_2| safe}}
-            {{ p2_3| safe}}
-            {{ p2_4| safe}}
-            {{ p2_5| safe}}
-            {{ p2_6| safe}}
-            {{ p2_7| safe}}
-            {{ p2_8| safe}}
-            {{ p2_9| safe}}
-            {{ p2_10| safe}}
-            {{ p2_11| safe}}
-        </tr>
-        <tr>
-            <th class="day">Tuesday</th>
-            {{ p3_1| safe}}
-            {{ p3_2| safe}}
-            {{ p3_0| safe}}
-            {{ p3_3| safe}}
-            {{ p3_4| safe}}
-            {{ p3_5| safe}}
-            {{ p3_6| safe}}
-            {{ p3_7| safe}}
-            {{ p3_8| safe}}
-            {{ p3_9| safe}}
-            {{ p3_10| safe}}
-            {{ p3_11| safe}}
-        </tr>
-        <tr>
-            <th class="day">Wednesday</th>
-            {{ p4_0| safe}}
-            {{ p4_1| safe}}
-            {{ p4_2| safe}}
-            {{ p4_3| safe}}
-            {{ p4_4| safe}}
-            {{ p4_5| safe}}
-            {{ p4_6| safe}}
-            {{ p4_7| safe}}
-            {{ p4_8| safe}}
-            {{ p4_9| safe}}
-            {{ p4_10| safe}}
-            {{ p4_11| safe}}
-        </tr>
-        <tr>
-            <th class="day">Thursday</th>
-            {{ p5_0| safe}}
-            {{ p5_1| safe}}
-            {{ p5_2| safe}}
-            {{ p5_3| safe}}
-            {{ p5_4| safe}}
-            {{ p5_5| safe}}
-            {{ p5_6| safe}}
-            {{ p5_7| safe}}
-            {{ p5_8| safe}}
-            {{ p5_9| safe}}
-            {{ p5_10| safe}}
-            {{ p5_11| safe}}
-        </tr>
-    </table>
-</div>
+    <div >
+        <table id="schedule">
+            <tr>
+                <th></th>
+                <th>1</th>
+                <th>2</th>
+                <th>3</th>
+                <th>4</th>
+                <th>5</th>
+                <th>6</th>
+                <th>7</th>
+                <th>8</th>
+                <th>9</th>
+                <th>10</th>
+                <th>11</th>
+                <th>12</th>
+            </tr>
+            <tr>
+                <th class="day">Saturday</th>
+                {{ p0_0 | safe }}
+                {{ p0_1| safe}}
+                {{ p0_2| safe}}
+                {{ p0_3| safe}}
+                {{ p0_4| safe}}
+                {{ p0_5| safe}}
+                {{ p0_6| safe}}
+                {{ p0_7| safe}}
+                {{ p0_8| safe}}
+                {{ p0_9| safe}}
+                {{ p0_10| safe}}
+                {{ p0_11| safe}}
+            </tr>
+            <tr>
+                <th class="day">Sunday</th>
+                {{ p1_0| safe}}
+                {{ p1_1| safe}}
+                {{ p1_2| safe}}
+                {{ p1_3| safe}}
+                {{ p1_4| safe}}
+                {{ p1_5| safe}}
+                {{ p1_6| safe}}
+                {{ p1_7| safe}}
+                {{ p1_8| safe}}
+                {{ p1_9| safe}}
+                {{ p1_10| safe}}
+                {{ p1_11| safe}}
+            </tr>
+            <tr>
+                <th class="day">Monday</th>
+                {{ p2_0| safe}}
+                {{ p2_1| safe}}
+                {{ p2_2| safe}}
+                {{ p2_3| safe}}
+                {{ p2_4| safe}}
+                {{ p2_5| safe}}
+                {{ p2_6| safe}}
+                {{ p2_7| safe}}
+                {{ p2_8| safe}}
+                {{ p2_9| safe}}
+                {{ p2_10| safe}}
+                {{ p2_11| safe}}
+            </tr>
+            <tr>
+                <th class="day">Tuesday</th>
+                {{ p3_1| safe}}
+                {{ p3_2| safe}}
+                {{ p3_0| safe}}
+                {{ p3_3| safe}}
+                {{ p3_4| safe}}
+                {{ p3_5| safe}}
+                {{ p3_6| safe}}
+                {{ p3_7| safe}}
+                {{ p3_8| safe}}
+                {{ p3_9| safe}}
+                {{ p3_10| safe}}
+                {{ p3_11| safe}}
+            </tr>
+            <tr>
+                <th class="day">Wednesday</th>
+                {{ p4_0| safe}}
+                {{ p4_1| safe}}
+                {{ p4_2| safe}}
+                {{ p4_3| safe}}
+                {{ p4_4| safe}}
+                {{ p4_5| safe}}
+                {{ p4_6| safe}}
+                {{ p4_7| safe}}
+                {{ p4_8| safe}}
+                {{ p4_9| safe}}
+                {{ p4_10| safe}}
+                {{ p4_11| safe}}
+            </tr>
+            <tr>
+                <th class="day">Thursday</th>
+                {{ p5_0| safe}}
+                {{ p5_1| safe}}
+                {{ p5_2| safe}}
+                {{ p5_3| safe}}
+                {{ p5_4| safe}}
+                {{ p5_5| safe}}
+                {{ p5_6| safe}}
+                {{ p5_7| safe}}
+                {{ p5_8| safe}}
+                {{ p5_9| safe}}
+                {{ p5_10| safe}}
+                {{ p5_11| safe}}
+            </tr>
+        </table>
+    </div>
 </div>
 <style>
     td{

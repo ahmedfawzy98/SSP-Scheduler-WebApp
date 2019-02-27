@@ -1,12 +1,3 @@
-/*body{*/
-    /*align-items: center;*/
-    /*width: 900px;*/
-/*}*/
-
-/*form{*/
-    /*border: 1px ;*/
-/*}*/
-
 table, th, td {
     border: 1px solid #C0B8B8;
     border-collapse: collapse;
@@ -18,9 +9,8 @@ th, td {
 }
 th{
     background: #deedf7;
-    alignment: center;
 }
-.day{
+.day {
     color: #990000;
 }
 

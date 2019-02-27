@@ -1,0 +1,70 @@
+
+#container-nb{
+    width: 80%;
+    font-family: Helvetica, Sans-Serif;
+    margin: 20px auto;
+    position: relative;
+    top: 100px;
+    border:1px solid #000000;
+    border-radius: 10px;
+}
+
+#options{
+    margin: 15px;
+    overflow: hidden;
+}
+
+ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+    background-color: #444444;
+    border-radius: 8px;
+}
+
+li {
+    float: left;
+}
+
+li a {
+    display: inline-block;
+    color: white !important;
+    text-align: center;
+    padding: 14px 13px;
+    text-decoration: none;
+    cursor: pointer;
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    font-size: 13px;
+
+}
+
+
+input[type=checkbox]{
+}
+
+/* Change the link color to #111 (black) on hover */
+li a:hover {
+    /*background-color: #184a6e;*/
+    background-color: #898887;
+}
+
+.active {
+    background-color: #189ad3;
+}
+
+#selectAllBtn{
+    float: right;
+    position: relative;
+    z-index: 10;
+}
+
+#continueBtn{
+    float: right;
+    /*position: relative;*/
+    /*z-index: 10;*/
+}
