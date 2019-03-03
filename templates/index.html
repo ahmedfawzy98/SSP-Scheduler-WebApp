@@ -16,30 +16,35 @@
 </head>
 <body>
     <div id="container-nb">
-        <div id="menuBar">
-            <ul>
-                <li><a id="1st" data-term="1">1st Term</a></li>
-                <li><a id="2nd" data-term="2">2nd Term</a></li>
-                <li><a id="3rd" data-term="3">3rd Term</a></li>
-                <li><a id="4th" data-term="4">4th Term</a></li>
-                <li><a id="5th" data-term="5">5th Term</a></li>
-                <li><a id="6th" data-term="6">6th Term</a></li>
-                <li><a id="7th" data-term="7">7th Term</a></li>
-                <li><a id="8th" data-term="8">8th Term</a></li>
-                <li><a id="9th" data-term="9">9th Term</a></li>
-                <li><a id="10th" data-term="10">10th Term</a></li>
-                <li><a id="11th" data-term="11">Electives</a></li>
-                <li><a id="12th" data-term="12">Humanities</a></li>
+        <p id="crHours" style="margin: 20px 10px;padding: 0;text-align: right;">Credit Hours : <span id="hours">0</span></p>
+        <div id="container-nb-form">
+            <div id="menuBar">
+                <ul>
+                    <li><a id="1st" data-term="1">1st Term</a></li>
+                    <li><a id="2nd" data-term="2">2nd Term</a></li>
+                    <li><a id="3rd" data-term="3">3rd Term</a></li>
+                    <li><a id="4th" data-term="4">4th Term</a></li>
+                    <li><a id="5th" data-term="5">5th Term</a></li>
+                    <li><a id="6th" data-term="6">6th Term</a></li>
+                    <li><a id="7th" data-term="7">7th Term</a></li>
+                    <li><a id="8th" data-term="8">8th Term</a></li>
+                    <li><a id="9th" data-term="9">9th Term</a></li>
+                    <li><a id="10th" data-term="10">10th Term</a></li>
+                    <li><a id="11th" data-term="11">Electives</a></li>
+                    <li><a id="12th" data-term="12">Humanities</a></li>
 
-            </ul>
+                </ul>
+            </div>
+
+            <form action="/schedule/" method="post" >
+                {% csrf_token %}
+                    <label for="hoursIn" style="display: none" style="display: none;"></label>
+                    <input type="number" name="hoursTaken" value="0" id="hoursIn" style="display: none" >
+                <div id="options" class="form-group">
+                    <input type="button" id="selectAllBtn" class="btn btn-secondary" value="Select All">
+                </div   >
+            </form>
         </div>
-
-        <form action="/schedule/" method="post" >
-            {% csrf_token %}
-            <div id="options" class="form-group">
-                <input type="button" id="selectAllBtn" class="btn btn-secondary" value="Select All">
-            </div   >
-        </form>
     </div>
     <script>
         $("li>a").mousedown(function () {
@@ -50,7 +55,7 @@
 {#         {% for courses in all_courses %}#}
          {% for course in courses %}
              options.append("<div class=\"form-check\" data-term=\""+ "{{ course.term }}"+"\">\n" +
-                 "                <input name=\""+ "{{ course.name }}" +"\" class=\"form-check-input position-static\" type=\"checkbox\" id=\"" + "{{ course.name }}" + "\">\n" +
+                 "                <input data-crh=\""+ "{{ course.creditHours }}" +"\" name=\""+ "{{ course.name }}" +"\" class=\"form-check-input position-static\" type=\"checkbox\" id=\"" + "{{ course.name }}" + "\">\n" +
                  "                <label class=\"form-check-label\" for=\"" + "{{ course.name }}" + "\">" + "{{ course.name }}"+" ("+"{{ course.creditHours }}" +")"+ "</label>\n" +
                  "            </div>");
          {% endfor %}
@@ -76,7 +81,6 @@
                 $("#selectAllBtn").hide();
                 $("#continueBtn").hide();
             }
-            console.log(termNum)
         });
 
 
@@ -102,6 +106,18 @@
 
         $("#selectAllBtn").click(function () {
             $("#options").children("div:visible").children("input:not(:checked)").click();
+        });
+
+        $("input:checkbox").change(function () {
+           if(this.checked){
+                $("#hours").html(parseInt($("#hours").html())+parseInt($(this).attr("data-crh")));
+
+           }
+           else{
+               $("#hours").html(parseInt($("#hours").html())-parseInt($(this).attr("data-crh")));
+           }
+           let hours = parseInt($("#hours").html());
+           $("#hoursIn").attr("value",$("#hours").html());
         });
 
 

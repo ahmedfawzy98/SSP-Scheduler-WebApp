@@ -103,6 +103,8 @@ def index(request):
         allcourses = input.courses
         # "selection" indicates that the request is from courses selection page
         if request.POST.get("submit") == "selection":
+            if int(request.POST.get("hoursTaken")) < 12:
+                return render(request,"illegal.html")
             if len(courses) > 0:
                 clean_priority(courses)
                 courses.clear()
