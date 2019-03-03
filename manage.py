@@ -15,4 +15,4 @@ if __name__ == '__main__':
     execute_from_command_line(sys.argv)
 
 
-exec(open("scheduler/tests.py").read())
+# exec(open("scheduler/tests.py").read())

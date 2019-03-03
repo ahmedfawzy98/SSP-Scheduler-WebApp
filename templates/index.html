@@ -49,9 +49,9 @@
         let options = $('#options');
 {#         {% for courses in all_courses %}#}
          {% for course in courses %}
-             options.append("<div class=\"form-check\" data-term=\""+ "{{ course.term }}" +"\">\n" +
+             options.append("<div class=\"form-check\" data-term=\""+ "{{ course.term }}"+"\">\n" +
                  "                <input name=\""+ "{{ course.name }}" +"\" class=\"form-check-input position-static\" type=\"checkbox\" id=\"" + "{{ course.name }}" + "\">\n" +
-                 "                <label class=\"form-check-label\" for=\"" + "{{ course.name }}" + "\">" + "{{ course.name }}" + "</label>\n" +
+                 "                <label class=\"form-check-label\" for=\"" + "{{ course.name }}" + "\">" + "{{ course.name }}"+" ("+"{{ course.creditHours }}" +")"+ "</label>\n" +
                  "            </div>");
          {% endfor %}
 {#         {% endfor %}#}
@@ -76,6 +76,7 @@
                 $("#selectAllBtn").hide();
                 $("#continueBtn").hide();
             }
+            console.log(termNum)
         });
 
 

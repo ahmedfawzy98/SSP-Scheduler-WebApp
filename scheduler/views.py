@@ -8,11 +8,11 @@ courses = []
 
 
 def select_courses(request):
-
+    courses.clear()
     input = Input()
-    courses = input.courses
+    allcourses = input.getCoursesOnly()
     dict = {}
-    dict["courses"] = courses
+    dict["courses"] = allcourses
     return render(request, 'index.html', context=dict)
 
 
@@ -101,6 +101,7 @@ def index(request):
         controller = Controller()
         input = Input()
         allcourses = input.courses
+        # "selection" indicates that the request is from courses selection page
         if request.POST.get("submit") == "selection":
             if len(courses) > 0:
                 clean_priority(courses)
@@ -120,7 +121,7 @@ def index(request):
                     j += 1
                 i += 1
             return render(request, 'schedule.html', context=dict)
-
+        #"generation" indicates that the request is from the current page */schedule/
         elif request.POST.get("submit") == "generation":
             clean_priority(courses)
             # courses.clear()

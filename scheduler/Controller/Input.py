@@ -17,6 +17,15 @@ class Input:
         self.read()
         self.create()
 
+
+    def getCoursesOnly(self):
+        database = Group.objects.all()
+        courses = {}
+        for row in database:
+            courses[row.lecCrsName] = Course(row.lecCrsName,termNum=row.termNum,crHrs=row.creditHours)
+
+        return list(courses.values())
+
     def read(self):
         database = Group.objects.all()
         for item in database:

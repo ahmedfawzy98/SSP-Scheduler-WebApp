@@ -6,6 +6,8 @@ class SchGroup:
         self.number = None
         self.daysTaken = set()
         self.available = True
+        self.termNum = 0
+        self.creditHours = 0
 
     def setLecture(self, lecture):
         self.lecture = lecture

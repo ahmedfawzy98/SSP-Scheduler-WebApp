@@ -51,3 +51,6 @@ class Group(models.Model):
     lab2From = models.PositiveIntegerField()
     lab2To = models.PositiveIntegerField()
     lab2PeriodType = models.CharField(max_length=256)
+
+    termNum = models.PositiveIntegerField()
+    creditHours = models.PositiveIntegerField()
