@@ -15,10 +15,6 @@ class Controller:
         self.courses = []
 
     def makeSchedule(self):
-        # database = Input()
-        # self.courses = database.courses
-        # self.courses[2].priority = 5
-        # self.courses[2].instructors[1].priority = 5
         self.courses.sort(key=attrgetter('priority'), reverse=True)
         for course in self.courses:
             course.instructors.sort(key=attrgetter('priority'), reverse=True)
@@ -33,46 +29,42 @@ class Controller:
             for j in range(len(self.courses[i].instructors)):
                 for k in range(len(self.courses[i].instructors[j].groups)):
                     for o in range(len(self.levels[i - 1])):
+                        # check if the current group doesn't clash with the current tree branch
                         if not self.levels[i - 1][o].check_clash(self.courses[i].instructors[j].groups[k],
                                                                  self.levels[i - 1][o].schedule):
-                            # self.levels[i-1][o].schedule.add_to_priority(self.courses[i].instructors[j].priority)
+                            # add the group to the current branch
                             self.levels[i - 1][o].add_child(self.courses[i].instructors[j].groups[k])
+                            # update the last added child total schedule's priority
                             self.levels[i - 1][o].children[-1].schedule.add_to_priority(
                                 self.courses[i].instructors[j].priority +
-                                self.levels[i - 1][o].children[-1].parent.schedule.priorityValue)
+                                self.levels[i - 1][o].children[-1].parent.get_total_priority())
+                            # add the last added child to the current level
                             self.levels[i].append(self.levels[i - 1][o].children[-1])
+                            # if the current course is the last add the last added child to the completed array
                             if i == len(self.courses) - 1:
                                 self.completed.append(self.levels[i - 1][o].children[-1])
         self.completed.sort(key=attrgetter('schedule.priorityValue'), reverse=True)
-        i = 1
-        tempPriority = self.completed[i].schedule.priorityValue
-        self.completedPriorityDuplicate.append(self.completed[0])
-        while self.completed[0].schedule.priorityValue == tempPriority:
-            self.completedPriorityDuplicate.append(self.completed[i])
-            i += 1
-            if i == len(self.completed):
-                break
-            tempPriority = self.completed[i].schedule.priorityValue
+        self.completedPriorityDuplicate = [self.completed[i] for i in range(0,len(self.completed))
+                                           if self.completed[0].get_total_priority()
+                                           == self.completed[i].get_total_priority()]
+
         self.completedPriorityDuplicate.sort(key=attrgetter('schedule.daysTaken'))
         self.schedule = self.completedPriorityDuplicate[0].schedule
         perfect = self.completedPriorityDuplicate[0]
+        # getting alternative schedules
         for i in range(len(self.courses)):
             self.completedPriorityDuplicate.clear()
             if i != 0:
                 perfect = perfect.parent
             perfect.data.available = False
+            # iterate until a schedule without an unavailable group is found
             for j in range(len(self.completed)):
                 if self.completed[j].all_available():
-                    self.completedPriorityDuplicate.append(self.completed[j])
-                    ii = 1
-                    tempPriority = self.completed[j + ii].schedule.priorityValue
-                    while self.completed[j].schedule.priorityValue == tempPriority:
-                        if self.completed[j + ii].all_available():
-                            self.completedPriorityDuplicate.append(self.completed[j + ii])
-                        ii += 1
-                        if j + ii == len(self.completed):
-                            break
-                        tempPriority = self.completed[j + ii].schedule.priorityValue
+                    # add the first found all-available schedule and its priority duplicates to completedPriorityD
+                    self.completedPriorityDuplicate = [self.completed[j+k] for k in range(0, len(self.completed))
+                                                       if (self.completed[j].get_total_priority()
+                                                       == self.completed[j+k].get_total_priority()
+                                                           and self.completed[j+k].all_available())]
                     break
             if len(self.completedPriorityDuplicate) != 0:
                 self.completedPriorityDuplicate.sort(key=attrgetter('schedule.daysTaken'))

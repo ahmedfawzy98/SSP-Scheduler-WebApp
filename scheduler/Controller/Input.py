@@ -17,14 +17,10 @@ class Input:
         self.read()
         self.create()
 
-
     def getCoursesOnly(self):
-        database = Group.objects.all()
-        courses = {}
-        for row in database:
-            courses[row.lecCrsName] = Course(row.lecCrsName,termNum=row.termNum,crHrs=row.creditHours)
-
-        return list(courses.values())
+        # using dict to avoid duplicates
+        return list({row.lecCrsName: Course(row.lecCrsName, termNum=row.termNum, crHrs=row.creditHours)
+                     for row in Group.objects.all()}.values())
 
     def read(self):
         database = Group.objects.all()
@@ -109,7 +105,7 @@ class Input:
         i = 0
         while i < len(self.instructors):
             inst = self.instructors[i]
-            j = i+1
+            j = i + 1
             while j < len(self.instructors):
                 if inst.name == self.instructors[j].name and inst.courseName == self.instructors[j].courseName:
                     inst.add_group(self.instructors[j].groups[0])

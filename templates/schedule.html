@@ -22,15 +22,11 @@
                     {% endfor %}
                 </select>
                 <label for="myRange"></label>
-    {#            <input id="number" type="number" value="0" min="0" max="10">#}
+
                 <input type="range" min="0" max="{{ coursesNum }}" value="0" class="slider sliders" id="myRange" name="{{ course.name }}Pr">
             </div>
         {% endfor %}
-{#        <div class="form-group">#}
-{#            <div class="input-group mb-3">#}
 
-{#            </div>#}
-{#        </div>#}
         <button id="generateBtn" type="submit" class="btn btn-primary" name="submit" value="generation">Generate</button>
     </form>
     <div >

@@ -43,3 +43,6 @@ class Node:
             else:
                 current = current.parent
         return True
+
+    def get_total_priority(self):
+        return self.schedule.priorityValue
