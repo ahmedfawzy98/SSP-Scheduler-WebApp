@@ -61,7 +61,7 @@ class Controller:
             for j in range(len(self.completed)):
                 if self.completed[j].all_available():
                     # add the first found all-available schedule and its priority duplicates to completedPriorityD
-                    self.completedPriorityDuplicate = [self.completed[j+k] for k in range(0, len(self.completed))
+                    self.completedPriorityDuplicate = [self.completed[j+k] for k in range(0, len(self.completed)-j-1)
                                                        if (self.completed[j].get_total_priority()
                                                        == self.completed[j+k].get_total_priority()
                                                            and self.completed[j+k].all_available())]

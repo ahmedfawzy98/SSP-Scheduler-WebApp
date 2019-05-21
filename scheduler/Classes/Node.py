@@ -20,6 +20,11 @@ class Node:
     def check_clash(group, sch):
         if sch.check_clash(group.lecture):
             return True
+
+        if group.exLecture is not None:
+            if sch.check_clash(group.exLecture):
+                return True
+
         for i in range(len(group.tutorials)):
             if sch.check_clash(group.tutorials[i]):
                 return True
@@ -30,6 +35,8 @@ class Node:
 
     def add_to_schedule(self):
         self.schedule.add_period(self.data.lecture)
+        if self.data.exLecture is not None:
+            self.schedule.add_period(self.data.exLecture)
         for i in range(len(self.data.tutorials)):
             self.schedule.add_period(self.data.tutorials[i])
         for i in range(len(self.data.labs)):

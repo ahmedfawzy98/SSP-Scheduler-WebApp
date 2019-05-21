@@ -41,6 +41,24 @@ class Input:
             l.periodType = item.lecPeriodType
             g.setLecture(l)
 
+            ###
+            t = Time()
+            l = Lecture()
+            l.groupNum = item.groupNum
+            l.instName = item.lecInstName
+            l.courseName = item.lecCrsName
+            l.place = item.lecExPlace
+            l.type = item.lecType
+            t.day = item.lecExDay
+            t.fr = item.lecExFrom
+            t.to = item.lecExTo
+            if l.place is not None:
+                l.setTime(t)
+            l.periodType = item.lecPeriodType
+            if l.place is not None:
+                g.setExLecture(l)
+            ###
+
             tut = Tutorial()
             t = Time()
             tut.instName = item.tut1InstName
@@ -52,7 +70,7 @@ class Input:
             t.to = item.tut1To
             tut.setTime(t)
             tut.periodType = item.tut1PeriodType
-            if tut.courseName != '':
+            if tut.courseName is not None:
                 g.add_tut(tut)
 
             tut = Tutorial()
@@ -66,7 +84,7 @@ class Input:
             t.to = item.tut2To
             tut.setTime(t)
             tut.periodType = item.tut2PeriodType
-            if tut.courseName != '':
+            if tut.courseName is not None:
                 g.add_tut(tut)
 
             lab = Lab()
@@ -80,7 +98,7 @@ class Input:
             t.to = item.lab1To
             lab.setTime(t)
             lab.periodType = item.lab1PeriodType
-            if lab.courseName != '':
+            if lab.courseName is not None:
                 g.add_lab(lab)
 
             lab = Lab()
@@ -94,7 +112,7 @@ class Input:
             t.to = item.lab2To
             lab.setTime(t)
             lab.periodType = item.lab2PeriodType
-            if lab.courseName != '':
+            if lab.courseName is not None:
                 g.add_lab(lab)
 
             self.groups.append(g)

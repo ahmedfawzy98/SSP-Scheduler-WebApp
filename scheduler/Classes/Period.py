@@ -20,10 +20,10 @@ class Period:
 
     def setTime(self, time):
         self.time = time
-        if self.time.day == '':
+        if self.time.day is None:
             self.time.day = 0
-        if self.time.fr == '':
+        if self.time.fr is None:
             self.time.fr = 0
-        if self.time.to == '':
+        if self.time.to is None:
             self.time.to = 0
         self.length = self.time.to - self.time.fr + 1
