@@ -2,22 +2,25 @@ from scheduler.Classes.Schedule import Schedule
 
 
 class Node:
-    def __init__(self, data, sch=None):
+    def __init__(self, data, sch=None, iTut=-1,iLab=-1):
         self.children = []
         self.parent = None
         self.data = data
         self.schedule = Schedule()
         if sch is not None:
             self.schedule.clone(sch)
+        self.tutNum = iTut
+        self.labNum = iLab
         self.add_to_schedule()
 
-    def add_child(self, data):
-        child = Node(data, self.schedule)
+
+    def add_child(self, data, iTut, iLab):
+        child = Node(data, self.schedule, iTut, iLab)
         child.parent = self
         self.children.append(child)
 
     @staticmethod
-    def check_clash(group, sch):
+    def check_clash(group, sch , iTut, iLab):
         if sch.check_clash(group.lecture):
             return True
 
@@ -25,11 +28,11 @@ class Node:
             if sch.check_clash(group.exLecture):
                 return True
 
-        for i in range(len(group.tutorials)):
-            if sch.check_clash(group.tutorials[i]):
+        if iTut != -1:
+            if sch.check_clash(group.tutorials[iTut]):
                 return True
-        for i in range(len(group.labs)):
-            if sch.check_clash(group.labs[i]):
+        if iLab != -1:
+            if sch.check_clash(group.labs[iLab]):
                 return True
         return False
 
@@ -37,10 +40,10 @@ class Node:
         self.schedule.add_period(self.data.lecture)
         if self.data.exLecture is not None:
             self.schedule.add_period(self.data.exLecture)
-        for i in range(len(self.data.tutorials)):
-            self.schedule.add_period(self.data.tutorials[i])
-        for i in range(len(self.data.labs)):
-            self.schedule.add_period(self.data.labs[i])
+        if self.tutNum != -1:
+            self.schedule.add_period(self.data.tutorials[self.tutNum])
+        if self.labNum != -1:
+            self.schedule.add_period(self.data.labs[self.labNum])
 
     def all_available(self):
         current = self
