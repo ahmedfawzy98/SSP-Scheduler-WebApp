@@ -40,15 +40,6 @@ class Node:
         return False
 
     def add_to_schedule(self):
-<<<<<<< HEAD
-        self.schedule.add_period(self.data.lecture)
-        if self.data.exLecture is not None:
-            self.schedule.add_period(self.data.exLecture)
-        if self.tutNum != -1:
-            self.schedule.add_period(self.data.tutorials[self.tutNum])
-        if self.labNum != -1:
-            self.schedule.add_period(self.data.labs[self.labNum])
-=======
         if self.data is not None:
             self.schedule.add_period(self.data.lecture)
             if self.data.exLecture is not None:
@@ -57,7 +48,6 @@ class Node:
                 self.schedule.add_period(self.data.tutorials[self.tutNum])
             if self.labNum != -1:
                 self.schedule.add_period(self.data.labs[self.labNum])
->>>>>>> bruntime
 
     def all_available(self):
         current = self
