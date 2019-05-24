@@ -61,7 +61,6 @@ def index(request):
             return render(request, 'schedule.html', context=dict)
         # "generation" indicates that the request is from the current page */schedule/
         elif request.POST.get("submit") == "generation":
-            start_time = time.time()
             clean_priority(courses)
             dict["courses"] = courses
             dict["coursesNum"] = len(courses)
@@ -101,7 +100,6 @@ def index(request):
 
                 i += 1
             courses.sort(key=attrgetter('name'))
-            print("Total Time:--- %s seconds ---" % (time.time() - start_time))
             return render(request, 'schedule.html', context=dict)
 
 
