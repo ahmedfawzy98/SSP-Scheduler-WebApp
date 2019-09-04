@@ -3,6 +3,8 @@ from operator import attrgetter
 # Create your views here.
 from scheduler.Controller.Controller import Controller
 from scheduler.Controller.Input import Input
+import copy
+
 import time
 
 courses = []
@@ -75,7 +77,7 @@ def index(request):
                             if pr[1] == inst.name:
                                 inst.priority = int(request.POST.get(course.name + "Pr"))
                                 course.priority = int(request.POST.get(course.name + "Pr"))
-            controller.courses = courses
+            controller.courses = copy.deepcopy(courses)
             controller.makeSchedule()
             schedule = controller.schedule.schedule
             i = 0
