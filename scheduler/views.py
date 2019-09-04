@@ -66,7 +66,7 @@ def index(request):
             dict["courses"] = courses
             dict["coursesNum"] = len(courses)
             for course in courses:
-                if request.POST.get(course.name) != "Select Instructor":
+                if request.POST.get(course.name) != "Any Instructor":
                     priority.append((course.name, request.POST.get(course.name)))
             for pr in priority:
                 for course in courses:

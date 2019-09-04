@@ -4,6 +4,8 @@ table, th, td {
 
 }
 th, td {
+    width: 7.68% !important;
+    height: 14.28% !important;
     padding: 3px;
     text-align: center;
 }
