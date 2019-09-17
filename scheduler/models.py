@@ -4,6 +4,7 @@ from django.db import models
 
 
 class Group(models.Model):
+    department = models.CharField(max_length=256, default=None, blank=True, null=True)
     termNum = models.PositiveIntegerField(default=None, blank=True, null=True)
     creditHours = models.PositiveIntegerField(default=None, blank=True, null=True)
     groupNum = models.PositiveIntegerField(default=None, blank=True, null=True)
