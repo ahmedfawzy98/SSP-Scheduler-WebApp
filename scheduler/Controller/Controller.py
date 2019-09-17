@@ -3,6 +3,7 @@ from scheduler.Classes.Node import Node
 from scheduler.Classes.Schedule import Schedule
 from scheduler.Controller.Input import Input
 import time
+import random
 
 
 class Controller:
@@ -13,6 +14,7 @@ class Controller:
         self.level = []
         self.completed = []
         self.completedPriorityDuplicate = []
+        self.completedDaysDuplicate = []
         self.courses = []
         self.coursesNum = None
         self.bestCompleted = [7,-1]
@@ -40,7 +42,7 @@ class Controller:
                                 child = node.children[-1]
                                 if cNum+1 < self.lastPrioCourse:
                                     self.build_tree(node.children[-1], cNum + 1)
-                                elif child.schedule.priorityValue > self.bestCompleted[1]:
+                                elif child.schedule.priorityValue >= self.bestCompleted[1]:
                                     self.build_tree(node.children[-1], cNum + 1)
                                 elif child.schedule.priorityValue <= self.bestCompleted[1]:
                                     if child.schedule.daysTaken < self.bestCompleted[0]:
@@ -62,11 +64,20 @@ class Controller:
         self.courses.sort(key=attrgetter('priority'), reverse=True)
         for course in self.courses:
             course.instructors.sort(key=attrgetter('priority'), reverse=True)
+            for inst in course.instructors:
+                random.shuffle(inst.groups)
+
         start_time = time.time()
         self.coursesNum = len(self.courses)
         for ind,course in enumerate(self.courses):
             if course.priority > 0:
                 self.lastPrioCourse = ind
+        copy = self.courses[self.lastPrioCourse:] if self.lastPrioCourse > -1 else self.courses[0:]
+        random.shuffle(copy)
+        if self.lastPrioCourse > -1:
+            self.courses[self.lastPrioCourse:] = copy
+        else:
+            self.courses[0:] = copy
         # if the prioritized courses are 2 or less then only for these courses keep the prioritized instructor and
         # delete the others
         if 0 <= self.lastPrioCourse <= 1:
@@ -81,7 +92,12 @@ class Controller:
                                            == self.completed[i].get_total_priority()]
 
         self.completedPriorityDuplicate.sort(key=attrgetter('schedule.daysTaken'))
-        self.schedule = self.completedPriorityDuplicate[0].schedule
+        self.completedDaysDuplicate = [self.completedPriorityDuplicate[i] for i in range(0, len(self.completedPriorityDuplicate))
+                                           if self.completedPriorityDuplicate[0].schedule.daysTaken
+                                           == self.completedPriorityDuplicate[i].schedule.daysTaken]
+        self.schedule = random.choice(self.completedDaysDuplicate).schedule
+        print("HAKUNA")
+        # self.schedule = self.completedPriorityDuplicate[0].schedule
         ####
         # Alternative schedules code
         ####
