@@ -6,6 +6,8 @@
     <title>SSP Scheduler</title>
     <link rel="stylesheet" href="{% static "schedule.css" %}">
     <link rel="stylesheet" href="{% static "bootstrap.css" %}">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
+    <script src="https://files.codepedia.info/files/uploads/iScripts/html2canvas.js"></script>
 
 
 </head>
@@ -54,10 +56,10 @@
     </form>
     <div class="row">
         <div class="col-md-12 text-center">
-            <div class="btn-group btn-group btn-group-toggle" data-toggle="buttons">
+            <div class="btn-group btn-group btn-group-toggle btn-block" data-toggle="buttons">
 
                 {% for courseNameS,courseName in coursesNames %}
-                    <button class="btn btn-secondary port-item" data-toggle="collapse" data-target="#{{courseName}}Sch">{{ courseNameS }}</button>
+                    <button class="btn btn-no-r btn-no-f btn-secondary port-item" data-toggle="collapse" data-target="#{{courseName}}Sch">{{ courseNameS }}</button>
                 {% endfor %}
 
             </div>
@@ -181,6 +183,11 @@
         </div>
         {% endfor %}
     </div>
+{#    <button id="btn-download" class="btn btn-success">Download Schedule</button>#}
+    <a id="btn-download" class="btn btn-success" href="#end">Download</a>
+    <footer id="end">
+
+    </footer>
 
 </div>
 <style>
@@ -238,11 +245,47 @@
 			  crossorigin="anonymous"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+{#<script src="{% static "html2canvas.js" %}" type="text/javascript"></script>#}
 <script>
-    $('.port-item').click( function(e) {
-      $('.collapse').collapse('hide');
-      $('.active').removeClass("active")
+
+
+    $(document).ready(function () {
+        {#var element = $("#html-content-holder"); // global variable#}
+        {#let getCanvas; // global variable#}
+        var element // global variable
+        var getCanvas; // global variable
+        var firstClick = false;
+
+        $("#btn-download").on('click', function (evt) {
+            element = $(".show").first();
+            html2canvas(element, {
+             onrendered: function (canvas) {
+                    getCanvas = canvas;
+                    console.log("done")
+                 }
+             });
+            var imgageData = getCanvas.toDataURL("image/png");
+            // Now browser starts downloading it instead of just showing it
+            var newData = imgageData.replace(/^data:image\/png/, "data:application/octet-stream");
+            $("#btn-download").attr("download", element.attr('id')+".png").attr("href", newData);
+        });
+
+        $('.port-item').click( async function(e) {
+            $('.collapse').collapse('hide');
+            $('.active').removeClass("active");
+            $(".port-item").not(this).attr("disabled", true);
+            await sleep(250);
+            $(".port-item").not(this).attr("disabled", false);
+            $("#btn-download").click();
+        });
+
+        function sleep(ms) {
+          return new Promise(resolve => setTimeout(resolve, ms));
+        }
+
     });
+
+
 </script>
 </body>
 </html>

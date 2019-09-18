@@ -63,6 +63,11 @@ class Controller:
 
     def makeSchedule(self):
         self.courses.sort(key=attrgetter('priority'), reverse=True)
+        # if self.courses[0].priority == 0:
+        #     self.courses[0].priority = 1
+        #     for instructor in self.courses[0].instructors:
+        #         instructor.priority = 1
+
         for course in self.courses:
             course.instructors.sort(key=attrgetter('priority'), reverse=True)
             for inst in course.instructors:
@@ -73,12 +78,12 @@ class Controller:
         for ind,course in enumerate(self.courses):
             if course.priority > 0:
                 self.lastPrioCourse = ind
-        copy = self.courses[self.lastPrioCourse:] if self.lastPrioCourse > -1 else self.courses[0:]
-        random.shuffle(copy)
-        if self.lastPrioCourse > -1:
-            self.courses[self.lastPrioCourse:] = copy
-        else:
-            self.courses[0:] = copy
+        # copy = self.courses[self.lastPrioCourse:] if self.lastPrioCourse > -1 else self.courses[0:]
+        # random.shuffle(copy)
+        # if self.lastPrioCourse > -1:
+        #     self.courses[self.lastPrioCourse:] = copy
+        # else:
+        #     self.courses[0:] = copy
         # if the prioritized courses are 2 or less then only for these courses keep the prioritized instructor and
         # delete the others
         if 0 <= self.lastPrioCourse <= 1:

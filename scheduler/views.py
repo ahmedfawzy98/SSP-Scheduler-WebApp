@@ -110,7 +110,7 @@ def index(request):
                                 schedulesHTML[ind][i][j+jj] = ""
                             j += sch[i][j].length
                         else:
-                            schedulesHTML[ind][i][j] = "<td></td>"
+                            schedulesHTML[ind][i][j] = "<td bgcolor='#FFFFFF'></td>"
                             j += 1
 
                     i += 1

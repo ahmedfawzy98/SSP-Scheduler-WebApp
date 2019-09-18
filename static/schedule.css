@@ -8,11 +8,29 @@ th, td {
     height: 14.28% !important;
     padding: 3px;
     text-align: center;
+    /*background-color: #6ac;*/
 }
 th{
     background: #deedf7;
 }
 .day {
     color: #990000;
+}
+
+.button-group .btn{
+
+    /*border-radius: 0 !important;*/
+}
+
+.btn-no-r{
+    border-bottom-left-radius: 0 !important;
+    border-bottom-right-radius: 0 !important;
+    /*border-radius: 0 !important;*/
+
+}
+
+.btn:focus {
+    outline: none !important;
+    box-shadow: none !important;
 }
 
