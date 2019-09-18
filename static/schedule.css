@@ -17,10 +17,10 @@ th{
     color: #990000;
 }
 
-.button-group .btn{
+/*.button-group .btn{*/
 
-    /*border-radius: 0 !important;*/
-}
+/*    border-radius: 0 !important;*/
+/*}*/
 
 .btn-no-r{
     border-bottom-left-radius: 0 !important;
@@ -34,3 +34,6 @@ th{
     box-shadow: none !important;
 }
 
+.btn:disabled{
+    opacity: 1;
+}

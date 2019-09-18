@@ -13,6 +13,8 @@ courses = []
 
 
 def select_courses(request):
+    if request.method == 'POST':
+        input_file.department = request.POST.get('department')
     courses.clear()
     input_file.term_numbers.clear()
     database = Input()
@@ -125,9 +127,9 @@ def index(request):
 def select_department(request):
     if request.method == 'GET':
         return render(request, 'department.html')
-    else:
-        input_file.department = request.POST.get('department')
-        return select_courses(request)
+    # else:
+    #     input_file.department = request.POST.get('department')
+    #     return select_courses(request)
 
 
 def clean_priority(coursesf):

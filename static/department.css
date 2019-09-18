@@ -3,3 +3,8 @@ padding: 0;
 border: none;
 white-space: normal;
  }
+
+.bg-black{
+ background:#000;
+ color:#fff;
+}
