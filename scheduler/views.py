@@ -3,6 +3,7 @@ from operator import attrgetter
 # Create your views here.
 from scheduler.Controller.Controller import Controller
 from scheduler.Controller.Input import Input
+from scheduler.Controller import Input as input_file
 import copy
 
 import time
@@ -12,8 +13,11 @@ courses = []
 
 def select_courses(request):
     courses.clear()
+    input_file.term_numbers.clear()
     database = Input()
-    return render(request, 'index.html', context={"courses": database.getCoursesOnly()})
+    input_file.term_numbers.sort()
+    return render(request, 'index.html', context={"courses": database.getCoursesOnly(),
+                                                  'term_numbers': input_file.term_numbers})
 
 
 def index(request):
@@ -105,6 +109,14 @@ def index(request):
             courses.sort(key=attrgetter('name'))
             print("Total Time:--- %s seconds ---" % (time.time() - start_time))
             return render(request, 'schedule.html', context=dict)
+
+
+def select_department(request):
+    if request.method == 'GET':
+        return render(request, 'department.html')
+    else:
+        input_file.department = request.POST.get('department')
+        return select_courses(request)
 
 
 def clean_priority(coursesf):

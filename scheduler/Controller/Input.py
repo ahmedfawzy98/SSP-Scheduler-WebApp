@@ -7,7 +7,10 @@ from scheduler.models import Group
 from scheduler.Classes.SchGroup import SchGroup
 from scheduler.Classes.Time import Time
 from scheduler.Classes.Lecture import Lecture
+from django.db.models import Q
 
+department = None
+term_numbers = []
 
 class Input:
     def __init__(self):
@@ -20,10 +23,11 @@ class Input:
     def getCoursesOnly(self):
         # using dict to avoid duplicates
         return list({row.lecCrsName: Course(row.lecCrsName, termNum=row.termNum, crHrs=row.creditHours)
-                     for row in Group.objects.all()}.values())
+                     for row in Group.objects.all().filter(Q(department=department) | Q(termNum=11))}.values())
+
 
     def read(self):
-        database = Group.objects.all()
+        database = Group.objects.all().filter(Q(department=department) | Q(termNum=11))
         for item in database:
             g = SchGroup()
             t = Time()
@@ -114,7 +118,8 @@ class Input:
             lab.periodType = item.lab2PeriodType
             if lab.courseName is not None:
                 g.add_lab(lab)
-
+            if item.termNum not in term_numbers:
+                term_numbers.append(item.termNum)
             self.groups.append(g)
 
     def create(self):

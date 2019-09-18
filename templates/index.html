@@ -16,18 +16,31 @@
         <div id="container-nb-form">
             <div id="menuBar">
                 <ul>
-                    <li><a id="1st" data-term="1">1st Term</a></li>
-                    <li><a id="2nd" data-term="2">2nd Term</a></li>
-                    <li><a id="3rd" data-term="3">3rd Term</a></li>
-                    <li><a id="4th" data-term="4">4th Term</a></li>
-                    <li><a id="5th" data-term="5">5th Term</a></li>
-                    <li><a id="6th" data-term="6">6th Term</a></li>
-                    <li><a id="7th" data-term="7">7th Term</a></li>
-                    <li><a id="8th" data-term="8">8th Term</a></li>
-                    <li><a id="9th" data-term="9">9th Term</a></li>
-                    <li><a id="10th" data-term="10">10th Term</a></li>
-                    <li><a id="11th" data-term="11">Electives</a></li>
-                    <li><a id="12th" data-term="12">Humanities</a></li>
+                    {% for term_num in term_numbers %}
+                        {% if term_num == 1 %}
+                            <li><a id="1st" data-term="1">1st Term</a></li>
+                        {% elif term_num == 2 %}
+                            <li><a id="2nd" data-term="2">2nd Term</a></li>
+                        {% elif term_num == 3 %}
+                            <li><a id="3rd" data-term="3">3rd Term</a></li>
+                        {% elif term_num == 4 %}
+                            <li><a id="4th" data-term="4">4th Term</a></li>
+                        {% elif term_num == 5 %}
+                            <li><a id="5th" data-term="5">5th Term</a></li>
+                        {% elif term_num == 6 %}
+                            <li><a id="6th" data-term="6">6th Term</a></li>
+                        {% elif term_num == 7 %}
+                            <li><a id="7th" data-term="7">7th Term</a></li>
+                        {% elif term_num == 8 %}
+                            <li><a id="8th" data-term="8">8th Term</a></li>
+                        {% elif term_num == 9 %}
+                            <li><a id="9th" data-term="9">9th Term</a></li>
+                        {% elif term_num == 10 %}
+                            <li><a id="10th" data-term="10">10th Term</a></li>
+                        {% elif term_num == 11 %}
+                            <li><a id="11th" data-term="11">Humanities</a></li>
+                        {% endif %}
+                    {% endfor %}
 
                 </ul>
             </div>
