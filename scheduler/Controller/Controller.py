@@ -10,6 +10,7 @@ class Controller:
     def __init__(self):
         self.schedule = Schedule()
         self.alternatives = []
+        self.altCourses = []
         self.levels = []
         self.level = []
         self.completed = []
@@ -95,29 +96,30 @@ class Controller:
         self.completedDaysDuplicate = [self.completedPriorityDuplicate[i] for i in range(0, len(self.completedPriorityDuplicate))
                                            if self.completedPriorityDuplicate[0].schedule.daysTaken
                                            == self.completedPriorityDuplicate[i].schedule.daysTaken]
-        self.schedule = random.choice(self.completedDaysDuplicate).schedule
+        perfect = random.choice(self.completedDaysDuplicate)
+        self.schedule = perfect.schedule
         print("HAKUNA")
-        # self.schedule = self.completedPriorityDuplicate[0].schedule
-        ####
+        ###
         # Alternative schedules code
-        ####
-        # perfect = self.completedPriorityDuplicate[0]
+        ###
         # getting alternative schedules
-        # for i in range(len(self.courses)):
-        #     self.completedPriorityDuplicate.clear()
-        #     if i != 0:
-        #         perfect = perfect.parent
-        #     perfect.data.available = False
-        #     # iterate until a schedule without an unavailable group is found
-        #     for j in range(len(self.completed)):
-        #         if self.completed[j].all_available():
-        #             # add the first found all-available schedule and its priority duplicates to completedPriorityD
-        #             self.completedPriorityDuplicate = [self.completed[j+k] for k in range(0, len(self.completed)-j-1)
-        #                                                if (self.completed[j].get_total_priority()
-        #                                                == self.completed[j+k].get_total_priority()
-        #                                                    and self.completed[j+k].all_available())]
-        #             break
-        #     if len(self.completedPriorityDuplicate) != 0:
-        #         self.completedPriorityDuplicate.sort(key=attrgetter('schedule.daysTaken'))
-        #         self.alternatives.append(self.completedPriorityDuplicate[0].schedule)
-        #     perfect.data.available = True
+        for i in range(len(self.courses)):
+            self.completedPriorityDuplicate.clear()
+            if i != 0:
+                perfect = perfect.parent
+            perfect.data.available = False
+            # iterate until a schedule without an unavailable group is found
+            for j in range(len(self.completed)):
+                if self.completed[j].all_available():
+                    # add the first found all-available schedule and its priority duplicates to completedPriorityD
+                    self.completedPriorityDuplicate = [self.completed[j+k] for k in range(0, len(self.completed)-j-1)
+                                                       if (self.completed[j].get_total_priority()
+                                                       == self.completed[j+k].get_total_priority()
+                                                           and self.completed[j+k].all_available())]
+                    break
+            if len(self.completedPriorityDuplicate) != 0:
+                self.completedPriorityDuplicate.sort(key=attrgetter('schedule.daysTaken'))
+                self.alternatives.append(self.completedPriorityDuplicate[0].schedule)
+                self.altCourses.append(self.courses[len(self.courses)-1-i].name)
+            perfect.data.available = True
+        print("HAKUNA")

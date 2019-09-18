@@ -5,6 +5,7 @@ from scheduler.Controller.Controller import Controller
 from scheduler.Controller.Input import Input
 from scheduler.Controller import Input as input_file
 import copy
+from scheduler.Classes.Course import Course
 
 import time
 
@@ -84,30 +85,40 @@ def index(request):
             controller.courses = copy.deepcopy(courses)
             controller.makeSchedule()
             schedule = controller.schedule.schedule
-            i = 0
-            while i < 6:
-                j = 0
-                while j < 12:
-                    if schedule[i][j] is not None:
+            alternatives = [x.schedule for x in controller.alternatives]
+            allSchedules = [schedule] + alternatives
+            schedulesHTML = [[[None for x in range(12)] for y in range(6)] for z in range(len(allSchedules))]
 
-                        if schedule[i][j].periodType == "Lecture":
-                            dict['p' + str(i) + '_' + str(j)] = "<td bgcolor='#FFE9E7' colspan='" + str(
-                                schedule[i][j].length) + "'>" + schedule[i][j].courseName + "<br>" + schedule[i][
-                                                                    j].instName + "</td>"
-                        elif schedule[i][j].periodType == "Tut":
-                            dict['p' + str(i) + '_' + str(j)] = "<td bgcolor='#d1e7f7' >" + schedule[i][
-                                j].courseName + "<br>" + schedule[i][j].instName + "</td>"
+            for ind,sch in enumerate(allSchedules):
+                i = 0
+                while i < 6:
+                    j = 0
+                    while j < 12:
+                        if sch[i][j] is not None:
+
+                            if sch[i][j].periodType == "Lecture":
+                                schedulesHTML[ind][i][j] = "<td bgcolor='#FFE9E7' colspan='" + str(
+                                    sch[i][j].length) + "'>" + sch[i][j].courseName + "<br>" + sch[i][
+                                                                        j].instName + "</td>"
+                            elif sch[i][j].periodType == "Tut":
+                                schedulesHTML[ind][i][j] = "<td bgcolor='#d1e7f7' >" + sch[i][
+                                    j].courseName + "<br>" + sch[i][j].instName + "</td>"
+                            else:
+                                schedulesHTML[ind][i][j] = "<td bgcolor='#BDFFFF'>" + sch[i][
+                                    j].courseName + "<br>" + sch[i][j].instName + "</td>"
+                            for jj in range(1,sch[i][j].length):
+                                schedulesHTML[ind][i][j+jj] = ""
+                            j += sch[i][j].length
                         else:
-                            dict['p' + str(i) + '_' + str(j)] = "<td bgcolor='#BDFFFF'>" + schedule[i][
-                                j].courseName + "<br>" + schedule[i][j].instName + "</td>"
-                        j += schedule[i][j].length
-                    else:
-                        dict['p' + str(i) + '_' + str(j)] = "<td></td>"
-                        j += 1
+                            schedulesHTML[ind][i][j] = "<td></td>"
+                            j += 1
 
-                i += 1
+                    i += 1
+            dict["coursesNames"] = [list(a) for a in zip(["Best"]+controller.altCourses,["best"]+
+                                                         [ c.replace(' ','') for c in  controller.altCourses])]
             courses.sort(key=attrgetter('name'))
             print("Total Time:--- %s seconds ---" % (time.time() - start_time))
+            dict["allSchedules"] = [list(a) for a in zip(schedulesHTML,["best"]+[ c.replace(' ','') for c in  controller.altCourses])]
             return render(request, 'schedule.html', context=dict)
 
 

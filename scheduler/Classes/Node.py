@@ -51,7 +51,7 @@ class Node:
 
     def all_available(self):
         current = self
-        while current is not None:
+        while current.data is not None:
             if not current.data.available:
                 return False
             else:
