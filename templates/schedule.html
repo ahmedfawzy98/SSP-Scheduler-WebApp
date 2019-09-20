@@ -135,6 +135,7 @@
 {#<script src="{% static "html2canvas.js" %}" type="text/javascript"></script>#}
 <script src=" {% static 'schedule.js' %} " ></script>
 <script>
+
     $(document).ready(function () {
         $("#main-form").submit(function (e) {
             e.preventDefault();
@@ -154,13 +155,12 @@
                     $("#main-form").after(data.text);
                     $(".btn-download").on('click', function (evt) {
                         element = $(".show").first();
-                        html2canvas(element, {
-                         onrendered: function (canvas) {
-                                getCanvas = canvas;
-                             }
+                        console.log('here');
+                        html2canvas(document.body).then(function(canvas){
+                            getCanvas = canvas
                          });
-                        var imgageData = getCanvas.toDataURL("image/png");
                         // Now browser starts downloading it instead of just showing it
+                        var imgageData = getCanvas.toDataURL("image/png");
                         var newData = imgageData.replace(/^data:image\/png/, "data:application/octet-stream");
                         $(".show .btn-download").attr("download", element.attr('id')+".png").attr("href", newData);
                     });
@@ -172,10 +172,24 @@
                         $(".port-item").not(this).attr("disabled", false);
                         $('html, body').animate({
                             scrollTop: $("#main-footer").offset().top
-                        }, 400);
+                        }, 800);
                     });
                     $("#generateBtn").html("Generate");
                     $("#generateBtn").attr("disabled", false);
+                    let check = true;
+                    let port_items = document.getElementsByClassName('port-item');
+                    for (let i = 0; i < port_items.length; i++){
+                        if(port_items[i] in document.getElementsByClassName('active')){
+                            check = false;
+                            break;
+                        }
+                    }
+                    if(check){
+                        $('#best').click();
+                        check = false;
+                    }
+                    $('.btn-download').click();
+                    $('.btn-download').click();
                 },
                 error: function (data) {
                     console.log('ERROR');
@@ -204,19 +218,6 @@
           return new Promise(resolve => setTimeout(resolve, ms));
         }
 
-        let check = true;
-        let port_items = document.getElementsByClassName('port-item');
-        for (let i = 0; i < port_items.length; i++){
-            if(port_items[i] in document.getElementsByClassName('active')){
-                check = false;
-                break;
-            }
-        }
-        if(check){
-            $('#best').addClass('active');
-            $('#bestSch').addClass('show');
-            check = false;
-        }
     });
 </script>
 </body>
