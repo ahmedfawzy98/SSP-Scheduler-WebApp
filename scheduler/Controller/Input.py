@@ -9,25 +9,29 @@ from scheduler.Classes.Time import Time
 from scheduler.Classes.Lecture import Lecture
 from django.db.models import Q
 
-department = None
-term_numbers = []
 
 class Input:
-    def __init__(self):
+    def __init__(self, department):
         self.courses = []
         self.instructors = []
         self.groups = []
+        self.term_numbers = []
+        self.department = department
         self.read()
         self.create()
 
     def getCoursesOnly(self):
         # using dict to avoid duplicates
         return list({row.lecCrsName: Course(row.lecCrsName, termNum=row.termNum, crHrs=row.creditHours)
-                     for row in Group.objects.all().filter(Q(department=department) | Q(termNum=11))}.values())
+                     for row in Group.objects.all().filter(Q(department=self.department) | Q(termNum=11))}.values())
+
+    def getCourses(self, courses):
+        return [course for course in self.courses if course.name in courses]
+
 
 
     def read(self):
-        database = Group.objects.all().filter(Q(department=department) | Q(termNum=11))
+        database = Group.objects.all().filter(Q(department=self.department) | Q(termNum=11))
         for item in database:
             g = SchGroup()
             t = Time()
@@ -118,9 +122,10 @@ class Input:
             lab.periodType = item.lab2PeriodType
             if lab.courseName is not None:
                 g.add_lab(lab)
-            if item.termNum not in term_numbers:
-                term_numbers.append(item.termNum)
+            if item.termNum not in self.term_numbers:
+                self.term_numbers.append(item.termNum)
             self.groups.append(g)
+            self.term_numbers.sort()
 
     def create(self):
         for group in self.groups:

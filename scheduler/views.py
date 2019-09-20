@@ -9,24 +9,27 @@ from scheduler.Classes.Course import Course
 
 import time
 
-courses = []
 
 
 def select_courses(request):
+    if 'courses' not in request.session:
+        request.session['courses'] = []
     if request.method == 'POST':
-        input_file.department = request.POST.get('department')
-    courses.clear()
-    input_file.term_numbers.clear()
-    database = Input()
-    input_file.term_numbers.sort()
+        # input_file.department = request.POST.get('department')
+        request.session['department'] = request.POST.get('department')
+    request.session['courses'].clear()
+    request.session.modified = True
+    database = Input(request.session['department'])
     return render(request, 'index.html', context={"courses": database.getCoursesOnly(),
-                                                  'term_numbers': input_file.term_numbers})
+                                                  'term_numbers': database.term_numbers})
 
 
 def index(request):
+    input = Input(request.session['department'])
     if request.method == "GET":
         dict = {}
-        if len(courses) > 0:
+        if len(request.session['courses']) > 0:
+            courses = input.getCourses(request.session['courses'])
             courses.sort(key=attrgetter('name'))
             dict["courses"] = courses
             dict["coursesNum"] = len(courses)
@@ -44,19 +47,21 @@ def index(request):
         priority = []
         dict = {}
         controller = Controller()
-        input = Input()
         allcourses = input.courses
         # "selection" indicates that the request is from courses selection page
         if request.POST.get("submit") == "selection":
             if int(request.POST.get("hoursTaken")) < 12:
                 return render(request, "illegal.html")
-            if len(courses) > 0:
-                clean_priority(courses)
-                courses.clear()
+            if len(request.session['courses']) > 0:
+                # clean_priority(request.session['courses'])
+                request.session['courses'].clear()
+                request.session.modified = True
 
             for course in allcourses:
                 if request.POST.get(course.name) == "on":
-                    courses.append(course)
+                    request.session['courses'].append(course.name)
+            request.session.modified = True
+            courses = input.getCourses(request.session['courses'])
             dict["courses"] = courses
             dict["coursesNum"] = len(courses)
             courses.sort(key=attrgetter('name'))
@@ -70,8 +75,9 @@ def index(request):
             return render(request, 'schedule.html', context=dict)
         # "generation" indicates that the request is from the current page */schedule/
         elif request.POST.get("submit") == "generation":
+            courses = input.getCourses(request.session['courses'])
             start_time = time.time()
-            clean_priority(courses)
+            # clean_priority(courses)
             dict["courses"] = courses
             dict["coursesNum"] = len(courses)
             for course in courses:
