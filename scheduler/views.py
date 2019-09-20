@@ -12,7 +12,6 @@ from django.template.loader import render_to_string
 import time
 
 
-
 def select_courses(request):
     if 'courses' not in request.session:
         request.session['courses'] = []
@@ -75,65 +74,7 @@ def index(request):
                     j += 1
                 i += 1
             return render(request, 'schedule.html', context=dict)
-        # "generation" indicates that the request is from the current page */schedule/
-        elif request.POST.get("submit") == "generation":
-            courses = input.getCourses(request.session['courses'])
-            start_time = time.time()
-            # clean_priority(courses)
-            dict["courses"] = courses
-            dict["coursesNum"] = len(courses)
-            for course in courses:
-                if request.POST.get(course.name) != "Any Instructor":
-                    priority.append((course.name, request.POST.get(course.name)))
-            for pr in priority:
-                for course in courses:
-                    if pr[0] == course.name:
-                        for inst in course.instructors:
-                            if pr[1] == inst.name:
-                                inst.priority = int(request.POST.get(course.name + "Pr"))
-                                course.priority = int(request.POST.get(course.name + "Pr"))
-            controller.courses = copy.deepcopy(courses)
-            controller.makeSchedule()
-            schedule = controller.schedule.schedule
-            alternatives = [x.schedule for x in controller.alternatives]
-            allSchedules = [schedule] + alternatives
-            schedulesHTML = [[[None for x in range(12)] for y in range(6)] for z in range(len(allSchedules))]
 
-            for ind,sch in enumerate(allSchedules):
-                i = 0
-                while i < 6:
-                    j = 0
-                    while j < 12:
-                        if sch[i][j] is not None:
-
-                            if sch[i][j].periodType == "Lecture":
-                                schedulesHTML[ind][i][j] = "<td bgcolor='#FFE9E7' colspan='" + str(
-                                    sch[i][j].length) + "'>" + sch[i][j].courseName + "<br>" + sch[i][
-                                                                        j].instName + "</td>"
-                            elif sch[i][j].periodType == "Tut":
-                                schedulesHTML[ind][i][j] = "<td bgcolor='#d1e7f7' >" + sch[i][
-                                    j].courseName + "<br>" + sch[i][j].instName + "</td>"
-                            else:
-                                schedulesHTML[ind][i][j] = "<td bgcolor='#BDFFFF'>" + sch[i][
-                                    j].courseName + "<br>" + sch[i][j].instName + "</td>"
-                            for jj in range(1,sch[i][j].length):
-                                schedulesHTML[ind][i][j+jj] = ""
-                            j += sch[i][j].length
-                        else:
-                            schedulesHTML[ind][i][j] = "<td bgcolor='#FFFFFF'></td>"
-                            j += 1
-
-                    i += 1
-            dict["coursesNames"] = [list(a) for a in zip(["Best"]+controller.altCourses,["best"]+
-                                                         [ c.replace(' ','') for c in  controller.altCourses])]
-            courses.sort(key=attrgetter('name'))
-            print("Total Time:--- %s seconds ---" % (time.time() - start_time))
-            dict["allSchedules"] = [list(a) for a in zip(schedulesHTML,["best"]+[ c.replace(' ','') for c in  controller.altCourses])]
-            # return render(request, 'schedule.html', context=dict)
-            data = {
-                'text': request.POST.get("Programming 2" + "Pr")
-            }
-            return JsonResponse(data)
 
 def generate_schedules(request):
     input = Input(request.session['department'])
