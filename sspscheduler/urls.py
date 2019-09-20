@@ -22,5 +22,6 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('', views.select_department, name='select_department'),
     path('courses/', views.select_courses, name='select_courses'),
-    path('schedule/', views.index, name='index')
+    path('schedule/', views.index, name='index'),
+    path('schedule/generate', views.generate_schedules, name='generate_schedules'),
 ]

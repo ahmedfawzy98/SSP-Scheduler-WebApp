@@ -14,193 +14,69 @@
 
 </head>
 <body>
-
-<nav class="navbar navbar-expand-md navbar-dark bg-black mb-4">
-    <div class="container">
-        <a href="/" class="navbar-brand">SSPScheduler</a>
-        <a href="/courses/" class="nav-link text-white">
-            <i class="fa fa-arrow-left"></i> &nbsp;Courses</a>
-    </div>
-
-</nav>
-<div class="container">
-    <form action="/schedule/" method="post" >
-        {% csrf_token %}
-        <div class="row">
-            {% for course in courses %}
-                <div class="col-md-4 col-sm-6 col-12">
-                  <div class="card mb-3">
-                    <div class="card-header text-center">
-                      <h5>{{ course.name }}</h5>
-                    </div>
-                    <div class="card-body">
-                      <div class="form-group">
-                        <label for="{{ course.name }}">Instructor</label>
-                        <select class="custom-select" id="{{ course.name }}" name="{{ course.name }}">
-                            <option selected value="Any Instructor">Any Instructor</option>
-                            {% for inst in course.instructors %}#}
-                                <option value="{{ inst.name }}">{{ inst.name }}</option>
-                            {% endfor %}
-                        </select>
-                      </div>
-                      <div class="form-group">
-                        <label for="{{ course.name }}Pr">Priority</label>
-                        <select class="custom-select" id="{{ course.name }}Pr" name="{{ course.name }}Pr">
-                            <option selected value="0">I don't care</option>
-                            <option value="1">Preferred Instructor-2</option>
-                            <option value="10">Preferred Instructor-1</option>
-                            <option value="50">Must-have instructor</option>
-                        </select>
-                      </div>
-                    </div>
-                  </div>
+    <div id="page-container">
+        <div id="content-wrap">
+            <nav class="navbar navbar-expand-md navbar-dark bg-black mb-4">
+                <div class="container">
+                    <a href="/" class="navbar-brand">SSPScheduler</a>
+                    <a href="/courses/" class="nav-link text-white">
+                        <i class="fa fa-arrow-left"></i> &nbsp;Courses</a>
                 </div>
-            {% endfor %}
+
+            </nav>
+            <div class="container">
+                <form action="/schedule/" method="post" id="main-form" >
+                    {% csrf_token %}
+                    <div class="row">
+                        {% for course in courses %}
+                            <div class="col-md-4 col-sm-6 col-12">
+                              <div class="card mb-3">
+                                <div class="card-header text-center">
+                                  <h5>{{ course.name }}</h5>
+                                </div>
+                                <div class="card-body">
+                                  <div class="form-group">
+                                    <label for="{{ course.name }}">Instructor</label>
+                                    <select class="custom-select" id="{{ course.name }}" name="{{ course.name }}">
+                                        <option selected value="Any Instructor">Any Instructor</option>
+                                        {% for inst in course.instructors %}#}
+                                            <option value="{{ inst.name }}">{{ inst.name }}</option>
+                                        {% endfor %}
+                                    </select>
+                                  </div>
+                                  <div class="form-group">
+                                    <label for="{{ course.name }}Pr">Priority</label>
+                                    <select class="custom-select" id="{{ course.name }}Pr" name="{{ course.name }}Pr">
+                                        <option selected value="0">I don't care</option>
+                                        <option value="1">Preferred Instructor-2</option>
+                                        <option value="10">Preferred Instructor-1</option>
+                                        <option value="50">Must-have instructor</option>
+                                    </select>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                        {% endfor %}
 
 
-        </div>
-        <div class="row justify-content-center">
-            <div class="col-4 ">
-                <button id="generateBtn" type="submit" class="btn btn-primary btn-block" name="submit" value="generation">Generate</button>
+                    </div>
+                    <div class="row justify-content-center">
+                        <div class="col-4 ">
+                            <button id="generateBtn" type="submit" class="btn btn-primary btn-block" name="submit" value="generation">Generate</button>
+                        </div>
+                    </div>
+                </form>
+
+
+
             </div>
         </div>
-    </form>
-    <div class="row">
-        <div class="col-md-12 text-center">
-            <div class="btn-group btn-group btn-group-toggle btn-block" data-toggle="buttons">
+        <footer id="main-footer">
+                <section class="bg-black p-4 mt-3">
+                </section>
+        </footer>
 
-                {% for courseNameS,courseName in coursesNames %}
-                    <button class="btn btn-no-r btn-no-f btn-secondary port-item" data-toggle="collapse" data-target="#{{courseName}}Sch" id="{{ courseName }}">{{ courseNameS }}</button>
-                {% endfor %}
-
-            </div>
-        </div>
     </div>
-
-
-
-
-
-    <div class="table-responsive">
-        {% for schedule,course in allSchedules %}
-        <div id="{{ course }}Sch" class="collapse">
-            <table class="table" >
-                <tr>
-                    <th scope="col"></th>
-                    <th scope="col">1</th>
-                    <th scope="col">2</th>
-                    <th scope="col">3</th>
-                    <th scope="col">4</th>
-                    <th scope="col">5</th>
-                    <th scope="col">6</th>
-                    <th scope="col">7</th>
-                    <th scope="col">8</th>
-                    <th scope="col">9</th>
-                    <th scope="col">10</th>
-                    <th scope="col">11</th>
-                    <th scope="col">12</th>
-                </tr>
-                <tr>
-                    <th class="day" scope="row" >Saturday</th>
-                    {{ schedule.0.0| safe }}
-                    {{ schedule.0.1| safe}}
-                    {{ schedule.0.2| safe}}
-                    {{ schedule.0.3| safe}}
-                    {{ schedule.0.4| safe}}
-                    {{ schedule.0.5| safe}}
-                    {{ schedule.0.6| safe}}
-                    {{ schedule.0.7| safe}}
-                    {{ schedule.0.8| safe}}
-                    {{ schedule.0.9| safe}}
-                    {{ schedule.0.10| safe}}
-                    {{ schedule.0.11| safe}}
-                </tr>
-                <tr>
-                    <th class="day" scope="row">Sunday</th>
-                    {{ schedule.1.0| safe }}
-                    {{ schedule.1.1| safe}}
-                    {{ schedule.1.2| safe}}
-                    {{ schedule.1.3| safe}}
-                    {{ schedule.1.4| safe}}
-                    {{ schedule.1.5| safe}}
-                    {{ schedule.1.6| safe}}
-                    {{ schedule.1.7| safe}}
-                    {{ schedule.1.8| safe}}
-                    {{ schedule.1.9| safe}}
-                    {{ schedule.1.10| safe}}
-                    {{ schedule.1.11| safe}}
-                </tr>
-                <tr>
-                    <th class="day" scope="row">Monday</th>
-                    {{ schedule.2.0| safe }}
-                    {{ schedule.2.1| safe}}
-                    {{ schedule.2.2| safe}}
-                    {{ schedule.2.3| safe}}
-                    {{ schedule.2.4| safe}}
-                    {{ schedule.2.5| safe}}
-                    {{ schedule.2.6| safe}}
-                    {{ schedule.2.7| safe}}
-                    {{ schedule.2.8| safe}}
-                    {{ schedule.2.9| safe}}
-                    {{ schedule.2.10| safe}}
-                    {{ schedule.2.11| safe}}
-                </tr>
-                <tr>
-                    <th class="day" scope="row">Tuesday</th>
-                    {{ schedule.3.0| safe }}
-                    {{ schedule.3.1| safe}}
-                    {{ schedule.3.2| safe}}
-                    {{ schedule.3.3| safe}}
-                    {{ schedule.3.4| safe}}
-                    {{ schedule.3.5| safe}}
-                    {{ schedule.3.6| safe}}
-                    {{ schedule.3.7| safe}}
-                    {{ schedule.3.8| safe}}
-                    {{ schedule.3.9| safe}}
-                    {{ schedule.3.10| safe}}
-                    {{ schedule.3.11| safe}}
-                </tr>
-                <tr>
-                    <th class="day" scope="row">Wednesday</th>
-                    {{ schedule.4.0| safe }}
-                    {{ schedule.4.1| safe}}
-                    {{ schedule.4.2| safe}}
-                    {{ schedule.4.3| safe}}
-                    {{ schedule.4.4| safe}}
-                    {{ schedule.4.5| safe}}
-                    {{ schedule.4.6| safe}}
-                    {{ schedule.4.7| safe}}
-                    {{ schedule.4.8| safe}}
-                    {{ schedule.4.9| safe}}
-                    {{ schedule.4.10| safe}}
-                    {{ schedule.4.11| safe}}
-                </tr>
-                <tr>
-                    <th class="day" scope="row">Thursday</th>
-                    {{ schedule.5.0| safe }}
-                    {{ schedule.5.1| safe}}
-                    {{ schedule.5.2| safe}}
-                    {{ schedule.5.3| safe}}
-                    {{ schedule.5.4| safe}}
-                    {{ schedule.5.5| safe}}
-                    {{ schedule.5.6| safe}}
-                    {{ schedule.5.7| safe}}
-                    {{ schedule.5.8| safe}}
-                    {{ schedule.5.9| safe}}
-                    {{ schedule.5.10| safe}}
-                    {{ schedule.5.11| safe}}
-                </tr>
-            </table>
-        </div>
-        {% endfor %}
-    </div>
-{#    <button id="btn-download" class="btn btn-success">Download Schedule</button>#}
-    <a id="btn-download" class="btn btn-success" href="#end">Download</a>
-    <footer id="end">
-
-    </footer>
-
-</div>
 <style>
     td{
         width:100px;
@@ -257,11 +133,58 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
 {#<script src="{% static "html2canvas.js" %}" type="text/javascript"></script>#}
+<script src=" {% static 'schedule.js' %} " ></script>
 <script>
     $(document).ready(function () {
-        {#var element = $("#html-content-holder"); // global variable#}
+        $("#main-form").submit(function (e) {
+            e.preventDefault();
+            $("#all-schedules").remove();
+            $("#generateBtn").attr("disabled", true);
+            $("#generateBtn").html(
+                "<span class=\"spinner-border spinner-border-sm\" role=\"status\" aria-hidden=\"true\"></span>\n");
+            let form = $(this);
+
+            $.ajax({
+                type: "POST",
+                url: '/schedule/generate',
+                data: form.serialize(),
+                dataType: 'json',
+                success: function (data) {
+                    console.log("SUCCESS");
+                    $("#main-form").after(data.text);
+                    $(".btn-download").on('click', function (evt) {
+                        element = $(".show").first();
+                        html2canvas(element, {
+                         onrendered: function (canvas) {
+                                getCanvas = canvas;
+                             }
+                         });
+                        var imgageData = getCanvas.toDataURL("image/png");
+                        // Now browser starts downloading it instead of just showing it
+                        var newData = imgageData.replace(/^data:image\/png/, "data:application/octet-stream");
+                        $(".show .btn-download").attr("download", element.attr('id')+".png").attr("href", newData);
+                    });
+                    $('.port-item').click( async function(e) {
+                        $('.collapse').collapse('hide');
+                        $('.active').removeClass("active");
+                        $(".port-item").not(this).attr("disabled", true);
+                        await sleep(250);
+                        $(".port-item").not(this).attr("disabled", false);
+                        $('html, body').animate({
+                            scrollTop: $("#main-footer").offset().top
+                        }, 400);
+                    });
+                    $("#generateBtn").html("Generate");
+                    $("#generateBtn").attr("disabled", false);
+                },
+                error: function (data) {
+                    console.log('ERROR');
+                },
+            });
+
+        });
         {#let getCanvas; // global variable#}
-        var element // global variable
+        var element; // global variable
         var getCanvas; // global variable
         var firstClick = false;
         $("#btn-download").on('click', function (evt) {
@@ -269,7 +192,6 @@
             html2canvas(element, {
              onrendered: function (canvas) {
                     getCanvas = canvas;
-                    console.log("done")
                  }
              });
             var imgageData = getCanvas.toDataURL("image/png");
@@ -277,14 +199,7 @@
             var newData = imgageData.replace(/^data:image\/png/, "data:application/octet-stream");
             $("#btn-download").attr("download", element.attr('id')+".png").attr("href", newData);
         });
-        $('.port-item').click( async function(e) {
-            $('.collapse').collapse('hide');
-            $('.active').removeClass("active");
-            $(".port-item").not(this).attr("disabled", true);
-            await sleep(250);
-            $(".port-item").not(this).attr("disabled", false);
-            $("#btn-download").click();
-        });
+
         function sleep(ms) {
           return new Promise(resolve => setTimeout(resolve, ms));
         }

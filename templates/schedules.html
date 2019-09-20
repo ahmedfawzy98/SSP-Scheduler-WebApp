@@ -1,0 +1,134 @@
+<div id="all-schedules">
+    <div class="row">
+        <div class="col-md-12 text-center">
+            <div class="btn-group btn-group btn-group-toggle btn-block" data-toggle="buttons">
+
+                {% for courseNameS,courseName in coursesNames %}
+                    <button class="btn btn-no-r btn-no-f btn-secondary port-item" data-toggle="collapse" data-target="#{{courseName}}Sch" id="{{ courseName }}">{{ courseNameS }}</button>
+                {% endfor %}
+
+            </div>
+        </div>
+    </div>
+
+
+
+
+
+    <div class="table-responsive">
+        {% for schedule,course in allSchedules %}
+        <div id="{{ course }}Sch" class="collapse">
+            <table class="table" >
+                <tr>
+                    <th scope="col"></th>
+                    <th scope="col">1</th>
+                    <th scope="col">2</th>
+                    <th scope="col">3</th>
+                    <th scope="col">4</th>
+                    <th scope="col">5</th>
+                    <th scope="col">6</th>
+                    <th scope="col">7</th>
+                    <th scope="col">8</th>
+                    <th scope="col">9</th>
+                    <th scope="col">10</th>
+                    <th scope="col">11</th>
+                    <th scope="col">12</th>
+                </tr>
+                <tr>
+                    <th class="day" scope="row" >Saturday</th>
+                    {{ schedule.0.0| safe }}
+                    {{ schedule.0.1| safe}}
+                    {{ schedule.0.2| safe}}
+                    {{ schedule.0.3| safe}}
+                    {{ schedule.0.4| safe}}
+                    {{ schedule.0.5| safe}}
+                    {{ schedule.0.6| safe}}
+                    {{ schedule.0.7| safe}}
+                    {{ schedule.0.8| safe}}
+                    {{ schedule.0.9| safe}}
+                    {{ schedule.0.10| safe}}
+                    {{ schedule.0.11| safe}}
+                </tr>
+                <tr>
+                    <th class="day" scope="row">Sunday</th>
+                    {{ schedule.1.0| safe }}
+                    {{ schedule.1.1| safe}}
+                    {{ schedule.1.2| safe}}
+                    {{ schedule.1.3| safe}}
+                    {{ schedule.1.4| safe}}
+                    {{ schedule.1.5| safe}}
+                    {{ schedule.1.6| safe}}
+                    {{ schedule.1.7| safe}}
+                    {{ schedule.1.8| safe}}
+                    {{ schedule.1.9| safe}}
+                    {{ schedule.1.10| safe}}
+                    {{ schedule.1.11| safe}}
+                </tr>
+                <tr>
+                    <th class="day" scope="row">Monday</th>
+                    {{ schedule.2.0| safe }}
+                    {{ schedule.2.1| safe}}
+                    {{ schedule.2.2| safe}}
+                    {{ schedule.2.3| safe}}
+                    {{ schedule.2.4| safe}}
+                    {{ schedule.2.5| safe}}
+                    {{ schedule.2.6| safe}}
+                    {{ schedule.2.7| safe}}
+                    {{ schedule.2.8| safe}}
+                    {{ schedule.2.9| safe}}
+                    {{ schedule.2.10| safe}}
+                    {{ schedule.2.11| safe}}
+                </tr>
+                <tr>
+                    <th class="day" scope="row">Tuesday</th>
+                    {{ schedule.3.0| safe }}
+                    {{ schedule.3.1| safe}}
+                    {{ schedule.3.2| safe}}
+                    {{ schedule.3.3| safe}}
+                    {{ schedule.3.4| safe}}
+                    {{ schedule.3.5| safe}}
+                    {{ schedule.3.6| safe}}
+                    {{ schedule.3.7| safe}}
+                    {{ schedule.3.8| safe}}
+                    {{ schedule.3.9| safe}}
+                    {{ schedule.3.10| safe}}
+                    {{ schedule.3.11| safe}}
+                </tr>
+                <tr>
+                    <th class="day" scope="row">Wednesday</th>
+                    {{ schedule.4.0| safe }}
+                    {{ schedule.4.1| safe}}
+                    {{ schedule.4.2| safe}}
+                    {{ schedule.4.3| safe}}
+                    {{ schedule.4.4| safe}}
+                    {{ schedule.4.5| safe}}
+                    {{ schedule.4.6| safe}}
+                    {{ schedule.4.7| safe}}
+                    {{ schedule.4.8| safe}}
+                    {{ schedule.4.9| safe}}
+                    {{ schedule.4.10| safe}}
+                    {{ schedule.4.11| safe}}
+                </tr>
+                <tr>
+                    <th class="day" scope="row">Thursday</th>
+                    {{ schedule.5.0| safe }}
+                    {{ schedule.5.1| safe}}
+                    {{ schedule.5.2| safe}}
+                    {{ schedule.5.3| safe}}
+                    {{ schedule.5.4| safe}}
+                    {{ schedule.5.5| safe}}
+                    {{ schedule.5.6| safe}}
+                    {{ schedule.5.7| safe}}
+                    {{ schedule.5.8| safe}}
+                    {{ schedule.5.9| safe}}
+                    {{ schedule.5.10| safe}}
+                    {{ schedule.5.11| safe}}
+                </tr>
+            </table>
+            <a class="btn btn-success btn-download" href="#end">Download</a>
+        </div>
+        {% endfor %}
+    </div>
+
+
+</div>
