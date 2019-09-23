@@ -39,8 +39,12 @@
                                     <label for="{{ course.name }}">Instructor</label>
                                     <select class="custom-select" id="{{ course.name }}" name="{{ course.name }}">
                                         <option selected value="Any Instructor">Any Instructor</option>
-                                        {% for inst in course.instructors %}#}
-                                            <option value="{{ inst.name }}">{{ inst.name }}</option>
+                                        {% for id, insts in instructors.items %}
+                                            {% if id == course.id %}
+                                                {% for inst in insts %}
+                                                    <option value="{{ inst.name }}">{{ inst.name }}</option>
+                                                {% endfor %}
+                                            {% endif %}
                                         {% endfor %}
                                     </select>
                                   </div>

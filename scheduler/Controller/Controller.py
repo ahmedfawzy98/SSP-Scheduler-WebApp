@@ -1,7 +1,6 @@
 from operator import attrgetter
 from scheduler.Classes.Node import Node
 from scheduler.Classes.Schedule import Schedule
-from scheduler.Controller.Input import Input
 import time
 import random
 
@@ -20,6 +19,7 @@ class Controller:
         self.coursesNum = None
         self.bestCompleted = [7,-1]
         self.lastPrioCourse = -1
+        self.func_runtime = 0
 
     def build_tree(self, node, cNum):
         if cNum != self.coursesNum-1:
@@ -34,6 +34,7 @@ class Controller:
                             # check if the current group doesn't clash with the current tree branch
                             if not node.check_clash(group,node.schedule,tutsInd[iTut],labsInd[iLab]):
                                 # add the group to the current branch
+                                start_time = time.time()
                                 node.add_child(group, tutsInd[iTut], labsInd[iLab])
                                 # update the last added child total schedule's priority
                                 node.children[-1].schedule.add_to_priority(
@@ -41,12 +42,13 @@ class Controller:
                                     node.children[-1].parent.get_total_priority())
 
                                 child = node.children[-1]
+                                self.func_runtime += time.time() - start_time
                                 if cNum+1 < self.lastPrioCourse:
                                     self.build_tree(node.children[-1], cNum + 1)
-                                elif child.schedule.priorityValue >= self.bestCompleted[1]:
+                                elif child.schedule.priorityValue > self.bestCompleted[1]:
                                     self.build_tree(node.children[-1], cNum + 1)
-                                elif child.schedule.priorityValue <= self.bestCompleted[1]:
-                                    if child.schedule.daysTaken < self.bestCompleted[0]:
+                                elif child.schedule.priorityValue == self.bestCompleted[1]:
+                                    if child.schedule.daysTaken <= self.bestCompleted[0]:
                                         self.build_tree(node.children[-1], cNum + 1)
                                 else:
                                     return
@@ -70,8 +72,8 @@ class Controller:
 
         for course in self.courses:
             course.instructors.sort(key=attrgetter('priority'), reverse=True)
-            for inst in course.instructors:
-                random.shuffle(inst.groups)
+            # for inst in course.instructors:
+            #     random.shuffle(inst.groups)
 
         start_time = time.time()
         self.coursesNum = len(self.courses)

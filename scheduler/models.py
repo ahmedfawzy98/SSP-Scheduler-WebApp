@@ -3,73 +3,146 @@ from django.db import models
 # Create your models here.
 
 
-class Group(models.Model):
-    department = models.CharField(max_length=256, default=None, blank=True, null=True)
-    termNum = models.PositiveIntegerField(default=None, blank=True, null=True)
+class Course(models.Model):
+    name = models.CharField(max_length=256, default=None, blank=True, null=True)
+    priority = models.PositiveIntegerField(default=None, blank=True, null=True)
+    term = models.PositiveIntegerField(default=None, blank=True, null=True)
     creditHours = models.PositiveIntegerField(default=None, blank=True, null=True)
-    groupNum = models.PositiveIntegerField(default=None, blank=True, null=True)
-    #
-    lecInstName = models.CharField(max_length=256, default=None, blank=True, null=True)
-    lecCrsName = models.CharField(max_length=256, default=None, blank=True, null=True)
-    lecPlace = models.CharField(max_length=256, default=None, blank=True, null=True)
-    lecType = models.PositiveIntegerField(default=None, blank=True, null=True)
-    lecDay = models.PositiveIntegerField(default=None, blank=True, null=True)
-    lecFrom = models.PositiveIntegerField(default=None, blank=True, null=True)
-    lecTo = models.PositiveIntegerField(default=None, blank=True, null=True)
-    #
-    lecExPlace = models.CharField(max_length=256, default=None, blank=True, null=True)
-    lecExDay = models.PositiveIntegerField(default=None, blank=True, null=True)
-    lecExFrom = models.PositiveIntegerField(default=None, blank=True, null=True)
-    lecExTo = models.PositiveIntegerField(default=None, blank=True, null=True)
-    #
-    lecPeriodType = models.CharField(max_length=256, default=None, blank=True, null=True)
-    #
-    tut1InstName = models.CharField(max_length=256, default=None, blank=True, null=True)
-    tut1CrsName = models.CharField(max_length=256, default=None, blank=True, null=True)
-    tut1Place = models.CharField(max_length=256, default=None, blank=True, null=True)
-    tut1Type = models.PositiveIntegerField(default=None, blank=True, null=True)
-    tut1Day = models.PositiveIntegerField(default=None, blank=True, null=True)
-    tut1From = models.PositiveIntegerField(default=None, blank=True, null=True)
-    tut1To = models.PositiveIntegerField(default=None, blank=True, null=True)
-    tut1PeriodType = models.CharField(max_length=256, default=None, blank=True, null=True)
-    #
-    tut2InstName = models.CharField(max_length=256, default=None, blank=True, null=True)
-    tut2CrsName = models.CharField(max_length=256, default=None, blank=True, null=True)
-    tut2Place = models.CharField(max_length=256, default=None, blank=True, null=True)
-    tut2Type = models.PositiveIntegerField(default=None, blank=True, null=True)
-    tut2Day = models.PositiveIntegerField(default=None, blank=True, null=True)
-    tut2From = models.PositiveIntegerField(default=None, blank=True, null=True)
-    tut2To = models.PositiveIntegerField(default=None, blank=True, null=True)
-    tut2PeriodType = models.CharField(max_length=256, default=None, blank=True, null=True)
-    #
-    lab1InstName = models.CharField(max_length=256, default=None, blank=True, null=True)
-    lab1CrsName = models.CharField(max_length=256, default=None, blank=True, null=True)
-    lab1Place = models.CharField(max_length=256, default=None, blank=True, null=True)
-    lab1Type = models.PositiveIntegerField(default=None, blank=True, null=True)
-    lab1Day = models.PositiveIntegerField(default=None, blank=True, null=True)
-    lab1From = models.PositiveIntegerField(default=None, blank=True, null=True)
-    lab1To = models.PositiveIntegerField(default=None, blank=True, null=True)
-    lab1PeriodType = models.CharField(max_length=256, default=None, blank=True, null=True)
-    #
-    lab2InstName = models.CharField(max_length=256, default=None, blank=True, null=True)
-    lab2CrsName = models.CharField(max_length=256, default=None, blank=True, null=True)
-    lab2Place = models.CharField(max_length=256, default=None, blank=True, null=True)
-    lab2Type = models.PositiveIntegerField(default=None, blank=True, null=True)
-    lab2Day = models.PositiveIntegerField(default=None, blank=True, null=True)
-    lab2From = models.PositiveIntegerField(default=None, blank=True, null=True)
-    lab2To = models.PositiveIntegerField(default=None, blank=True, null=True)
-    lab2PeriodType = models.CharField(max_length=256, default=None, blank=True, null=True)
-    #
+    department = models.CharField(max_length=256, default=None, blank=True, null=True)
+    instructors = None
+
+    def keep_first(self):
+        first = self.instructors[0]
+        for inst in self.instructors:
+            if inst.id != first.id:
+                self.instructor_set.remove(inst)
+
+    def build(self):
+        self.instructors = list(self.instructor_set.all())
+        for inst in self.instructors:
+            inst.build()
 
 
 class Instructor(models.Model):
     name = models.CharField(max_length=256, default=None, blank=True, null=True)
-    courseName = models.CharField(max_length=256, default=None, blank=True, null=True)
     priority = models.PositiveIntegerField(default=None, blank=True, null=True)
-    group = models.ForeignKey(Group, on_delete=models.CASCADE)
+    course = models.ForeignKey(Course, on_delete=models.CASCADE, default=None, blank=True, null=True)
+    groups = None
+
+    def build(self):
+        self.groups = list(self.group_set.all())
+        for group in self.groups:
+            group.build()
 
 
-class Course(models.Model):
-    name = models.CharField(max_length=256, default=None, blank=True, null=True)
-    priority = models.PositiveIntegerField(default=None, blank=True, null=True)
-    inst = models.ForeignKey(Instructor, on_delete=models.CASCADE)
+class Group(models.Model):
+    groupNum = models.PositiveIntegerField(default=None, blank=True, null=True)
+    inst = models.ForeignKey(Instructor, on_delete=models.CASCADE, default=None, blank=True, null=True)
+    available = models.BooleanField(default=True)
+    lecture = None
+    exLecture = None
+    tutorials = None
+    labs = None
+
+    def build(self):
+        self.lecture = list(self.lecture_set.all())[0]
+        self.tutorials = list(self.tutorial_set.all())
+        self.labs = list(self.lab_set.all())
+        self.exLecture = list(self.lecture.exlecture_set.all())[0] if list(self.lecture.exlecture_set.all()) else None
+        self.lecture.build()
+        if self.exLecture is not None:
+            self.exLecture.build()
+        for tut in self.tutorials:
+            tut.build()
+        for lab in self.labs:
+            lab.build()
+
+
+class Lecture(models.Model):
+    place = models.CharField(max_length=256, default=None, blank=True, null=True)
+    type = models.PositiveIntegerField(default=None, blank=True, null=True)
+    periodType = models.CharField(max_length=256, default=None, blank=True, null=True)
+    group = models.ForeignKey(Group, on_delete=models.CASCADE, default=None, blank=True, null=True)
+    time = None
+
+    def length(self):
+        return self.time.time_to - self.time.time_from + 1
+
+    def instName(self):
+        return self.group.inst.name
+
+    def courseName(self):
+        return self.group.inst.course.name
+
+    def build(self):
+        self.time = list(self.time_set.all())[0]
+
+
+class ExLecture(models.Model):
+    Place = models.CharField(max_length=256, default=None, blank=True, null=True)
+    lecture = models.ForeignKey(Lecture, on_delete=models.CASCADE, default=None, blank=True, null=True)
+    time = None
+
+    def length(self):
+        return self.time.time_to - self.time.time_from + 1
+
+    def instName(self):
+        return self.lecture.group.inst.name
+
+    def courseName(self):
+        return self.lecture.group.inst.course.name
+
+    def build(self):
+        self.time = list(self.time_set.all())[0]
+
+
+class Tutorial(models.Model):
+    place = models.CharField(max_length=256, default=None, blank=True, null=True)
+    type = models.PositiveIntegerField(default=None, blank=True, null=True)
+    periodType = models.CharField(max_length=256, default=None, blank=True, null=True)
+    group = models.ForeignKey(Group, on_delete=models.CASCADE, default=None, blank=True, null=True)
+    time = None
+    length = None
+
+    def length(self):
+        return self.time.time_to - self.time.time_from + 1
+
+    def instName(self):
+        return self.group.inst.name
+
+    def courseName(self):
+        return self.group.inst.course.name
+
+    def build(self):
+        self.time = list(self.time_set.all())[0]
+
+
+class Lab(models.Model):
+    place = models.CharField(max_length=256, default=None, blank=True, null=True)
+    type = models.PositiveIntegerField(default=None, blank=True, null=True)
+    periodType = models.CharField(max_length=256, default=None, blank=True, null=True)
+    group = models.ForeignKey(Group, on_delete=models.CASCADE, default=None, blank=True, null=True)
+    time = None
+
+    def length(self):
+        return self.time.time_to - self.time.time_from + 1
+
+    def instName(self):
+        return self.group.inst.name
+
+    def courseName(self):
+        return self.group.inst.course.name
+
+    def build(self):
+        self.time = list(self.time_set.all())[0]
+
+
+class Time(models.Model):
+    time_day = models.PositiveIntegerField(default=None, blank=True, null=True)
+    time_from = models.PositiveIntegerField(default=None, blank=True, null=True)
+    time_to = models.PositiveIntegerField(default=None, blank=True, null=True)
+    lecture = models.ForeignKey(Lecture, on_delete=models.CASCADE, default=None, blank=True, null=True)
+    exlecture = models.ForeignKey(ExLecture, on_delete=models.CASCADE, default=None, blank=True, null=True)
+    tut = models.ForeignKey(Tutorial, on_delete=models.CASCADE, default=None, blank=True, null=True)
+    lab = models.ForeignKey(Lab, on_delete=models.CASCADE, default=None, blank=True, null=True)
+
