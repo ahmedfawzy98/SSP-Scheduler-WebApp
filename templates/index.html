@@ -85,7 +85,7 @@
 
 
 
-        options.append("<button id=\"continueBtn\" type=\"submit\" class=\"btn btn-primary\" name=\"submit\" value=\"selection\">Continue</button>");
+        options.append("<button id=\"continueBtn\" type=\"submit\" class=\"btn btn-primary\" name=\"submit\" value=\"selection\" disabled>Continue</button>");
         options.children("div").hide();
         $("#selectAllBtn").hide();
         $("#continueBtn").hide();
@@ -117,13 +117,31 @@
 
 
         $("input:checkbox").change(function () {
-           if(this.checked){
-                $("#hours").html(parseInt($("#hours").html())+parseInt($(this).attr("data-crh")));
+            let courseHours = parseInt($(this).attr("data-crh"));
+            let currentValue = parseInt($("#hours").html());
+            let newValue;
+            if(this.checked){
+                newValue = parseInt($("#hours").html())+parseInt($(this).attr("data-crh"));
+               if(newValue <= 21 ){
+                   $("#hours").html(newValue);
+                   if(newValue >= 12){
+                       $("#continueBtn").prop('disabled', false);
+                   }
 
-           }
-           else{
-               $("#hours").html(parseInt($("#hours").html())-parseInt($(this).attr("data-crh")));
-           }
+
+               }else {
+                   $(this).prop('checked', false);
+                   alert("You can't have more than 21 credit hours")
+                   return
+               }
+            }
+            else{
+                newValue = parseInt($("#hours").html())-parseInt($(this).attr("data-crh"));
+                if(newValue < 12){
+                    $("#continueBtn").prop('disabled', true);
+                }
+                $("#hours").html(parseInt($("#hours").html())-parseInt($(this).attr("data-crh")));
+            }
            let hours = parseInt($("#hours").html());
            $("#hoursIn").attr("value",$("#hours").html());
         });
