@@ -9,7 +9,6 @@ from django.db.models import Q
 
 import time
 
-# Create your views here.
 
 
 def select_courses(request):
@@ -49,8 +48,11 @@ def index(request):
         controller = Controller()
         # "selection" indicates that the request is from courses selection page
         if request.POST.get("submit") == "selection":
-            if int(request.POST.get("hoursTaken")) < 12:
-                return render(request, "illegal.html")
+            if int(request.POST.get("hoursTaken")) < 12 or int(request.POST.get("hoursTaken")) > 21 :
+                dict['error_msg'] = "Insufficient credit hours taken. At least 12 credit hours is required " \
+                                    "<a href=\"/courses\">here</a>." if int(request.POST.get("hoursTaken")) < 12 else "Too many credit hours taken. At maximum 21 credit hours is allowed " \
+                                    "<a href=\"/courses\">here</a>."
+                return render(request, "illegal.html", context= dict)
             if len(request.session['courses']) > 0:
                 # clean_priority(request.session['courses'])
                 request.session['courses'].clear()
@@ -85,7 +87,8 @@ def generate_schedules(request):
     dict = {}
     controller = Controller()
     courses = [course for course in allcourses if course.name in request.session['courses']]
-    # clean_priority(courses)
+    for course in courses:
+        course.build()
     dict["courses"] = courses
     dict["coursesNum"] = len(courses)
     for course in courses:
@@ -94,25 +97,35 @@ def generate_schedules(request):
     for pr in priority:
         for course in courses:
             if pr[0] == course.name:
-                for inst in course.instructors():
+                for inst in course.instructors:
                     if pr[1] == inst.name:
                         inst.priority = int(request.POST.get(course.name + "Pr"))
                         course.priority = int(request.POST.get(course.name + "Pr"))
-    start_time = time.time()
-    for course in courses:
-        course.build()
-    print("Building time:--- %s seconds ---" % (time.time() - start_time))
     controller.courses = copy.deepcopy(courses)
     start_time = time.time()
     controller.makeSchedule()
-    print("Building tree time:--- %s seconds ---" % (time.time() - start_time))
-    print("FUNC TIME : %s" % controller.func_runtime)
-    schedule = controller.schedule.schedule
-    alternatives = [x.schedule for x in controller.alternatives]
-    allSchedules = [schedule] + alternatives
+    print("Tree building time:--- %s seconds ---" % (time.time() - start_time))
+    if controller.schedule is None:
+        data = {
+            'text': "<h4 id='all-schedules' class='text-center'>There's no possible schedule for your preferences</h4>"
+        }
+        return JsonResponse(data)
+    best_schedule = controller.schedule.schedule
+    # alternatives = [x.schedule for x in controller.alternatives]
+    alternatives = []
+    for alt in controller.alternatives:
+        if alt:
+            alternatives.append(alt.schedule)
+        else:
+            alternatives.append(None)
+
+    allSchedules = [best_schedule] + alternatives
     schedulesHTML = [[[None for x in range(12)] for y in range(6)] for z in range(len(allSchedules))]
 
     for ind, sch in enumerate(allSchedules):
+        if sch is None:
+            schedulesHTML[ind][0][0] = "NOT FOUND"
+            continue
         i = 0
         while i < 6:
             j = 0
@@ -142,27 +155,17 @@ def generate_schedules(request):
     courses.sort(key=attrgetter('name'))
     dict["allSchedules"] = [list(a) for a in
                             zip(schedulesHTML, ["best"] + [c.replace(' ', '') for c in controller.altCourses])]
-    # return render(request, 'schedule.html', context=dict)
     x = render_to_string(template_name='schedules.html', context=dict)
-    print("HELLO")
     data = {
         'text': x
     }
     return JsonResponse(data)
 
 
-# def ajaxTest(request):
-#     data = {
-#         'text': request.POST.get("Programming 2" + "Pr")
-#     }
-#     return JsonResponse(data)
 
 def select_department(request):
     if request.method == 'GET':
         return render(request, 'department.html')
-    # else:
-    #     input_file.department = request.POST.get('department')
-    #     return select_courses(request)
 
 
 def clean_priority(coursesf):

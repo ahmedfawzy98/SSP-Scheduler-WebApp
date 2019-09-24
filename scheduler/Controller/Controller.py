@@ -1,7 +1,6 @@
 from operator import attrgetter
 from scheduler.Classes.Node import Node
 from scheduler.Classes.Schedule import Schedule
-import time
 import random
 
 
@@ -10,8 +9,6 @@ class Controller:
         self.schedule = Schedule()
         self.alternatives = []
         self.altCourses = []
-        self.levels = []
-        self.level = []
         self.completed = []
         self.completedPriorityDuplicate = []
         self.completedDaysDuplicate = []
@@ -19,7 +16,6 @@ class Controller:
         self.coursesNum = None
         self.bestCompleted = [7,-1]
         self.lastPrioCourse = -1
-        self.func_runtime = 0
 
     def build_tree(self, node, cNum):
         if cNum != self.coursesNum-1:
@@ -34,7 +30,6 @@ class Controller:
                             # check if the current group doesn't clash with the current tree branch
                             if not node.check_clash(group,node.schedule,tutsInd[iTut],labsInd[iLab]):
                                 # add the group to the current branch
-                                start_time = time.time()
                                 node.add_child(group, tutsInd[iTut], labsInd[iLab])
                                 # update the last added child total schedule's priority
                                 node.children[-1].schedule.add_to_priority(
@@ -42,11 +37,13 @@ class Controller:
                                     node.children[-1].parent.get_total_priority())
 
                                 child = node.children[-1]
-                                self.func_runtime += time.time() - start_time
+                                # If this branch didn't reach the last prioritized course then continue
                                 if cNum+1 < self.lastPrioCourse:
                                     self.build_tree(node.children[-1], cNum + 1)
+                                # If this branch has more priority value than the current best then continue
                                 elif child.schedule.priorityValue > self.bestCompleted[1]:
                                     self.build_tree(node.children[-1], cNum + 1)
+                                # If this branch has the same priority value as the best but less or equal days continue
                                 elif child.schedule.priorityValue == self.bestCompleted[1]:
                                     if child.schedule.daysTaken <= self.bestCompleted[0]:
                                         self.build_tree(node.children[-1], cNum + 1)
@@ -64,28 +61,28 @@ class Controller:
 
 
     def makeSchedule(self):
+        # Sorting the courses so that it starts the tree with the most prioritized to make sure the branches will always
+        #   contain them
         self.courses.sort(key=attrgetter('priority'), reverse=True)
-        # if self.courses[0].priority == 0:
-        #     self.courses[0].priority = 1
-        #     for instructor in self.courses[0].instructors:
-        #         instructor.priority = 1
 
         for course in self.courses:
             course.instructors.sort(key=attrgetter('priority'), reverse=True)
             # for inst in course.instructors:
             #     random.shuffle(inst.groups)
 
-        start_time = time.time()
         self.coursesNum = len(self.courses)
         for ind,course in enumerate(self.courses):
             if course.priority > 0:
                 self.lastPrioCourse = ind
+
+        # Shuffling the courses after the last prioritized course
         # copy = self.courses[self.lastPrioCourse:] if self.lastPrioCourse > -1 else self.courses[0:]
         # random.shuffle(copy)
         # if self.lastPrioCourse > -1:
         #     self.courses[self.lastPrioCourse:] = copy
         # else:
         #     self.courses[0:] = copy
+
         # if the prioritized courses are 2 or less then only for these courses keep the prioritized instructor and
         # delete the others
         if 0 <= self.lastPrioCourse <= 1:
@@ -93,7 +90,6 @@ class Controller:
                 self.courses[i].instructors = [self.courses[i].instructors[0]]
         root = Node(None)
         self.build_tree(root,-1)
-        print("Execution Time: --- %s seconds ---" % (time.time() - start_time))
         self.completed.sort(key=attrgetter('schedule.priorityValue'), reverse=True)
         self.completedPriorityDuplicate = [self.completed[i] for i in range(0,len(self.completed))
                                            if self.completed[0].get_total_priority()
@@ -103,9 +99,13 @@ class Controller:
         self.completedDaysDuplicate = [self.completedPriorityDuplicate[i] for i in range(0, len(self.completedPriorityDuplicate))
                                            if self.completedPriorityDuplicate[0].schedule.daysTaken
                                            == self.completedPriorityDuplicate[i].schedule.daysTaken]
-        perfect = random.choice(self.completedDaysDuplicate)
+        try:
+            perfect = random.choice(self.completedDaysDuplicate)
+        except IndexError:
+            self.schedule = None
+            return
         self.schedule = perfect.schedule
-        print("HAKUNA")
+
         ###
         # Alternative schedules code
         ###
@@ -128,5 +128,7 @@ class Controller:
                 self.completedPriorityDuplicate.sort(key=attrgetter('schedule.daysTaken'))
                 self.alternatives.append(self.completedPriorityDuplicate[0].schedule)
                 self.altCourses.append(self.courses[len(self.courses)-1-i].name)
+            else:
+                self.alternatives.append(None)
+                self.altCourses.append(self.courses[len(self.courses) - 1 - i].name)
             perfect.data.available = True
-        print("HAKUNA")

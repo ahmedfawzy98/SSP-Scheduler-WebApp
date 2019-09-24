@@ -31,12 +31,3 @@ class Schedule:
         for i in range(6):
             self.days[i] = sch.days[i]
 
-    def printSchedule(self):
-        for i in range(6):
-            print(str(i), end=' ')
-            for j in range(12):
-                if self.schedule[i][j] is None:
-                    print('                  ' + str(j) + '                   ', end='')
-                else:
-                    self.schedule[i][j].printMe()
-            print()
