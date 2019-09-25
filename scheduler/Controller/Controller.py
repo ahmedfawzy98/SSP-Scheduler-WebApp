@@ -10,14 +10,15 @@ class Controller:
         self.alternatives = []
         self.altCourses = []
         self.completed = []
-        self.completedPriorityDuplicate = []
-        self.completedDaysDuplicate = []
+        self.priority_duplicates = []
+        self.days_duplicates = []
+        self.gap_duplicates = []
         self.courses = []
         self.coursesNum = None
         self.bestCompleted = [7,-1]
         self.lastPrioCourse = -1
         self.offdays = []
-        self.preferredDays = []
+        self.preferred_days = []
 
     def build_tree(self, node, cNum):
         if cNum != self.coursesNum-1:
@@ -92,19 +93,9 @@ class Controller:
                 self.courses[i].instructors = [self.courses[i].instructors[0]]
         root = Node(None)
         self.build_tree(root,-1)
-        self.completed.sort(key=attrgetter('schedule.priorityValue'), reverse=True)
-        self.completedPriorityDuplicate = [self.completed[i] for i in range(0,len(self.completed))
-                                           if self.completed[0].get_total_priority()
-                                           == self.completed[i].get_total_priority()]
-
-        self.completedPriorityDuplicate.sort(key=attrgetter('schedule.daysTaken'))
-        self.completedDaysDuplicate = [self.completedPriorityDuplicate[i] for i in range(0, len(self.completedPriorityDuplicate))
-                                           if self.completedPriorityDuplicate[0].schedule.daysTaken
-                                           == self.completedPriorityDuplicate[i].schedule.daysTaken]
-        self.preferredDays = [self.completedDaysDuplicate[i] for i in range(0, len(self.completedDaysDuplicate))
-                                           if self.completedDaysDuplicate[i].schedule.has_pref_days(self.offdays)]
+        self.filter_completed()
         try:
-            perfect = random.choice(self.preferredDays)
+            perfect = random.choice(self.gap_duplicates)
         except IndexError:
             self.schedule = None
             return
@@ -115,7 +106,7 @@ class Controller:
         ###
         # getting alternative schedules
         for i in range(len(self.courses)):
-            self.completedPriorityDuplicate.clear()
+            self.priority_duplicates.clear()
             if i != 0:
                 perfect = perfect.parent
             perfect.data.available = False
@@ -123,16 +114,34 @@ class Controller:
             for j in range(len(self.completed)):
                 if self.completed[j].all_available():
                     # add the first found all-available schedule and its priority duplicates to completedPriorityD
-                    self.completedPriorityDuplicate = [self.completed[j+k] for k in range(0, len(self.completed)-j-1)
-                                                       if (self.completed[j].get_total_priority()
+                    self.priority_duplicates = [self.completed[j + k] for k in range(0, len(self.completed) - j - 1)
+                                                if (self.completed[j].get_total_priority()
                                                        == self.completed[j+k].get_total_priority()
                                                            and self.completed[j+k].all_available())]
                     break
-            if len(self.completedPriorityDuplicate) != 0:
-                self.completedPriorityDuplicate.sort(key=attrgetter('schedule.daysTaken'))
-                self.alternatives.append(self.completedPriorityDuplicate[0].schedule)
+            if len(self.priority_duplicates) != 0:
+                self.priority_duplicates.sort(key=attrgetter('schedule.daysTaken'))
+                self.alternatives.append(self.priority_duplicates[0].schedule)
                 self.altCourses.append(self.courses[len(self.courses)-1-i].name)
             else:
                 self.alternatives.append(None)
                 self.altCourses.append(self.courses[len(self.courses) - 1 - i].name)
             perfect.data.available = True
+
+    def filter_completed(self):
+        self.completed.sort(key=attrgetter('schedule.priorityValue'), reverse=True)
+        self.priority_duplicates = [self.completed[i] for i in range(0, len(self.completed))
+                                    if self.completed[0].get_total_priority()
+                                    == self.completed[i].get_total_priority()]
+        self.priority_duplicates.sort(key=attrgetter('schedule.daysTaken'))
+        self.days_duplicates = [self.priority_duplicates[i] for i in range(0, len(self.priority_duplicates))
+                                if self.priority_duplicates[0].schedule.daysTaken
+                                == self.priority_duplicates[i].schedule.daysTaken]
+        self.preferred_days = [self.days_duplicates[i] for i in range(0, len(self.days_duplicates))
+                               if self.days_duplicates[i].schedule.has_pref_days(self.offdays)]
+        list(map(lambda x: x.schedule.calculate_gap(), self.preferred_days))
+        self.preferred_days.sort(key=attrgetter('schedule.gap_value'))
+        self.gap_duplicates = [self.preferred_days[i] for i in range(0, len(self.preferred_days))
+                               if self.preferred_days[0].schedule.gap_value
+                               == self.preferred_days[i].schedule.gap_value]
+        return

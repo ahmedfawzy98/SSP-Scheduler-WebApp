@@ -28,6 +28,33 @@ class Schedule:
                 return False
         return True
 
+    def calculate_gap(self):
+        counting = False
+        for i in range(0,6):
+            day_gap = 0
+            for j in range(0,12):
+                if counting:
+                    if self.schedule[i][j] is not None:
+                        if day_gap:
+                            if self.schedule[i][j].length() == 1 and self.schedule[i][j].periodType != "Lecture" and j % 2 == 1 \
+                                    and self.schedule[i][j - 1] is None:
+                                day_gap -= 1
+                            self.gap_value += day_gap
+                            day_gap = 0
+                        else:
+                            if self.schedule[i][j].length() == 1 and self.schedule[i][j].periodType != "Lecture" and j % 2 == 0 \
+                                    and self.schedule[i][j + 1] is None:
+                                day_gap -= 1
+                    else:
+                        day_gap += 1
+                elif self.schedule[i][j] is not None:
+                    if self.schedule[i][j].length() == 1 and self.schedule[i][j].periodType != "Lecture" and j % 2 == 0 \
+                                and self.schedule[i][j+1] is None:
+                        day_gap -= 1
+                    counting = True
+            day_gap = 0
+            counting = False
+
     def clone(self, sch):
         for i in range(6):
             for j in range(12):
