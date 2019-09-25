@@ -3,6 +3,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>SSP Scheduler</title>
     <link rel="stylesheet" href="{% static "bootstrap.css" %}">
     <link rel="stylesheet" href="{% static "department.css" %}">
@@ -27,6 +28,63 @@
             <div class="container">
                 <form action="/schedule/" method="post" id="main-form" >
                     {% csrf_token %}
+                    <div class="modal fade" id="prefModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                      <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                          <div class="modal-header">
+                            <h5 class="modal-title" id="prefModalLabel">Preferences</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                              <span aria-hidden="true">&times;</span>
+                            </button>
+                          </div>
+                          <div class="modal-body p-4">
+{#                                <div class="row justify-content-around mb-4">#}
+{#                                    <div class="form-group justify-content-start">#}
+{#                                        <div class="col-12 col-md-12 text-center">#}
+{#                                            <label for="densityBtnGroup">Schedule Density</label>#}
+{#                                        </div>#}
+{#                                        <div class="col-12 col-md-12">#}
+{#                                            <div class="btn-group" role="group" aria-label="Basic example">#}
+{#                                                <button id="min-day" type="button"  class="btn btn-outline-secondary density active">Minimum Days</button>#}
+{#                                                <input class="density-in" type="hidden"  name="min-day" value="selected">#}
+{#                                                <button id="max-day" type="button"  class="btn btn-outline-secondary density">Maximum Days</button>#}
+{#                                                <input class="density-in" type="hidden" name="max-day" value="unselected">#}
+{#                                            </div>#}
+{#                                        </div>#}
+{#                                    </div>#}
+{#                                </div>#}
+
+                                <div class="row justify-content-around my-4">
+                                    <div class="form-group">
+                                        <div class="col-12 col-md-12 text-center">
+                                            <label for="densityBtnGroup" >Preferred Days Off</label>
+                                        </div>
+                                        <div class="col-12 col-md-12">
+                                            <div class="btn-group" role="group" aria-label="Basic example">
+                                                <button id="sat-day" type="button"  class="btn btn-outline-secondary days">Sat</button>
+                                                <input class="days-in"  type="hidden" name="sat-day" value="unselected">
+                                                <button id="sun-day" type="button" class="btn btn-outline-secondary days">Sun</button>
+                                                <input class="days-in" type="hidden" name="sun-day" value="unselected">
+                                                <button id="mon-day" type="button" class="btn btn-outline-secondary days">Mon</button>
+                                                <input class="days-in" type="hidden" name="mon-day" value="unselected">
+                                                <button id="tue-day" type="button" class="btn btn-outline-secondary days">Tue</button>
+                                                <input class="days-in" type="hidden" name="tue-day" value="unselected">
+                                                <button id="wed-day" type="button" class="btn btn-outline-secondary days">Wed</button>
+                                                <input class="days-in" type="hidden" name="wed-day" value="unselected">
+                                                <input class="days-in" type="hidden" name="thu-day" value="unselected">
+                                                <button id="thu-day" type="button" class="btn btn-outline-secondary days">Thu</button>
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                          </div>
+                          <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
                     <div class="row">
                         {% for course in courses %}
                             <div class="col-md-4 col-sm-6 col-12">
@@ -68,13 +126,18 @@
                         <div class="col-4 ">
                             <button id="generateBtn" type="submit" class="btn btn-primary btn-block" name="submit" value="generation">Generate</button>
                         </div>
+                        <div class="col-4 ">
+                            <button id="prefBtn" type="button" class="btn btn-secondary btn-block" name="submit" value="generation" data-toggle="modal" data-target="#prefModal">Preferences</button>
+                        </div>
                     </div>
                 </form>
 
 
 
             </div>
+
         </div>
+
         <footer id="main-footer">
                 <section class="bg-black p-4 mt-3">
                 </section>
@@ -94,7 +157,7 @@
     .input-group{
         margin: 10px;
     }
-    #generateBtn{
+    #generateBtn,#prefBtn{
         margin:20px;
     }
     .sliders {
@@ -141,6 +204,7 @@
 <script>
 
     $(document).ready(function () {
+        $(".days-in").val("unselected");
         $("#main-form").submit(function (e) {
             e.preventDefault();
             $("#all-schedules").remove();
@@ -170,7 +234,7 @@
                     });
                     $('.port-item').click( async function(e) {
                         $('.collapse').collapse('hide');
-                        $('.active').removeClass("active");
+                        $('.active').not($(".density,.days")).removeClass("active");
                         $(".port-item").not(this).attr("disabled", true);
                         await sleep(250);
                         $(".port-item").not(this).attr("disabled", false);
@@ -216,6 +280,35 @@
             // Now browser starts downloading it instead of just showing it
             var newData = imgageData.replace(/^data:image\/png/, "data:application/octet-stream");
             $("#btn-download").attr("download", element.attr('id')+".png").attr("href", newData);
+        });
+
+        $(".density").on('click', function () {
+            let buttons = $(".density");
+            let inputs = $(".density-in");
+           if(!$(this).hasClass('active')){
+               buttons.removeClass('active');
+               for(let i=0; i < inputs.length ; i++){
+                   if(inputs[i].value === "selected"){
+                       inputs[i].setAttribute("value", "unselected")
+                   }else{
+                       inputs[i].setAttribute("value", "selected")
+                   }
+               }
+               $(this).addClass('active');
+           }
+        });
+
+        $(".days").on('click', function() {
+            let days = $(".days");
+            let name = this.id;
+            console.log(name);
+            if ($(this).hasClass('active')){
+                $(this).removeClass('active');
+                $("[name='"+name+"']").val('unselected')
+            }else{
+                $(this).addClass('active');
+                $("[name='"+name+"']").val('selected')
+            }
         });
 
         function sleep(ms) {

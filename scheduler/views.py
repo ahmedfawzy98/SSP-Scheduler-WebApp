@@ -48,11 +48,6 @@ def index(request):
         controller = Controller()
         # "selection" indicates that the request is from courses selection page
         if request.POST.get("submit") == "selection":
-            if int(request.POST.get("hoursTaken")) < 12 or int(request.POST.get("hoursTaken")) > 21 :
-                dict['error_msg'] = "Insufficient credit hours taken. At least 12 credit hours is required " \
-                                    "<a href=\"/courses\">here</a>." if int(request.POST.get("hoursTaken")) < 12 else "Too many credit hours taken. At maximum 21 credit hours is allowed " \
-                                    "<a href=\"/courses\">here</a>."
-                return render(request, "illegal.html", context= dict)
             if len(request.session['courses']) > 0:
                 # clean_priority(request.session['courses'])
                 request.session['courses'].clear()
@@ -63,6 +58,15 @@ def index(request):
                     request.session['courses'].append(course.name)
             request.session.modified = True
             courses = [course for course in allcourses if course.name in request.session['courses']]
+            credit_hours = 0
+            for course in courses:
+                credit_hours+= course.creditHours
+            if credit_hours < 12 or credit_hours > 21 :
+                dict['error_msg'] = "Insufficient credit hours taken. At least 12 credit hours is required " \
+                                    "<a href=\"/courses\">here</a>." if credit_hours < 12 else "Too many credit hours taken. At maximum 21 credit hours is allowed " \
+                                    "<a href=\"/courses\">here</a>."
+                return render(request, "illegal.html", context= dict)
+
             dict["courses"] = courses
             instructors = {}
             for course in courses:
@@ -101,13 +105,19 @@ def generate_schedules(request):
                     if pr[1] == inst.name:
                         inst.priority = int(request.POST.get(course.name + "Pr"))
                         course.priority = int(request.POST.get(course.name + "Pr"))
+    days = ['sat-day', 'sun-day', 'mon-day', 'tue-day', 'wed-day', 'thu-day']
+    offdays = []
+    for i in range(0,6):
+        if request.POST.get(days[i]) == "selected":
+            offdays.append(i)
+    controller.offdays = offdays
     controller.courses = copy.deepcopy(courses)
     start_time = time.time()
     controller.makeSchedule()
     print("Tree building time:--- %s seconds ---" % (time.time() - start_time))
     if controller.schedule is None:
         data = {
-            'text': "<h4 id='all-schedules' class='text-center'>There's no possible schedule for your preferences</h4>"
+            'text': "<h4 id='all-schedules' class='text-center'>There's no possible schedule with your preferences</h4>"
         }
         return JsonResponse(data)
     best_schedule = controller.schedule.schedule

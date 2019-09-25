@@ -4,6 +4,7 @@ class Schedule:
         self.days = [False, False, False, False, False, False]
         self.daysTaken = 0
         self.priorityValue = 0
+        self.gap_value = 0
 
     def check_clash(self, period):
         for i in range(period.length()):
@@ -20,6 +21,12 @@ class Schedule:
 
     def add_to_priority(self, value):
         self.priorityValue += value
+
+    def has_pref_days(self, days):
+        for day in days:
+            if self.days[day]:
+                return False
+        return True
 
     def clone(self, sch):
         for i in range(6):

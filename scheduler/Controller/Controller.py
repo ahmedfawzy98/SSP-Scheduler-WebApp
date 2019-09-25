@@ -16,6 +16,8 @@ class Controller:
         self.coursesNum = None
         self.bestCompleted = [7,-1]
         self.lastPrioCourse = -1
+        self.offdays = []
+        self.preferredDays = []
 
     def build_tree(self, node, cNum):
         if cNum != self.coursesNum-1:
@@ -99,8 +101,10 @@ class Controller:
         self.completedDaysDuplicate = [self.completedPriorityDuplicate[i] for i in range(0, len(self.completedPriorityDuplicate))
                                            if self.completedPriorityDuplicate[0].schedule.daysTaken
                                            == self.completedPriorityDuplicate[i].schedule.daysTaken]
+        self.preferredDays = [self.completedDaysDuplicate[i] for i in range(0, len(self.completedDaysDuplicate))
+                                           if self.completedDaysDuplicate[i].schedule.has_pref_days(self.offdays)]
         try:
-            perfect = random.choice(self.completedDaysDuplicate)
+            perfect = random.choice(self.preferredDays)
         except IndexError:
             self.schedule = None
             return
