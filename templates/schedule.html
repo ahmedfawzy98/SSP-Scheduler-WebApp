@@ -38,21 +38,21 @@
                             </button>
                           </div>
                           <div class="modal-body p-4">
-{#                                <div class="row justify-content-around mb-4">#}
-{#                                    <div class="form-group justify-content-start">#}
-{#                                        <div class="col-12 col-md-12 text-center">#}
-{#                                            <label for="densityBtnGroup">Schedule Density</label>#}
-{#                                        </div>#}
-{#                                        <div class="col-12 col-md-12">#}
-{#                                            <div class="btn-group" role="group" aria-label="Basic example">#}
-{#                                                <button id="min-day" type="button"  class="btn btn-outline-secondary density active">Minimum Days</button>#}
-{#                                                <input class="density-in" type="hidden"  name="min-day" value="selected">#}
-{#                                                <button id="max-day" type="button"  class="btn btn-outline-secondary density">Maximum Days</button>#}
-{#                                                <input class="density-in" type="hidden" name="max-day" value="unselected">#}
-{#                                            </div>#}
-{#                                        </div>#}
-{#                                    </div>#}
-{#                                </div>#}
+                                <div class="row justify-content-around mb-4">
+                                    <div class="form-group justify-content-start">
+                                        <div class="col-12 col-md-12 text-center">
+                                            <label for="densityBtnGroup">Schedule Density</label>
+                                        </div>
+                                        <div class="col-12 col-md-12">
+                                            <div id="min-day" class="btn-group" role="group" aria-label="Basic example">
+                                                <button id="min-day" type="button"  class="btn btn-outline-secondary density active">Minimum Days</button>
+                                                <input class="density-in" type="hidden"  name="min-day" value="selected">
+                                                <input class="density-in" type="hidden" name="max-day" value="unselected">
+                                                <button id="max-day" type="button"  class="btn btn-outline-secondary density">Maximum Days</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
 
                                 <div class="row justify-content-around my-4">
                                     <div class="form-group">
@@ -285,6 +285,7 @@
         $(".density").on('click', function () {
             let buttons = $(".density");
             let inputs = $(".density-in");
+            let name = this.id
            if(!$(this).hasClass('active')){
                buttons.removeClass('active');
                for(let i=0; i < inputs.length ; i++){
@@ -301,7 +302,6 @@
         $(".days").on('click', function() {
             let days = $(".days");
             let name = this.id;
-            console.log(name);
             if ($(this).hasClass('active')){
                 $(this).removeClass('active');
                 $("[name='"+name+"']").val('unselected')

@@ -5,6 +5,7 @@ class Schedule:
         self.daysTaken = 0
         self.priorityValue = 0
         self.gap_value = 0
+        self.max_density = 0
 
     def check_clash(self, period):
         for i in range(period.length()):
@@ -33,15 +34,21 @@ class Schedule:
         for i in range(0,6):
             day_gap = 0
             for j in range(0,12):
+                # When the first non free period is encountered starts counting gaps , when another non free period
+                #   add the counted gaps to the day_gap
                 if counting:
                     if self.schedule[i][j] is not None:
                         if day_gap:
+                            # If an even single-period lab or tutorial is found decrement the day_gap because that means
+                            #   there's a counted gap that isn't actually a gap
                             if self.schedule[i][j].length() == 1 and self.schedule[i][j].periodType != "Lecture" and j % 2 == 1 \
                                     and self.schedule[i][j - 1] is None:
                                 day_gap -= 1
                             self.gap_value += day_gap
                             day_gap = 0
                         else:
+                            # If an odd single-period lab or tutorial is found decrement the day_gap because that means
+                            #   there will be a counted gap that isn't actually a gap
                             if self.schedule[i][j].length() == 1 and self.schedule[i][j].periodType != "Lecture" and j % 2 == 0 \
                                     and self.schedule[i][j + 1] is None:
                                 day_gap -= 1
@@ -54,6 +61,15 @@ class Schedule:
                     counting = True
             day_gap = 0
             counting = False
+
+    def calc_max_density(self):
+        for i in range(0, 6):
+            day_density = 0
+            for j in range(0, 12):
+                if self.schedule[i][j]:
+                    day_density += 1
+            if day_density > self.max_density:
+                self.max_density = day_density
 
     def clone(self, sch):
         for i in range(6):

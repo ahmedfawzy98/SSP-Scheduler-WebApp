@@ -10,7 +10,6 @@ from django.db.models import Q
 import time
 
 
-
 def select_courses(request):
     if 'courses' not in request.session:
         request.session['courses'] = []
@@ -110,10 +109,12 @@ def generate_schedules(request):
     for i in range(0,6):
         if request.POST.get(days[i]) == "selected":
             offdays.append(i)
+    if request.POST.get('max-day') == "selected":
+        controller.max_days = True
     controller.offdays = offdays
     controller.courses = copy.deepcopy(courses)
     start_time = time.time()
-    controller.makeSchedule()
+    controller.create_schedules()
     print("Tree building time:--- %s seconds ---" % (time.time() - start_time))
     if controller.schedule is None:
         data = {
@@ -129,12 +130,12 @@ def generate_schedules(request):
         else:
             alternatives.append(None)
 
-    allSchedules = [best_schedule] + alternatives
-    schedulesHTML = [[[None for x in range(12)] for y in range(6)] for z in range(len(allSchedules))]
+    all_schedules = [best_schedule] + alternatives
+    schedules_html = [[[None for x in range(12)] for y in range(6)] for z in range(len(all_schedules))]
 
-    for ind, sch in enumerate(allSchedules):
+    for ind, sch in enumerate(all_schedules):
         if sch is None:
-            schedulesHTML[ind][0][0] = "NOT FOUND"
+            schedules_html[ind][0][0] = "NOT FOUND"
             continue
         i = 0
         while i < 6:
@@ -143,34 +144,33 @@ def generate_schedules(request):
                 if sch[i][j] is not None:
 
                     if sch[i][j].periodType == "Lecture":
-                        schedulesHTML[ind][i][j] = "<td bgcolor='#FFE9E7' colspan='" + str(
+                        schedules_html[ind][i][j] = "<td bgcolor='#FFE9E7' colspan='" + str(
                             sch[i][j].length()) + "'>" + sch[i][j].courseName() + "<br>" + sch[i][
                                                        j].instName() + "</td>"
                     elif sch[i][j].periodType == "Tut":
-                        schedulesHTML[ind][i][j] = "<td bgcolor='#d1e7f7' >" + sch[i][
+                        schedules_html[ind][i][j] = "<td bgcolor='#d1e7f7' >" + sch[i][
                             j].courseName() + "<br>" + sch[i][j].instName() + "</td>"
                     else:
-                        schedulesHTML[ind][i][j] = "<td bgcolor='#BDFFFF'>" + sch[i][
+                        schedules_html[ind][i][j] = "<td bgcolor='#BDFFFF'>" + sch[i][
                             j].courseName() + "<br>" + sch[i][j].instName() + "</td>"
                     for jj in range(1, sch[i][j].length()):
-                        schedulesHTML[ind][i][j + jj] = ""
+                        schedules_html[ind][i][j + jj] = ""
                     j += sch[i][j].length()
                 else:
-                    schedulesHTML[ind][i][j] = "<td bgcolor='#FFFFFF'></td>"
+                    schedules_html[ind][i][j] = "<td bgcolor='#FFFFFF'></td>"
                     j += 1
 
             i += 1
-    dict["coursesNames"] = [list(a) for a in zip(["Best"] + controller.altCourses, ["best"] +
-                                                 [c.replace(' ', '') for c in controller.altCourses])]
+    dict["coursesNames"] = [list(a) for a in zip(["Best"] + controller.alt_courses, ["best"] +
+                                                 [c.replace(' ', '') for c in controller.alt_courses])]
     courses.sort(key=attrgetter('name'))
     dict["allSchedules"] = [list(a) for a in
-                            zip(schedulesHTML, ["best"] + [c.replace(' ', '') for c in controller.altCourses])]
+                            zip(schedules_html, ["best"] + [c.replace(' ', '') for c in controller.alt_courses])]
     x = render_to_string(template_name='schedules.html', context=dict)
     data = {
         'text': x
     }
     return JsonResponse(data)
-
 
 
 def select_department(request):
