@@ -8,8 +8,8 @@
     <link rel="stylesheet" href="{% static "bootstrap.css" %}">
     <link rel="stylesheet" href="{% static "department.css" %}">
     <link rel="stylesheet" href="{% static "schedule.css" %}">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.13/css/all.css" integrity="sha384-DNOHZ68U8hZfKXOrtjWvjxusGo9WQnrNx2sqG0tfsghAvtVlRW3tvkXWZh58N9jp"
+    crossorigin="anonymous">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
     <script src="https://files.codepedia.info/files/uploads/iScripts/html2canvas.js"></script>
 
@@ -74,6 +74,23 @@
                                                 <input class="days-in" type="hidden" name="thu-day" value="unselected">
                                                 <button id="thu-day" type="button" class="btn btn-outline-secondary days">Thu</button>
 
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row justify-content-center mb-4">
+                                    <div class="form-group justify-content-start">
+                                        <div class="col-12 col-md-12 text-center">
+                                            <label for="densityBtnGroup">Include Alternatives
+                                                <i class="fas fa-question-circle" data-toggle="tooltip" data-placement="top" title="in case you missed a course while registration you'll find an alternative schedule for each possibly missed course"></i>
+                                            </label>
+                                        </div>
+                                        <div class="col-12 col-md-12">
+                                            <div id="min-day" class="btn-group btn-block" role="group" aria-label="Basic example">
+                                                <button id="alt-yes" type="button"  class="btn btn-outline-secondary alt">Yes</button>
+                                                <input class="alt-in" type="hidden"  name="alt-yes" value="unselected">
+                                                <input class="alt-in" type="hidden" name="alt-no" value="selected">
+                                                <button id="alt-no" type="button"  class="btn btn-outline-secondary alt active">No</button>
                                             </div>
                                         </div>
                                     </div>
@@ -204,6 +221,9 @@
 <script>
 
     $(document).ready(function () {
+        $(function () {
+          $('[data-toggle="tooltip"]').tooltip()
+        })
         $(".days-in").val("unselected");
         $("#main-form").submit(function (e) {
             e.preventDefault();
@@ -223,7 +243,6 @@
                     $("#main-form").after(data.text);
                     $(".btn-download").on('click', function (evt) {
                         element = $(".show").first();
-                        console.log('here');
                         html2canvas(document.body).then(function(canvas){
                             getCanvas = canvas
                          });
@@ -234,7 +253,7 @@
                     });
                     $('.port-item').click( async function(e) {
                         $('.collapse').collapse('hide');
-                        $('.active').not($(".density,.days")).removeClass("active");
+                        $('.active').not($(".density,.days,.alt")).removeClass("active");
                         $(".port-item").not(this).attr("disabled", true);
                         await sleep(250);
                         $(".port-item").not(this).attr("disabled", false);
@@ -244,18 +263,19 @@
                     });
                     $("#generateBtn").html("Generate");
                     $("#generateBtn").attr("disabled", false);
-                    let check = true;
-                    let port_items = document.getElementsByClassName('port-item');
-                    for (let i = 0; i < port_items.length; i++){
-                        if(port_items[i] in document.getElementsByClassName('active')){
-                            check = false;
-                            break;
-                        }
-                    }
-                    if(check){
-                        $('#best').click();
-                        check = false;
-                    }
+                    {#let check = true;#}
+                    {#let port_items = document.getElementsByClassName('port-item');#}
+                    {#for (let i = 0; i < port_items.length; i++){#}
+                    {#    if(port_items[i] in document.getElementsByClassName('active')){#}
+                    {#        check = false;#}
+                    {#        break;}}#}
+                    {#if(check){#}
+                    {#    $('#best').click();#}
+                    {#    check = false;}#}
+                    {#$("#best").click();#}
+                    $('html, body').animate({
+                            scrollTop: $("#main-footer").offset().top
+                        }, 800);
                     $('.btn-download').click();
                     $('.btn-download').click();
                 },
@@ -309,6 +329,23 @@
                 $(this).addClass('active');
                 $("[name='"+name+"']").val('selected')
             }
+        });
+
+        $(".alt").on('click', function () {
+            let buttons = $(".alt");
+            let inputs = $(".alt-in");
+            let name = this.id
+           if(!$(this).hasClass('active')){
+               buttons.removeClass('active');
+               for(let i=0; i < inputs.length ; i++){
+                   if(inputs[i].value === "selected"){
+                       inputs[i].setAttribute("value", "unselected")
+                   }else{
+                       inputs[i].setAttribute("value", "selected")
+                   }
+               }
+               $(this).addClass('active');
+           }
         });
 
         function sleep(ms) {

@@ -106,11 +106,15 @@ def generate_schedules(request):
                         course.priority = int(request.POST.get(course.name + "Pr"))
     days = ['sat-day', 'sun-day', 'mon-day', 'tue-day', 'wed-day', 'thu-day']
     offdays = []
+    alt_yes = False
     for i in range(0,6):
         if request.POST.get(days[i]) == "selected":
             offdays.append(i)
     if request.POST.get('max-day') == "selected":
         controller.max_days = True
+    if request.POST.get('alt-yes') == "selected":
+        alt_yes = True
+    controller.alt_yes = alt_yes
     controller.offdays = offdays
     controller.courses = copy.deepcopy(courses)
     start_time = time.time()
@@ -130,7 +134,10 @@ def generate_schedules(request):
         else:
             alternatives.append(None)
 
-    all_schedules = [best_schedule] + alternatives
+    if alt_yes:
+        all_schedules = [best_schedule] + alternatives
+    else:
+        all_schedules = [best_schedule]
     schedules_html = [[[None for x in range(12)] for y in range(6)] for z in range(len(all_schedules))]
 
     for ind, sch in enumerate(all_schedules):
@@ -161,11 +168,18 @@ def generate_schedules(request):
                     j += 1
 
             i += 1
-    dict["coursesNames"] = [list(a) for a in zip(["Best"] + controller.alt_courses, ["best"] +
+    if alt_yes:
+        dict["coursesNames"] = [list(a) for a in zip(["Best"] + controller.alt_courses, ["best"] +
                                                  [c.replace(' ', '') for c in controller.alt_courses])]
+    else:
+        dict["coursesNames"] = [list(a) for a in zip(["Best"], ["best"] )]
     courses.sort(key=attrgetter('name'))
-    dict["allSchedules"] = [list(a) for a in
+    if alt_yes:
+        dict["allSchedules"] = [list(a) for a in
                             zip(schedules_html, ["best"] + [c.replace(' ', '') for c in controller.alt_courses])]
+    else:
+        dict["allSchedules"] = [list(a) for a in
+                                zip(schedules_html, ["best"])]
     x = render_to_string(template_name='schedules.html', context=dict)
     data = {
         'text': x

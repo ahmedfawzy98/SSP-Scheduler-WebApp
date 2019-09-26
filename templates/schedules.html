@@ -4,7 +4,11 @@
             <div class="btn-group btn-group btn-group-toggle btn-block" data-toggle="buttons">
 
                 {% for courseNameS,courseName in coursesNames %}
+                    {% if courseName == "best" %}
+                    <button class="btn btn-no-r btn-no-f btn-secondary port-item active" data-toggle="collapse" data-target="#{{courseName}}Sch" id="{{ courseName }}">{{ courseNameS }}</button>
+                    {% else %}
                     <button class="btn btn-no-r btn-no-f btn-secondary port-item" data-toggle="collapse" data-target="#{{courseName}}Sch" id="{{ courseName }}">{{ courseNameS }}</button>
+                    {% endif %}
                 {% endfor %}
 
             </div>
@@ -18,7 +22,11 @@
     <div class="table-responsive">
         {% for schedule,course in allSchedules %}
         {% if schedule.0.0 != "NOT FOUND"  %}
+        {% if course == "best" %}
+        <div id="{{ course }}Sch" class="collapse show">
+        {% else %}
         <div id="{{ course }}Sch" class="collapse">
+        {% endif %}
             <table class="table" >
                 <tr>
                     <th scope="col"></th>

@@ -19,6 +19,7 @@ class Controller:
         self.last_prio_course = -1
         self.offdays = []
         self.max_days = False
+        self.alt_yes = False
         self.preferred_days = []
 
     def build_tree(self, node, cNum):
@@ -113,28 +114,29 @@ class Controller:
         # Alternative schedules code
         ###
         # getting alternative schedules
-        for i in range(len(self.courses)):
-            self.priority_duplicates = []
-            if i != 0:
-                perfect = perfect.parent
-            perfect.data.available = False
-            # iterate until a schedule without an unavailable group is found
-            for j in range(len(self.completed)):
-                if self.completed[j].all_available():
-                    # add the first found all-available schedule and its priority duplicates to completedPriorityD
-                    self.priority_duplicates = [self.completed[j + k] for k in range(0, len(self.completed) - j - 1)
-                                                if (self.completed[j].get_total_priority()
-                                                       == self.completed[j+k].get_total_priority()
-                                                           and self.completed[j+k].all_available())]
-                    break
-            if len(self.priority_duplicates) != 0:
-                self.priority_duplicates.sort(key=attrgetter('schedule.daysTaken'))
-                self.alternatives.append(self.priority_duplicates[0].schedule)
-                self.alt_courses.append(self.courses[len(self.courses) - 1 - i].name)
-            else:
-                self.alternatives.append(None)
-                self.alt_courses.append(self.courses[len(self.courses) - 1 - i].name)
-            perfect.data.available = True
+        if self.alt_yes:
+            for i in range(len(self.courses)):
+                self.priority_duplicates = []
+                if i != 0:
+                    perfect = perfect.parent
+                perfect.data.available = False
+                # iterate until a schedule without an unavailable group is found
+                for j in range(len(self.completed)):
+                    if self.completed[j].all_available():
+                        # add the first found all-available schedule and its priority duplicates to completedPriorityD
+                        self.priority_duplicates = [self.completed[j + k] for k in range(0, len(self.completed) - j - 1)
+                                                    if (self.completed[j].get_total_priority()
+                                                           == self.completed[j+k].get_total_priority()
+                                                               and self.completed[j+k].all_available())]
+                        break
+                if len(self.priority_duplicates) != 0:
+                    self.priority_duplicates.sort(key=attrgetter('schedule.daysTaken'))
+                    self.alternatives.append(self.priority_duplicates[0].schedule)
+                    self.alt_courses.append(self.courses[len(self.courses) - 1 - i].name)
+                else:
+                    self.alternatives.append(None)
+                    self.alt_courses.append(self.courses[len(self.courses) - 1 - i].name)
+                perfect.data.available = True
 
     def filtered_completed(self):
         self.completed.sort(key=attrgetter('schedule.priorityValue'), reverse=True)
