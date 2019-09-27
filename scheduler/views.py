@@ -18,7 +18,8 @@ def select_courses(request):
     request.session['courses'].clear()
     request.session.modified = True
     courses = Course.objects.all().filter(Q(department=request.session['department']) | Q(term=11))
-    term_numbers = list(dict.fromkeys([x['term'] for x in Course.objects.all().values('term')]))
+    term_numbers = list(dict.fromkeys([x.term for x in courses]))
+    term_numbers.sort()
     return render(request, 'index.html', context={"courses": courses, 'term_numbers': term_numbers})
 
 

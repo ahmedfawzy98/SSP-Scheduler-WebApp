@@ -81,6 +81,7 @@ class Lecture(models.Model):
 class ExLecture(models.Model):
     Place = models.CharField(max_length=256, default=None, blank=True, null=True)
     lecture = models.ForeignKey(Lecture, on_delete=models.CASCADE, default=None, blank=True, null=True)
+    periodType = 'Lecture'
     time = None
 
     def length(self):
