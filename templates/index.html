@@ -3,6 +3,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>SSP Scheduler</title>
     <link rel="stylesheet" href="{% static "index.css" %}">
     <link rel="stylesheet" href="{% static "bootstrap.css" %}">
@@ -63,9 +64,26 @@
                 {% csrf_token %}
                     <label for="hoursIn" style="display: none" style="display: none;"></label>
                     <input type="number" name="hoursTaken" value="0" id="hoursIn" style="display: none" >
-                <div id="options" class="form-group">
-                    <input type="button" id="selectAllBtn" class="btn btn-secondary" value="Select All">
-                </div   >
+                <div  class="form-group">
+                    <div class="row m-3">
+                        <div id="options" class="col-8">
+{#                            <div class="form-check" style="" data-term="7">#}
+{#                                 <label style="" class="form-check-label">#}
+{#                                     <input data-crh="3" name="DSP implementation of communication systems" class="form-check-input position-static" type="checkbox" id="ASD ADSASDASD ASD AD AD AD ASD AD">#}
+{#                                     DSP implementation of communication systems (3)#}
+{#                                 </label>#}
+{#                             </div>#}
+                        </div>
+                        <div class="col-4">
+                            <input type="button" id="selectAllBtn" class="btn btn-secondary btn-block" value="Select All">
+                        </div>
+                    </div>
+                    <div class="row justify-content-center m-3 justify">
+                        <div id="continue" class="col-4">
+
+                        </div>
+                    </div>
+                </div>
             </form>
         </div>
     </div>
@@ -75,17 +93,23 @@
         });
 
         let options = $('#options');
+        let continueBtn = $("#continue")
 
          {% for course in courses %}
-             options.append("<div class=\"form-check\" data-term=\""+ "{{ course.term }}"+"\">\n" +
+             {#options.append("<div class=\"form-check\" style=\"white-space:nowrap;\" data-term=\""+ "{{ course.term }}"+"\">\n" +#}
+             {#    "                <input data-crh=\""+ "{{ course.creditHours }}" +"\" name=\""+ "{{ course.name }}" +"\" class=\"form-check-input position-static\" type=\"checkbox\" id=\"" + "{{ course.name }}" + "\">\n" +#}
+             {#    "                <label style=\" text-overflow: ellipsis;\" class=\"form-check-label \" for=\"" + "{{ course.name }}" + "\">" + "{{ course.name }}"+" ("+"{{ course.creditHours }}" +")"+ "</label>\n" +#}
+             {#    "            </div>");#}
+             options.append("<div class=\"form-check\" style=\"\" data-term=\""+ "{{ course.term }}"+"\">\n" +
+                 "                <label style=\" text-overflow: ellipsis;\" class=\"form-check-label \">" +
                  "                <input data-crh=\""+ "{{ course.creditHours }}" +"\" name=\""+ "{{ course.name }}" +"\" class=\"form-check-input position-static\" type=\"checkbox\" id=\"" + "{{ course.name }}" + "\">\n" +
-                 "                <label class=\"form-check-label\" for=\"" + "{{ course.name }}" + "\">" + "{{ course.name }}"+" ("+"{{ course.creditHours }}" +")"+ "</label>\n" +
+                 "{{ course.name }}"+" ("+"{{ course.creditHours }}" +")"+ "</label>\n" +
                  "            </div>");
          {% endfor %}
 
 
 
-        options.append("<button id=\"continueBtn\" type=\"submit\" class=\"btn btn-primary\" name=\"submit\" value=\"selection\" disabled>Continue</button>");
+        continueBtn.append("<button id=\"continueBtn\" type=\"submit\" class=\"btn btn-primary btn-block\" name=\"submit\" value=\"selection\" disabled>Continue</button>");
         options.children("div").hide();
         $("#selectAllBtn").hide();
         $("#continueBtn").hide();
@@ -111,7 +135,7 @@
 
 
         $("#selectAllBtn").click(function () {
-            $("#options").children("div:visible").children("input:not(:checked)").click();
+            $("#options").children("div:visible").children("label").children("input:not(:checked)").click();
         });
 
 

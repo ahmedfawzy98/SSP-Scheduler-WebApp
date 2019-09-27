@@ -12,10 +12,6 @@
     border-radius: 10px;
 }
 
-#options{
-    margin: 15px;
-    overflow: hidden;
-}
 
 ul {
     list-style-type: none;
@@ -60,19 +56,25 @@ li a:hover {
     background-color: #189ad3;
 }
 
-#selectAllBtn{
-    float: right;
-    position: relative;
-    z-index: 10;
-}
 
-#continueBtn{
-    float: right;
-    /*position: relative;*/
-    /*z-index: 10;*/
-}
 
 #hours{
     color: 	#CC9933;
+}
+
+/* sm */
+@media (min-width: 544px) {
+}
+
+/* md */
+@media (min-width: 768px) {
+}
+
+/* lg) */
+@media (min-width: 992px) {
+}
+
+/* xl */
+@media (min-width: 1200px) {
 }
 
