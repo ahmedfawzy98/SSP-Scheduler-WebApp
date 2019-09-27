@@ -104,7 +104,7 @@
                     </div>
                     <div class="row">
                         {% for course in courses %}
-                            <div class="col-md-4 col-sm-6 col-12">
+                            <div class="col-12 col-sm-6 col-lg-4">
                               <div class="card mb-3">
                                 <div class="card-header text-center">
                                   <h5>{{ course.name }}</h5>
@@ -139,12 +139,15 @@
 
 
                     </div>
-                    <div class="row justify-content-center">
-                        <div class="col-4 ">
+                    <div class="row justify-content-center mb-3">
+                        <div class="col-7 col-md-4">
                             <button id="generateBtn" type="submit" class="btn btn-primary btn-block" name="submit" value="generation">Generate</button>
                         </div>
-                        <div class="col-4 ">
-                            <button id="prefBtn" type="button" class="btn btn-secondary btn-block" name="submit" value="generation" data-toggle="modal" data-target="#prefModal">Preferences</button>
+                        <div class="col-3 col-md-3">
+                            <button id="prefBtn" type="button" class="btn btn-secondary btn-block" name="submit" value="generation" data-toggle="modal" data-target="#prefModal">
+                                <i class="fas fa-cog "></i>
+                                <span class="d-none d-md-inline">Preferences</span>
+                            </button>
                         </div>
                     </div>
                 </form>
@@ -163,9 +166,8 @@
     </div>
 <style>
     td{
-        width:100px;
-        height:50pt;
-        font-size: 13px;
+        {#width:100px;#}
+        {#height:50pt;#}
         font-family: "Roboto", "Lucida Grande", "DejaVu Sans", "Bitstream Vera Sans", Verdana, Arial, sans-serif;
     }
     .course-label{

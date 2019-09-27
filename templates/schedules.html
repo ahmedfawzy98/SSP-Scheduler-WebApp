@@ -1,4 +1,5 @@
 <div id="all-schedules">
+    {% if alt %}
     <div class="row">
         <div class="col-md-12 text-center">
             <div class="btn-group btn-group btn-group-toggle btn-block" data-toggle="buttons">
@@ -14,6 +15,7 @@
             </div>
         </div>
     </div>
+    {% endif %}
 
 
 
@@ -44,7 +46,7 @@
                     <th scope="col">12</th>
                 </tr>
                 <tr>
-                    <th class="day" scope="row" >Saturday</th>
+                    <th class="day" scope="row" >Sat</th>
                     {{ schedule.0.0| safe }}
                     {{ schedule.0.1| safe}}
                     {{ schedule.0.2| safe}}
@@ -59,7 +61,7 @@
                     {{ schedule.0.11| safe}}
                 </tr>
                 <tr>
-                    <th class="day" scope="row">Sunday</th>
+                    <th class="day" scope="row">Sun</th>
                     {{ schedule.1.0| safe }}
                     {{ schedule.1.1| safe}}
                     {{ schedule.1.2| safe}}
@@ -74,7 +76,7 @@
                     {{ schedule.1.11| safe}}
                 </tr>
                 <tr>
-                    <th class="day" scope="row">Monday</th>
+                    <th class="day" scope="row">Mon</th>
                     {{ schedule.2.0| safe }}
                     {{ schedule.2.1| safe}}
                     {{ schedule.2.2| safe}}
@@ -89,7 +91,7 @@
                     {{ schedule.2.11| safe}}
                 </tr>
                 <tr>
-                    <th class="day" scope="row">Tuesday</th>
+                    <th class="day" scope="row">Tue</th>
                     {{ schedule.3.0| safe }}
                     {{ schedule.3.1| safe}}
                     {{ schedule.3.2| safe}}
@@ -104,7 +106,7 @@
                     {{ schedule.3.11| safe}}
                 </tr>
                 <tr>
-                    <th class="day" scope="row">Wednesday</th>
+                    <th class="day" scope="row">Wed</th>
                     {{ schedule.4.0| safe }}
                     {{ schedule.4.1| safe}}
                     {{ schedule.4.2| safe}}
@@ -119,7 +121,7 @@
                     {{ schedule.4.11| safe}}
                 </tr>
                 <tr>
-                    <th class="day" scope="row">Thursday</th>
+                    <th class="day" scope="row">Thu</th>
                     {{ schedule.5.0| safe }}
                     {{ schedule.5.1| safe}}
                     {{ schedule.5.2| safe}}

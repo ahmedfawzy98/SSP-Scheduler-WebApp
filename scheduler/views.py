@@ -114,6 +114,8 @@ def generate_schedules(request):
         controller.max_days = True
     if request.POST.get('alt-yes') == "selected":
         alt_yes = True
+
+    dict["alt"] = alt_yes
     controller.alt_yes = alt_yes
     controller.offdays = offdays
     controller.courses = copy.deepcopy(courses)
@@ -152,14 +154,14 @@ def generate_schedules(request):
 
                     if sch[i][j].periodType == "Lecture":
                         schedules_html[ind][i][j] = "<td bgcolor='#FFE9E7' colspan='" + str(
-                            sch[i][j].length()) + "'>" + sch[i][j].courseName() + "<br>" + sch[i][
+                            sch[i][j].length()) + "'>" + sch[i][j].courseName() + "<hr>" + sch[i][
                                                        j].instName() + "</td>"
                     elif sch[i][j].periodType == "Tut":
                         schedules_html[ind][i][j] = "<td bgcolor='#d1e7f7' >" + sch[i][
-                            j].courseName() + "<br>" + sch[i][j].instName() + "</td>"
+                            j].courseName() + "<hr>" + sch[i][j].instName() + "</td>"
                     else:
                         schedules_html[ind][i][j] = "<td bgcolor='#BDFFFF'>" + sch[i][
-                            j].courseName() + "<br>" + sch[i][j].instName() + "</td>"
+                            j].courseName() + "<hr>" + sch[i][j].instName() + "</td>"
                     for jj in range(1, sch[i][j].length()):
                         schedules_html[ind][i][j + jj] = ""
                     j += sch[i][j].length()
