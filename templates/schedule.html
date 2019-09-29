@@ -112,7 +112,7 @@
                                 <div class="card-body">
                                   <div class="form-group">
                                     <label for="{{ course.name }}">Instructor</label>
-                                    <select class="custom-select" id="{{ course.name }}" name="{{ course.name }}">
+                                    <select class="custom-select inst-select" id="{{ course.name }}" name="{{ course.name }}">
                                         <option selected value="Any Instructor">Any Instructor</option>
                                         {% for id, insts in instructors.items %}
                                             {% if id == course.id %}
@@ -125,7 +125,7 @@
                                   </div>
                                   <div class="form-group">
                                     <label for="{{ course.name }}Pr">Priority</label>
-                                    <select class="custom-select" id="{{ course.name }}Pr" name="{{ course.name }}Pr">
+                                    <select class="custom-select pr-select" id="{{ course.name }}Pr" name="{{ course.name }}Pr" disabled>
                                         <option selected value="0">I don't care</option>
                                         <option value="1">Preferred Instructor-2</option>
                                         <option value="10">Preferred Instructor-1</option>
@@ -168,7 +168,7 @@
     td{
         {#width:100px;#}
         {#height:50pt;#}
-        {#font-family: "Roboto", "Lucida Grande", "DejaVu Sans", "Bitstream Vera Sans", Verdana, Arial, sans-serif;#}
+        font-family: sans-serif;
     }
     .course-label{
         width: 200px;
@@ -227,9 +227,10 @@
 <script>
 
     $(document).ready(function () {
+        $(".pr-select").attr("disabled", "disabled");
         $(function () {
           $('[data-toggle="tooltip"]').tooltip()
-        })
+        });
         $(".days-in").val("unselected");
         $("#main-form").submit(function (e) {
             e.preventDefault();
@@ -248,8 +249,8 @@
                     console.log("SUCCESS");
                     $("#main-form").after(data.text);
                     $(".btn-download").on('click', function (evt) {
-                        element = $(".show").first();
-                        html2canvas(document.body).then(function(canvas){
+                        element = $(".show .table").first();
+                        html2canvas(element).then(function(canvas){
                             getCanvas = canvas
                          });
                         // Now browser starts downloading it instead of just showing it
@@ -269,16 +270,6 @@
                     });
                     $("#generateBtn").html("Generate");
                     $("#generateBtn").attr("disabled", false);
-                    {#let check = true;#}
-                    {#let port_items = document.getElementsByClassName('port-item');#}
-                    {#for (let i = 0; i < port_items.length; i++){#}
-                    {#    if(port_items[i] in document.getElementsByClassName('active')){#}
-                    {#        check = false;#}
-                    {#        break;}}#}
-                    {#if(check){#}
-                    {#    $('#best').click();#}
-                    {#    check = false;}#}
-                    {#$("#best").click();#}
                     $('html, body').animate({
                             scrollTop: $("#main-footer").offset().top
                         }, 800);
@@ -290,22 +281,6 @@
                 },
             });
 
-        });
-        {#let getCanvas; // global variable#}
-        var element; // global variable
-        var getCanvas; // global variable
-        var firstClick = false;
-        $("#btn-download").on('click', function (evt) {
-            element = $(".show").first();
-            html2canvas(element, {
-             onrendered: function (canvas) {
-                    getCanvas = canvas;
-                 }
-             });
-            var imgageData = getCanvas.toDataURL("image/png");
-            // Now browser starts downloading it instead of just showing it
-            var newData = imgageData.replace(/^data:image\/png/, "data:application/octet-stream");
-            $("#btn-download").attr("download", element.attr('id')+".png").attr("href", newData);
         });
 
         $(".density").on('click', function () {
@@ -353,6 +328,16 @@
                $(this).addClass('active');
            }
         });
+
+        $(".inst-select").on('change', function(){
+            let courseName = this.id;
+            if(this.value === "Any Instructor"){
+                $("[id='"+courseName+"Pr']").val("0");
+                $("[id='"+courseName+"Pr']").attr("disabled", "disabled");
+            }else{
+                $("[id='"+courseName+"Pr']").attr("disabled", false);
+            }
+        } );
 
         function sleep(ms) {
           return new Promise(resolve => setTimeout(resolve, ms));

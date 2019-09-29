@@ -2,9 +2,9 @@
 #container-nb{
     width: 80%;
     font-family: Helvetica, Sans-Serif;
-    margin: 20px auto;
+    margin: 10px auto;
     position: relative;
-    top: 80px;
+    top: 50px;
 }
 
 #container-nb-form{
