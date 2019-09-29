@@ -19,7 +19,8 @@ ul {
     padding: 0;
     overflow: hidden;
     background-color: #444444;
-    border-radius: 8px;
+    border-top-left-radius: 8px;
+    border-top-right-radius: 8px;
 }
 
 li {
@@ -30,7 +31,7 @@ li a {
     display: inline-block;
     color: white !important;
     text-align: center;
-    padding: 14px 13px;
+    padding: 14px 3px;
     text-decoration: none;
     cursor: pointer;
     -webkit-touch-callout: none;
@@ -38,28 +39,71 @@ li a {
     -moz-user-select: none;
     -ms-user-select: none;
     user-select: none;
-    font-size: 13px;
+    font-size: 10px;
+    border-right: 1px solid gray;
 
 }
-
 
 input[type=checkbox]{
 }
 
-/* Change the link color to #111 (black) on hover */
-li a:hover {
-    /*background-color: #184a6e;*/
-    background-color: #898887;
-}
 
 .active {
-    background-color: #189ad3;
+    background-color: #007bff;
 }
 
 
 
 #hours{
     color: 	#CC9933;
+}
+
+li a:hover {
+    background-color: #007bff;
+}
+
+.form-check{
+    padding: 0.15rem !important;
+}
+
+.badge-secondary{
+    background-color: #a7b1b9 !important;
+}
+
+#selectAllA{
+    color:#189ad3;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+#message {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+}
+#inner-message {
+    margin: 0 auto;
+}
+
+@media (min-width: 375px){
+    li a{
+        padding: 14px 6px;
+        font-size: 11px;
+    }
+}
+
+@media (min-width: 425px){
+    li a{
+        padding: 14px 8px;
+        font-size: 12px;
+    }
+}
+
+@media (min-width: 450px) {
+    li a:hover {
+        background-color: #898887;
+    }
 }
 
 /* sm */

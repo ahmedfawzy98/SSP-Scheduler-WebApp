@@ -13,6 +13,8 @@
 
 </head>
 <body>
+
+
 <nav class="navbar navbar-expand-md navbar-dark bg-black">
     <div class="container">
         <a href="/" class="navbar-brand">SSPScheduler</a>
@@ -25,6 +27,8 @@
 {#        <h6>12 CH is minimum credit hours</h6>#}
     </div>
 </section>
+
+
 
     <div id="container-nb">
         <p id="crHours" style="margin: 20px 10px;padding: 0;text-align: right;">Credit Hours : <span id="hours">0</span></p>
@@ -66,6 +70,9 @@
                     <input type="number" name="hoursTaken" value="0" id="hoursIn" style="display: none" >
                 <div  class="form-group">
                     <div class="row m-3">
+                        <div class="col-12 d-md-none justify-content-start mt-2" style="padding: 0.15rem">
+                            <span id="selectAllA"  class="selectAllBtn">(select the whole term)</span>
+                        </div>
                         <div id="options" class="col-12 col-md-9 col-lg-10">
 {#                            <div class="form-check" style="" data-term="7">#}
 {#                                 <label style="" class="form-check-label">#}
@@ -75,7 +82,7 @@
 {#                             </div>#}
                         </div>
                         <div class="d-none col-md-3 col-lg-2 d-md-block">
-                            <input type="button" id="selectAllBtn" class="btn btn-secondary btn-block" value="Select All">
+                            <input type="button" class="selectAllBtn btn btn-secondary btn-block" value="Select All">
                         </div>
                     </div>
                     <div class="row justify-content-center m-3 justify">
@@ -86,6 +93,12 @@
             </form>
         </div>
     </div>
+
+{#    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>#}
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
     <script>
         $("li>a").mousedown(function () {
             return false;
@@ -102,7 +115,7 @@
              options.append("<div class=\"form-check\" style=\"\" data-term=\""+ "{{ course.term }}"+"\">\n" +
                  "                <label style=\" text-overflow: ellipsis;\" class=\"form-check-label \">" +
                  "                <input data-crh=\""+ "{{ course.creditHours }}" +"\" name=\""+ "{{ course.name }}" +"\" class=\"form-check-input position-static\" type=\"checkbox\" id=\"" + "{{ course.name }}" + "\">\n" +
-                 "{{ course.name }}"+" ("+"{{ course.creditHours }}" +")"+ "</label>\n" +
+                 "{{ course.name }}"+" <span class=\"badge badge-pill badge-secondary\">"+"{{ course.creditHours }}" +" hr</span>"+ "</label>\n" +
                  "            </div>");
          {% endfor %}
 
@@ -110,7 +123,7 @@
 
         continueBtn.append("<button id=\"continueBtn\" type=\"submit\" class=\"btn btn-primary btn-block\" name=\"submit\" value=\"selection\" disabled>Continue</button>");
         options.children("div").hide();
-        $("#selectAllBtn").hide();
+        $(".selectAllBtn").hide();
         $("#continueBtn").hide();
 
 
@@ -123,17 +136,17 @@
             options.children("div").hide();
             options.children("div[data-term='"+termNum+"']").show();
             if(options.children("div[data-term='"+termNum+"']").length > 0){
-                $("#selectAllBtn").show();
+                $(".selectAllBtn").show();
                 $("#continueBtn").show();
             }else{
-                $("#selectAllBtn").hide();
+                $(".selectAllBtn").hide();
                 $("#continueBtn").hide();
             }
         });
 
 
 
-        $("#selectAllBtn").click(function () {
+        $(".selectAllBtn").click(function () {
             $("#options").children("div:visible").children("label").children("input:not(:checked)").click();
         });
 
@@ -150,11 +163,21 @@
                    if(newValue >= 12){
                        $("#continueBtn").prop('disabled', false);
                    }
-
-
                }else {
                    $(this).prop('checked', false);
-                   alert("You can't have more than 21 credit hours")
+                   if(!$("#inner-message").length){
+                       $(".navbar").after("<div id=\"message\">\n" +
+                           "    <div id=\"inner-message\" class=\" alert alert-danger alert-dismissible fade show\" role=\"alert\" >\n" +
+                           "      You can't have more than 21 hours.\n" +
+                           {#"      <button type=\"button\" class=\"close\" data-dismiss=\"alert\" aria-label=\"Close\">\n" +#}
+                           {#"        <span aria-hidden=\"true\">&times;</span>\n" +#}
+                           {#"      </button>\n" +#}
+                           "    </div>\n" +
+                           "</div>");
+                       $(".alert").fadeTo(4000, 500).slideUp(500, function(){
+                            $(".alert").slideUp(500);$("#message").remove();
+                        });
+                    }
                    return
                }
             }

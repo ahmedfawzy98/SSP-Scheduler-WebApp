@@ -1,3 +1,4 @@
+
 table{
         table-layout: fixed;
 }
@@ -29,11 +30,6 @@ th{
 .day {
     color: #990000;
 }
-
-/*.button-group .btn{*/
-
-/*    border-radius: 0 !important;*/
-/*}*/
 
 .btn-no-r{
     border-bottom-left-radius: 0 !important;
@@ -81,23 +77,43 @@ hr{
 
 
 
-/*@media (min-width: 340px) {*/
-/*    td {*/
-/*        padding: 1px !important;*/
-/*        font-size: 0.37rem;*/
-/*    }*/
+.btn.btn-secondary:hover{
+    background-color: #6c757d;
+}
+.btn.btn-outline-secondary:hover{
+    background-color: white;
+    color: #6c757d;
+}
+.btn.btn-primary:hover{
+    background-color: #007bff ;
+}
 
-/*    th{*/
-/*        font-size: 0.45rem;*/
-/*        padding: 1px !important;*/
-/*    }*/
-/*}*/
 
 @media (min-width: 450px) {
 
     .port-item{
         padding: 0.15rem 0.75rem !important;
     }
+
+    .btn.btn-secondary:hover{
+        color: #fff;
+        background-color: #5a6268;
+        border-color: #5a6268;
+    }
+
+    .btn.btn-outline-secondary:hover{
+        color: #fff;
+        background-color: #6c757d;
+        border-color: #6c757d;
+    }
+
+    .btn.btn-primary:hover{
+        color : #fff;
+        background-color: #0069d9;
+        border-color: #0069d9;
+    }
+
+
 }
 
 /* sm */
