@@ -166,8 +166,8 @@
                }else {
                    $(this).prop('checked', false);
                    if(!$("#inner-message").length){
-                       $(".navbar").after("<div id=\"message\">\n" +
-                           "    <div id=\"inner-message\" class=\" alert alert-danger alert-dismissible fade show\" role=\"alert\" >\n" +
+                       $("#container-nb").after("<div id=\"message\">\n" +
+                           "    <div id=\"inner-message\" class=\" alert alert-danger alert-dismissible fade show\" role=\"alert\">\n" +
                            "      You can't have more than 21 hours.\n" +
                            {#"      <button type=\"button\" class=\"close\" data-dismiss=\"alert\" aria-label=\"Close\">\n" +#}
                            {#"        <span aria-hidden=\"true\">&times;</span>\n" +#}
