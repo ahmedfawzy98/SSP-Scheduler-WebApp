@@ -69,7 +69,7 @@
                     <input type="number" name="hoursTaken" value="0" id="hoursIn" style="display: none" >
                 <div  class="form-group">
                     <div class="row m-3">
-                        <div class="col-12 d-md-none justify-content-start mt-2" style="padding: 0.15rem">
+                        <div class="col-12 justify-content-start mt-2" style="padding: 0.15rem">
                             <span id="selectAllA"  class="selectAllBtn">(select the whole term)</span>
                         </div>
                         <div id="options" class="col-12 col-md-9 col-lg-10">
@@ -80,9 +80,9 @@
 {#                                 </label>#}
 {#                             </div>#}
                         </div>
-                        <div class="d-none col-md-3 col-lg-2 d-md-block">
-                            <input type="button" class="selectAllBtn btn btn-secondary btn-block" value="Select All">
-                        </div>
+{#                        <div class="d-none col-md-3 col-lg-2 d-md-block">#}
+{#                            <input id="selectAllIn" type="button" class="selectAllBtn btn btn-secondary btn-block" value="Select All">#}
+{#                        </div>#}
                     </div>
                     <div class="row justify-content-center m-3 justify">
                         <div id="continue" class="col-8 col-md-4 col-lg-3">
@@ -137,16 +137,30 @@
             if(options.children("div[data-term='"+termNum+"']").length > 0){
                 $(".selectAllBtn").show();
                 $("#continueBtn").show();
+                if($("#options").children("div:visible").children("label").children("input:checked").length
+                                >= $("#options").children("div:visible").children("label").children("input").length-2 ){
+                    $(".selectAllBtn").text("(deselect the whole term)");
+                }else{
+                    $(".selectAllBtn").text("(select the whole term)");
+                }
             }else{
                 $(".selectAllBtn").hide();
                 $("#continueBtn").hide();
             }
+
+
         });
 
 
 
         $(".selectAllBtn").click(function () {
-            $("#options").children("div:visible").children("label").children("input:not(:checked)").click();
+            if($(this).text().includes("deselect")) {
+                $("#options").children("div:visible").children("label").children("input:checked").click();
+                $(this).text("(select the whole term)");
+            }else{
+                $("#options").children("div:visible").children("label").children("input:not(:checked)").click();
+                $(this).text("(deselect the whole term)");
+            }
         });
 
 
