@@ -1,4 +1,5 @@
 from django.shortcuts import render
+from django.shortcuts import redirect
 from django.http import JsonResponse
 from operator import attrgetter
 from scheduler.Controller.Controller import Controller
@@ -11,6 +12,9 @@ import time
 
 
 def select_courses(request):
+    if request.method == "GET":
+        if 'department' not in request.session:
+            return redirect('/')
     if 'courses' not in request.session:
         request.session['courses'] = []
     if request.method == 'POST':
@@ -24,11 +28,22 @@ def select_courses(request):
 
 
 def index(request):
-    allcourses = Course.objects.all().filter(Q(department=request.session['department']) | Q(term=11))
+
     if request.method == "GET":
         dict = {}
-        if len(request.session['courses']) > 0:
+        if "courses" in request.session:
+            if len(request.session['courses']) == 0:
+                return redirect('/')
+            allcourses = Course.objects.all().filter(Q(department=request.session['department']) | Q(term=11))
             courses = [course for course in allcourses if course.name in request.session['courses']]
+            credit_hours = 0
+            for course in courses:
+                credit_hours += course.creditHours
+            if credit_hours < 12 or credit_hours > 21:
+                dict['error_msg'] = "Insufficient credit hours taken. At least 12 credit hours is required " \
+                                    "<a href=\"/courses\">here</a>." if credit_hours < 12 else "Too many credit hours taken. At maximum 21 credit hours is allowed " \
+                                                                                               "<a href=\"/courses\">here</a>."
+                return render(request, "illegal.html", context=dict)
             courses.sort(key=attrgetter('name'))
             dict["courses"] = courses
             dict["coursesNum"] = len(courses)
@@ -41,8 +56,9 @@ def index(request):
                 i += 1
             return render(request, 'schedule.html', context=dict)
         else:
-            return render(request, 'illegal.html')
+            return redirect('/')
     else:
+        allcourses = Course.objects.all().filter(Q(department=request.session['department']) | Q(term=11))
         priority = []
         dict = {}
         controller = Controller()

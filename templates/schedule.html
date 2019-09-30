@@ -125,11 +125,12 @@
                                   </div>
                                   <div class="pr-form-group">
                                     <label for="{{ course.name }}Pr">Priority</label>
-                                    <select class="custom-select pr-select" id="{{ course.name }}Pr" name="{{ course.name }}Pr" disabled>
-                                        <option selected value="0">I don't care</option>
-                                        <option value="5">Preferred Instructor</option>
-                                        <option value="50">Must-have instructor</option>
-                                    </select>
+                                      <br>
+                                    <div class="btn-group pr-select btn-block" role="group" aria-label="Basic example">
+                                        <button type="button" class="pr-btn btn btn-outline-secondary">Preferred</button>
+                                        <button type="button" class="pr-btn btn btn-outline-secondary rounded-right">Must-have</button>
+                                        <input class="pr-in" type="hidden" id="{{ course.name }}Pr" name="{{ course.name }}Pr" value="0">
+                                    </div>
                                   </div>
                                 </div>
                               </div>
@@ -227,7 +228,6 @@
 
     $(document).ready(function () {
         $(".pr-select").parent().hide();
-        $(".pr-select").attr("disabled", "disabled");
         $(function () {
           $('[data-toggle="tooltip"]').tooltip()
         });
@@ -283,6 +283,18 @@
 
         });
 
+        $(".pr-btn").on('click', function () {
+           if($(this).text() === "Must-have"){
+               $(this).siblings("input").val(50);
+               $(this).siblings("button").removeClass("active");
+               $(this).addClass("active");
+           }else{
+               $(this).siblings("input").val(5);
+               $(this).siblings("button").removeClass("active");
+               $(this).addClass("active");
+           }
+        });
+
         $(".density").on('click', function () {
             let buttons = $(".density");
             let inputs = $(".density-in");
@@ -331,24 +343,24 @@
 
         $(".inst-select").on('change', function(){
             let courseName = this.id;
+
             if(this.value === "Any Instructor"){
-                $("[id='"+courseName+"Pr']").parent().fadeOut();
+                $("[id='"+courseName+"Pr']").parent().parent().fadeOut();
                 $(this).parent().animate({
                    marginBottom: "3.4rem",
                     marginTop: "2.2rem"
                 },function () {
                     $("[id='"+courseName+"Pr']").val("0");
-                    $("[id='"+courseName+"Pr']").attr("disabled", "disabled");
+                    $("[id='"+courseName+"Pr']").siblings().removeClass("active");
                 });
 
 
             }else{
-                $("[id='"+courseName+"Pr']").attr("disabled", false);
                 $(this).parent().animate({
                    marginBottom: "1rem",
                     marginTop: "0"
                 });
-                $("[id='"+courseName+"Pr']").parent().fadeIn();
+                $("[id='"+courseName+"Pr']").parent().parent().fadeIn();
             }
         } );
 

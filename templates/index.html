@@ -21,10 +21,9 @@
     </div>
 </nav>
 
-<section id="choose_courses_section" class="bg-dark text-white text-center p-4">
+<section id="choose_courses_section" class="bg-dark text-white text-center p-3">
     <div class="container">
-        <h1 style="font-size: 1.9rem">Choose Your Courses</h1>
-{#        <h6>12 CH is minimum credit hours</h6>#}
+        <h1 style="font-size: 1.6rem">Choose Your Courses</h1>
     </div>
 </section>
 
@@ -161,7 +160,12 @@
                if(newValue <= 21 ){
                    $("#hours").html(newValue);
                    if(newValue >= 12){
-                       $("#continueBtn").prop('disabled', false);
+                       $("#continueBtn").animate({
+                         opacity: "1"
+                       },'fast',function () {
+                           $("#continueBtn").prop('disabled', false);
+                       });
+
                    }
                }else {
                    $(this).prop('checked', false);
@@ -184,7 +188,12 @@
             else{
                 newValue = parseInt($("#hours").html())-parseInt($(this).attr("data-crh"));
                 if(newValue < 12){
-                    $("#continueBtn").prop('disabled', true);
+                    $("#continueBtn").animate({
+                         opacity: ".65"
+                       },'fast',function () {
+                            $("#continueBtn").prop('disabled', true);
+                       });
+
                 }
                 $("#hours").html(parseInt($("#hours").html())-parseInt($(this).attr("data-crh")));
             }
