@@ -278,6 +278,9 @@
                 },
                 error: function (data) {
                     console.log('ERROR');
+                    $("#generateBtn").attr("disabled", false);
+                    $("#generateBtn").html("Generate");
+                    $("#main-form").submit();
                 },
             });
 
@@ -367,7 +370,6 @@
         function sleep(ms) {
           return new Promise(resolve => setTimeout(resolve, ms));
         }
-
     });
 </script>
 </body>
