@@ -88,6 +88,19 @@ hr{
     background-color: #007bff ;
 }
 
+.pr-form-group{
+    margin-bottom: 0;
+}
+
+.inst-form-group{
+    margin-top: 2.2rem;
+    margin-bottom: 3.4rem;
+}
+
+.card-body{
+    height: 196px !important;
+}
+
 
 @media (min-width: 450px) {
 
@@ -115,6 +128,7 @@ hr{
 
 
 }
+
 
 /* sm */
 @media (min-width: 544px) {

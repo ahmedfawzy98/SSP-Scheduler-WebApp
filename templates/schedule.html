@@ -110,7 +110,7 @@
                                   <h5>{{ course.name }}</h5>
                                 </div>
                                 <div class="card-body">
-                                  <div class="form-group">
+                                  <div class="inst-form-group">
                                     <label for="{{ course.name }}">Instructor</label>
                                     <select class="custom-select inst-select" id="{{ course.name }}" name="{{ course.name }}">
                                         <option selected value="Any Instructor">Any Instructor</option>
@@ -123,12 +123,11 @@
                                         {% endfor %}
                                     </select>
                                   </div>
-                                  <div class="form-group">
+                                  <div class="pr-form-group">
                                     <label for="{{ course.name }}Pr">Priority</label>
                                     <select class="custom-select pr-select" id="{{ course.name }}Pr" name="{{ course.name }}Pr" disabled>
                                         <option selected value="0">I don't care</option>
-                                        <option value="1">Preferred Instructor-2</option>
-                                        <option value="10">Preferred Instructor-1</option>
+                                        <option value="5">Preferred Instructor</option>
                                         <option value="50">Must-have instructor</option>
                                     </select>
                                   </div>
@@ -227,6 +226,7 @@
 <script>
 
     $(document).ready(function () {
+        $(".pr-select").parent().hide();
         $(".pr-select").attr("disabled", "disabled");
         $(function () {
           $('[data-toggle="tooltip"]').tooltip()
@@ -332,10 +332,23 @@
         $(".inst-select").on('change', function(){
             let courseName = this.id;
             if(this.value === "Any Instructor"){
-                $("[id='"+courseName+"Pr']").val("0");
-                $("[id='"+courseName+"Pr']").attr("disabled", "disabled");
+                $("[id='"+courseName+"Pr']").parent().fadeOut();
+                $(this).parent().animate({
+                   marginBottom: "3.4rem",
+                    marginTop: "2.2rem"
+                },function () {
+                    $("[id='"+courseName+"Pr']").val("0");
+                    $("[id='"+courseName+"Pr']").attr("disabled", "disabled");
+                });
+
+
             }else{
                 $("[id='"+courseName+"Pr']").attr("disabled", false);
+                $(this).parent().animate({
+                   marginBottom: "1rem",
+                    marginTop: "0"
+                });
+                $("[id='"+courseName+"Pr']").parent().fadeIn();
             }
         } );
 
