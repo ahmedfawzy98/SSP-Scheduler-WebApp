@@ -8,6 +8,8 @@
     <link rel="stylesheet" href="{% static "index.css" %}">
     <link rel="stylesheet" href="{% static "bootstrap.css" %}">
     <link rel="stylesheet" href="{% static "department.css" %}">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.13/css/all.css" integrity="sha384-DNOHZ68U8hZfKXOrtjWvjxusGo9WQnrNx2sqG0tfsghAvtVlRW3tvkXWZh58N9jp"
+    crossorigin="anonymous">
 
     <script type="text/javascript" src="{% static "jquery.js" %}"></script>
 
@@ -28,120 +30,124 @@
 </section>
 
 
-
-    <div id="container-nb">
-        <p id="crHours" style="margin: 20px 10px;padding: 0;text-align: right;">Credit Hours : <span id="hours">0</span></p>
-        <div id="container-nb-form">
-            <div id="menuBar">
-                <ul>
-                    {% for term_num in term_numbers %}
-                        {% if term_num == 1 %}
-                            <li><a id="1st" data-term="1">1st Term</a></li>
-                        {% elif term_num == 2 %}
-                            <li><a id="2nd" data-term="2">2nd Term</a></li>
-                        {% elif term_num == 3 %}
-                            <li><a id="3rd" data-term="3">3rd Term</a></li>
-                        {% elif term_num == 4 %}
-                            <li><a id="4th" data-term="4">4th Term</a></li>
-                        {% elif term_num == 5 %}
-                            <li><a id="5th" data-term="5">5th Term</a></li>
-                        {% elif term_num == 6 %}
-                            <li><a id="6th" data-term="6">6th Term</a></li>
-                        {% elif term_num == 7 %}
-                            <li><a id="7th" data-term="7">7th Term</a></li>
-                        {% elif term_num == 8 %}
-                            <li><a id="8th" data-term="8">8th Term</a></li>
-                        {% elif term_num == 9 %}
-                            <li><a id="9th" data-term="9">9th Term</a></li>
-                        {% elif term_num == 10 %}
-                            <li><a id="10th" data-term="10">10th Term</a></li>
-                        {% elif term_num == 11 %}
-                            <li><a id="11th" data-term="11">Humanities</a></li>
-                        {% endif %}
-                    {% endfor %}
-
-                </ul>
-            </div>
-
-            <form action="/schedule/" method="post" >
-                {% csrf_token %}
-                    <label for="hoursIn" style="display: none" style="display: none;"></label>
-                    <input type="number" name="hoursTaken" value="0" id="hoursIn" style="display: none" >
-                <div  class="form-group">
-                    <div class="row m-3">
-                        <div class="col-12 justify-content-start mt-2" style="padding: 0.15rem">
-                            <span id="selectAllA"  class="selectAllBtn">(select the whole term)</span>
-                        </div>
-                        <div id="options" class="col-12 col-md-9 col-lg-10">
-{#                            <div class="form-check" style="" data-term="7">#}
-{#                                 <label style="" class="form-check-label">#}
-{#                                     <input data-crh="3" name="DSP implementation of communication systems" class="form-check-input position-static" type="checkbox" id="ASD ADSASDASD ASD AD AD AD ASD AD">#}
-{#                                     DSP implementation of communication systems (3)#}
-{#                                 </label>#}
-{#                             </div>#}
-                        </div>
-{#                        <div class="d-none col-md-3 col-lg-2 d-md-block">#}
-{#                            <input id="selectAllIn" type="button" class="selectAllBtn btn btn-secondary btn-block" value="Select All">#}
-{#                        </div>#}
-                    </div>
-                    <div class="row justify-content-center m-3 justify">
-                        <div id="continue" class="col-8 col-md-4 col-lg-3">
-                        </div>
+    <div class="row justify-content-center">
+        <div class="col-12 col-sm-10 col-md-8 col-lg-7 col-xl-5">
+            <div id="container-nb">
+                <div class="row">
+                    <div class="col-12 text-right">
+                        <p  id="crHours" style="display:inline;">Credit Hours : <span id="hours">0</span></p>
                     </div>
                 </div>
-            </form>
+                <div id="container-nb-form">
+                    <div id="menuBar">
+                        <div class="btn-group btn-block" id="menu-btns" data-toggle="buttons">
+                            {% for term_num in term_numbers %}
+                                {% if term_num == 1 %}
+                                    <button class="btn btn-secondary" id="1st" onclick="this.blur();" data-term="1">1st Term</button>
+                                {% elif term_num == 2 %}
+                                    <button class="btn btn-secondary" id="2nd" onclick="this.blur();" data-term="2">2nd Term</button>
+                                {% elif term_num == 3 %}
+                                    <button class="btn btn-secondary" id="3rd" onclick="this.blur();" data-term="3">3rd Term</button>
+                                {% elif term_num == 4 %}
+                                    <button class="btn btn-secondary" id="4th" onclick="this.blur();" data-term="4">4th Term</button>
+                                {% elif term_num == 5 %}
+                                    <button class="btn btn-secondary" id="5th" onclick="this.blur();" data-term="5">5th Term</button>
+                                {% elif term_num == 6 %}
+                                    <button class="btn btn-secondary" id="6th" onclick="this.blur();" data-term="6">6th Term</button>
+                                {% elif term_num == 7 %}
+                                    <button class="btn btn-secondary" id="7th" onclick="this.blur();" data-term="7">7th Term</button>
+                                {% elif term_num == 8 %}
+                                    <button class="btn btn-secondary" id="8th" onclick="this.blur();" data-term="8">8th Term</button>
+                                {% elif term_num == 9 %}
+                                    <button class="btn btn-secondary" id="9th" onclick="this.blur();" data-term="9">9th Term</button>
+                                {% elif term_num == 10 %}
+                                    <button class="btn btn-secondary" id="10th" onclick="this.blur();" data-term="10">10th Term</button>
+                                {% elif term_num == 11 %}
+                                    <button class="btn btn-secondary" id="11th" onclick="this.blur();" data-term="11">Humanities</button>
+                                {% endif %}
+                            {% endfor %}
+                        </div>
+                    </div>
+
+                    <form action="/schedule/" method="post" >
+                        {% csrf_token %}
+                            <label for="hoursIn" style="display: none" style="display: none;"></label>
+                            <input type="number" name="hoursTaken" value="0" id="hoursIn" style="display: none" >
+                        <div  class="form-group">
+                            <div class="row m-3">
+                                <div class="col-12 justify-content-start mt-1" style="padding: 0.15rem;margin-left:-5px">
+                                    <button class="btn btn-secondary btn-sm selectAllBtn" style="line-height: 1;display:none;">Select All</button>
+                                </div>
+                                <div id="options" class="col-12">
+        {#                            <div class="form-check" style="" data-term="7">#}
+        {#                                 <label style="" class="form-check-label">#}
+        {#                                     <input data-crh="3" name="DSP implementation of communication systems" class="form-check-input position-static" type="checkbox" id="ASD ADSASDASD ASD AD AD AD ASD AD">#}
+        {#                                     DSP implementation of communication systems (3)#}
+        {#                                 </label>#}
+        {#                             </div>#}
+                                </div>
+                            </div>
+                            <div class="row justify-content-center m-3 justify">
+                                <div class="col-8 col-md-4 col-lg-4">
+                                    <span id="continue" class="d-inline-block" style="width:100%" tabindex="0" data-toggle="tooltip" title="You need 12 credit hours at least to continue">
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
         </div>
     </div>
 
-{#    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>#}
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
     <script>
-        $("li>a").mousedown(function () {
-            return false;
-        });
-
         let options = $('#options');
-        let continueBtn = $("#continue")
+        let continueBtn = $("#continue");
 
          {% for course in courses %}
-             {#options.append("<div class=\"form-check\" style=\"white-space:nowrap;\" data-term=\""+ "{{ course.term }}"+"\">\n" +#}
-             {#    "                <input data-crh=\""+ "{{ course.creditHours }}" +"\" name=\""+ "{{ course.name }}" +"\" class=\"form-check-input position-static\" type=\"checkbox\" id=\"" + "{{ course.name }}" + "\">\n" +#}
-             {#    "                <label style=\" text-overflow: ellipsis;\" class=\"form-check-label \" for=\"" + "{{ course.name }}" + "\">" + "{{ course.name }}"+" ("+"{{ course.creditHours }}" +")"+ "</label>\n" +#}
-             {#    "            </div>");#}
-             options.append("<div class=\"form-check\" style=\"\" data-term=\""+ "{{ course.term }}"+"\">\n" +
-                 "                <label style=\" text-overflow: ellipsis;\" class=\"form-check-label \">" +
-                 "                <input data-crh=\""+ "{{ course.creditHours }}" +"\" name=\""+ "{{ course.name }}" +"\" class=\"form-check-input position-static\" type=\"checkbox\" id=\"" + "{{ course.name }}" + "\">\n" +
-                 "{{ course.name }}"+" <span class=\"badge badge-pill badge-secondary\">"+"{{ course.creditHours }}" +" hr</span>"+ "</label>\n" +
-                 "            </div>");
+             options.append("<div class=\"form-check\" style=\"display:none\" data-term=\""+ "{{ course.term }}"+"\">\n" +
+                                 "<div class='row'>" +
+                                    "<div class='col-9'>" +
+                                    "<label style=\" text-overflow: ellipsis;\" class=\"form-check-label \">" +
+                                        "<input data-crh=\""+ "{{ course.creditHours }}" +"\" name=\""+ "{{ course.name }}" +
+                                            "\" class=\"form-check-input position-static\" type=\"checkbox\" id=\"" +
+                                            "{{ course.name }}" + "\">\n" +
+                                            "{{ course.name }}"+
+                                    "</label>\n" +
+                                    "</div>" +
+                                    "<div class='col-1'>" +
+                                        "<span class=\"badge badge-pill badge-secondary\">"+"{{ course.creditHours }}" +" hrs</span>"+
+                                    "</div>" +
+                                "</div>" +
+                                "<hr style='padding:0;margin:0;'>"+
+                            "</div>");
          {% endfor %}
 
 
 
-        continueBtn.append("<button id=\"continueBtn\" type=\"submit\" class=\"btn btn-primary btn-block\" name=\"submit\" value=\"selection\" disabled>Continue</button>");
-        options.children("div").hide();
-        $(".selectAllBtn").hide();
-        $("#continueBtn").hide();
+        continueBtn.append("<button style='pointer-events:none;display:none' id=\"continueBtn\" type=\"submit\" class=\"btn btn-primary btn-block\" name=\"submit\"" +
+            " value=\"selection\"" +
+            " disabled>Continue</button>");
 
 
-
-        $("li>a").click(function () {
+        $("#menu-btns .btn").click(function () {
             let termNum = $(this).attr("data-term");
-            $("li>a").removeClass("active");
-            $(this).addClass("active");
+            $("#menu-btns .btn").removeClass("active");
             let options = $('#options');
             options.children("div").hide();
             options.children("div[data-term='"+termNum+"']").show();
             if(options.children("div[data-term='"+termNum+"']").length > 0){
                 $(".selectAllBtn").show();
                 $("#continueBtn").show();
-                if($("#options").children("div:visible").children("label").children("input:checked").length
-                                >= $("#options").children("div:visible").children("label").children("input").length-2 ){
-                    $(".selectAllBtn").text("(deselect the whole term)");
+                if($("#options").children("div:visible").children("div").children("div").children("label").children("input:checked").length
+                                >= $("#options").children("div:visible").children("div").children("div").children("label").children("input").length-2 ){
+                    $(".selectAllBtn").text("Deselect All");
                 }else{
-                    $(".selectAllBtn").text("(select the whole term)");
+                    $(".selectAllBtn").text("Select All");
                 }
             }else{
                 $(".selectAllBtn").hide();
@@ -153,13 +159,14 @@
 
 
 
-        $(".selectAllBtn").click(function () {
-            if($(this).text().includes("deselect")) {
-                $("#options").children("div:visible").children("label").children("input:checked").click();
-                $(this).text("(select the whole term)");
+        $(".selectAllBtn").click(function (e) {
+            e.preventDefault();
+            if($(this).text().includes("Deselect")) {
+                $("#options").children("div:visible").children("div").children("div").children("label").children("input:checked").click();
+                $(this).text("Select All");
             }else{
-                $("#options").children("div:visible").children("label").children("input:not(:checked)").click();
-                $(this).text("(deselect the whole term)");
+                $("#options").children("div:visible").children("div").children("div").children("label").children("input:not(:checked)").click();
+                $(this).text("Deselect All");
             }
         });
 
@@ -174,12 +181,9 @@
                if(newValue <= 21 ){
                    $("#hours").html(newValue);
                    if(newValue >= 12){
-                       $("#continueBtn").animate({
-                         opacity: "1"
-                       },'fast',function () {
-                           $("#continueBtn").prop('disabled', false);
-                       });
-
+                       $("#continueBtn").prop('disabled', false);
+                       $("#continue").attr("data-original-title","");
+                       $("#continueBtn").css("pointer-events","");
                    }
                }else {
                    $(this).prop('checked', false);
@@ -202,17 +206,29 @@
             else{
                 newValue = parseInt($("#hours").html())-parseInt($(this).attr("data-crh"));
                 if(newValue < 12){
-                    $("#continueBtn").animate({
-                         opacity: ".65"
-                       },'fast',function () {
-                            $("#continueBtn").prop('disabled', true);
-                       });
-
+                    $("#continueBtn").prop('disabled', true);
+                    $("#continue").attr("data-original-title","You need 12 credit hours at least to continue");
+                    $("#continueBtn").css("pointer-events","none");
                 }
                 $("#hours").html(parseInt($("#hours").html())-parseInt($(this).attr("data-crh")));
             }
            let hours = parseInt($("#hours").html());
            $("#hoursIn").attr("value",$("#hours").html());
+        });
+
+        {#$(".form-check").on('click',function () {#}
+        {#    let checkBox = $(this).children("div").children().first().children("label").children("input");#}
+        {#    if(checkBox.prop("checked") === true){#}
+        {#        checkBox.prop("checked", false)#}
+        {#        checkBox.trigger('change')#}
+        {#    }#}
+        {#    else{#}
+        {#        checkBox.prop("checked", true)#}
+        {#        checkBox.trigger('change')#}
+        {#    }#}
+        {#    console.log("HELLO");});#}
+        $(function () {
+          $('[data-toggle="tooltip"]').tooltip()
         });
 
 
