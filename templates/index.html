@@ -170,6 +170,8 @@
             }
         });
 
+        $("#menu-btns .btn").first().click();
+
 
 
         $("input:checkbox").change(function () {
@@ -188,7 +190,7 @@
                }else {
                    $(this).prop('checked', false);
                    if(!$("#inner-message").length){
-                       $("#container-nb").after("<div id=\"message\">\n" +
+                       $("#container-nb").after("<div id=\"message\" style='z-index:999'>\n" +
                            "    <div id=\"inner-message\" class=\" alert alert-danger alert-dismissible fade show\" role=\"alert\">\n" +
                            "      You can't have more than 21 hours.\n" +
                            {#"      <button type=\"button\" class=\"close\" data-dismiss=\"alert\" aria-label=\"Close\">\n" +#}
@@ -216,17 +218,19 @@
            $("#hoursIn").attr("value",$("#hours").html());
         });
 
-        {#$(".form-check").on('click',function () {#}
-        {#    let checkBox = $(this).children("div").children().first().children("label").children("input");#}
-        {#    if(checkBox.prop("checked") === true){#}
-        {#        checkBox.prop("checked", false)#}
-        {#        checkBox.trigger('change')#}
-        {#    }#}
-        {#    else{#}
-        {#        checkBox.prop("checked", true)#}
-        {#        checkBox.trigger('change')#}
-        {#    }#}
-        {#    console.log("HELLO");});#}
+        $(".form-check").on('click',function (e) {
+            let $tgt = $(e.target);
+            let checkBox = $(this).children("div").children().first().children("label").children("input");
+            if (!$tgt.is(":checkbox") && !$tgt.is("label") ) {
+                if (checkBox.prop("checked") === true) {
+                    checkBox.prop("checked", false);
+                    checkBox.trigger('change')
+                } else {
+                    checkBox.prop("checked", true);
+                    checkBox.trigger('change')
+                }
+            }
+        });
         $(function () {
           $('[data-toggle="tooltip"]').tooltip()
         });

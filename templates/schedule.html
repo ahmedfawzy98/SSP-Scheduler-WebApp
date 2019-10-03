@@ -127,6 +127,7 @@
                                     <label for="{{ course.name }}Pr">Priority</label>
                                       <br>
                                     <div class="btn-group pr-select btn-block" role="group" aria-label="Basic example">
+                                        <button type="button" class="pr-btn btn btn-outline-secondary">Avoid</button>
                                         <button type="button" class="pr-btn btn btn-outline-secondary">Preferred</button>
                                         <button type="button" class="pr-btn btn btn-outline-secondary rounded-right">Must-have</button>
                                         <input class="pr-in" type="hidden" id="{{ course.name }}Pr" name="{{ course.name }}Pr" value="0">
@@ -287,12 +288,17 @@
         });
 
         $(".pr-btn").on('click', function () {
-           if($(this).text() === "Must-have"){
+            btnText = $(this).text();
+           if(btnText === "Must-have"){
                $(this).siblings("input").val(50);
                $(this).siblings("button").removeClass("active");
                $(this).addClass("active");
-           }else{
+           }else if(btnText === "Preferred"){
                $(this).siblings("input").val(5);
+               $(this).siblings("button").removeClass("active");
+               $(this).addClass("active");
+           }else{
+               $(this).siblings("input").val(-20);
                $(this).siblings("button").removeClass("active");
                $(this).addClass("active");
            }
