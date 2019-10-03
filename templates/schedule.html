@@ -4,6 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, user-scalable=no">
     <title>SSP Scheduler</title>
     <link rel="stylesheet" href="{% static "bootstrap.css" %}">
     <link rel="stylesheet" href="{% static "department.css" %}">
@@ -102,7 +103,7 @@
                         </div>
                       </div>
                     </div>
-                    <div class="row">
+                    <div id="cards" class="row">
                         {% for course in courses %}
                             <div class="col-12 col-sm-6 col-lg-4">
                               <div class="card mb-3">
@@ -128,8 +129,8 @@
                                       <br>
                                     <div class="btn-group pr-select btn-block" role="group" aria-label="Basic example">
                                         <button type="button" class="pr-btn btn btn-outline-secondary">Avoid</button>
-                                        <button type="button" class="pr-btn btn btn-outline-secondary">Preferred</button>
-                                        <button type="button" class="pr-btn btn btn-outline-secondary rounded-right">Must-have</button>
+                                        <button type="button" class="pr-btn btn btn-outline-secondary">High</button>
+                                        <button type="button" class="pr-btn btn btn-outline-secondary rounded-right">Highest</button>
                                         <input class="pr-in" type="hidden" id="{{ course.name }}Pr" name="{{ course.name }}Pr" value="0">
                                     </div>
                                   </div>
@@ -289,11 +290,11 @@
 
         $(".pr-btn").on('click', function () {
             btnText = $(this).text();
-           if(btnText === "Must-have"){
+           if(btnText === "Highest"){
                $(this).siblings("input").val(50);
                $(this).siblings("button").removeClass("active");
                $(this).addClass("active");
-           }else if(btnText === "Preferred"){
+           }else if(btnText === "High"){
                $(this).siblings("input").val(5);
                $(this).siblings("button").removeClass("active");
                $(this).addClass("active");

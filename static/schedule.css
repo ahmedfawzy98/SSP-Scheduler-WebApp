@@ -108,6 +108,13 @@ hr{
 }
 
 
+@media (min-width: 370px) {
+    .pr-btn{
+        /*padding: .375rem .75rem !important;*/
+    }
+}
+
+
 @media (min-width: 450px) {
 
     .port-item{
@@ -137,7 +144,7 @@ hr{
 
 
 /* sm */
-@media (min-width: 544px) {
+@media (min-width: 575px) {
 
     td {
         font-size: 0.48rem;
@@ -152,6 +159,15 @@ hr{
     .port-item{
         padding: 0.2rem 0.75rem !important;
         font-size: 0.5rem;
+    }
+
+    .pr-btn{
+        padding: .375rem .6rem !important;
+    }
+
+    #cards>div{
+        padding-right: 0;
+        padding-left: 0;
     }
 }
 
@@ -172,6 +188,15 @@ hr{
     .port-item{
         padding: 0.3rem 0.75rem !important;
         font-size: 0.7rem;
+    }
+
+    #cards>div{
+        padding-right: 15px;
+        padding-left: 15px;
+    }
+
+    .pr-btn{
+        padding: .375rem .75rem !important;
     }
 }
 /* lg) */
