@@ -109,6 +109,11 @@ input[type=checkbox]{
     border-radius: .33rem;
 }
 
+#content-wrapper{
+    margin-right: 0;
+    margin-left: 0;
+}
+
 
 @media (min-width: 375px){
     #menuBar .btn-group button{
