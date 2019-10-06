@@ -2,6 +2,7 @@ from django.shortcuts import render
 from django.shortcuts import redirect
 from django.http import JsonResponse
 from operator import attrgetter
+
 from scheduler.Controller.Controller import Controller
 import copy
 from django.template.loader import render_to_string
@@ -10,6 +11,7 @@ from django.db.models import Q
 
 import time
 
+cache = {}
 
 def select_courses(request):
     if request.method == "GET":
@@ -103,6 +105,7 @@ def index(request):
             return render(request, 'schedule.html', context=dict)
 
 
+# @gzip_page
 def generate_schedules(request):
     allcourses = list(Course.objects.all().filter(Q(department=request.session['department']) | Q(term=11)))
     priority = []
@@ -141,6 +144,7 @@ def generate_schedules(request):
     start_time = time.time()
     controller.create_schedules()
     print("Tree building time:--- %s seconds ---" % (time.time() - start_time))
+    start_time = time.time()
     if controller.schedule is None:
         data = {
             'text': "<h4 id='all-schedules' class='text-center'>There's no possible schedule with your preferences</h4>"

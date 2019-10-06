@@ -241,13 +241,15 @@
             $("#generateBtn").html(
                 "<span class=\"spinner-border spinner-border-sm\" role=\"status\" aria-hidden=\"true\"></span>\n");
             let form = $(this);
-
+            let t0 = performance.now();
             $.ajax({
                 type: "POST",
                 url: '/schedule/generate',
                 data: form.serialize(),
                 dataType: 'json',
                 success: function (data) {
+                    let t1 = performance.now();
+                    console.log("Call to generate took " + (t1 - t0) + " milliseconds.");
                     console.log("SUCCESS");
                     $("#main-form").after(data.text);
                     $(".btn-download").on('click', function (evt) {

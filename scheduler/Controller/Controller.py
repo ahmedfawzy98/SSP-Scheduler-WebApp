@@ -2,7 +2,9 @@ from operator import attrgetter
 from scheduler.Classes.Node import Node
 from scheduler.Classes.Schedule import Schedule
 import random
+import sys
 
+cache = {}
 
 class Controller:
     def __init__(self):
@@ -83,7 +85,7 @@ class Controller:
             #     random.shuffle(inst.groups)
 
         self.courses_num = len(self.courses)
-        for ind,course in enumerate(self.courses):
+        for ind, course in enumerate(self.courses):
             if course.priority > 0:
                 self.last_prio_course = ind
 
@@ -97,24 +99,34 @@ class Controller:
 
         # if the prioritized courses are 2 or less then only for these courses keep the prioritized instructor and
         # delete the others
-        if 0 <= self.last_prio_course <= 1:
-            for i in range(0, self.last_prio_course + 1):
-                self.courses[i].instructors = [self.courses[i].instructors[0]]
-        root = Node(None)
-        self.build_tree(root,-1)
-
-        try:
-            perfect = self.filtered_completed()
-        except IndexError:
-            self.schedule = None
+        # if 0 <= self.last_prio_course <= 1:
+        #     for i in range(0, self.last_prio_course + 1):
+        #         self.courses[i].instructors = [self.courses[i].instructors[0]]
+        combination_key = ""
+        for course in self.courses:
+            combination_key += course.name
+            if course.priority > 0:
+                combination_key += course.instructors[0].name
+                combination_key += str(course.instructors[0].priority)
+        if combination_key in cache:
+            print(sys.getsizeof(cache[combination_key]))
+            self.schedule = random.choice(cache[combination_key][0])
+            alt_index = cache[combination_key][0].index(self.schedule)
+            self.alternatives = cache[combination_key][1][alt_index]
+            self.alt_courses = cache[combination_key][2]
             return
-        self.schedule = perfect.schedule
+        root = Node(None)
+        self.build_tree(root, -1)
+        perfect_list = self.filtered_completed(combination_key)
+        perfect_schedules_list = [perfect.schedule for perfect in perfect_list]
+        cache[combination_key] = [perfect_schedules_list, [], []]
 
         ###
         # Alternative schedules code
         ###
         # getting alternative schedules
-        if self.alt_yes:
+        for index, perfect in enumerate(perfect_list):
+            cache[combination_key][1].append([])
             for i in range(len(self.courses)):
                 self.priority_duplicates = []
                 if i != 0:
@@ -131,18 +143,34 @@ class Controller:
                         break
                 if len(self.priority_duplicates) != 0:
                     self.priority_duplicates.sort(key=attrgetter('schedule.daysTaken'))
-                    self.alternatives.append(self.priority_duplicates[0].schedule)
-                    self.alt_courses.append(self.courses[len(self.courses) - 1 - i].name)
+                    # self.alternatives.append(self.priority_duplicates[0].schedule)
+                    cache[combination_key][1][index].append(self.priority_duplicates[0].schedule)
+                    if index == 0:
+                        # self.alt_courses.append(self.courses[len(self.courses) - 1 - i].name)
+                        cache[combination_key][2].append(self.courses[len(self.courses) - 1 - i].name)
                 else:
-                    self.alternatives.append(None)
-                    self.alt_courses.append(self.courses[len(self.courses) - 1 - i].name)
+                    # self.alternatives.append(None)
+                    cache[combination_key][1][index].append(None)
+                    if index == 0:
+                        # self.alt_courses.append(self.courses[len(self.courses) - 1 - i].name)
+                        cache[combination_key][2].append(self.courses[len(self.courses) - 1 - i].name)
                 perfect.data.available = True
 
-    def filtered_completed(self):
+        try:
+            self.schedule = random.choice(cache[combination_key][0])
+            alt_index = cache[combination_key][0].index(self.schedule)
+            self.alternatives = cache[combination_key][1][alt_index]
+            self.alt_courses = cache[combination_key][2]
+            return
+        except IndexError:
+            self.schedule = None
+            return
+
+
+    def filtered_completed(self, combination_key):
         self.completed.sort(key=attrgetter('schedule.priorityValue'), reverse=True)
-        priority_duplicates = [self.completed[i] for i in range(0, len(self.completed))
-                                    if self.completed[0].get_total_priority()
-                                    == self.completed[i].get_total_priority()]
+        best_priority = self.completed[0].get_total_priority()
+        priority_duplicates = list(filter(lambda cm: cm.get_total_priority() == best_priority, self.completed))
         if self.max_days:
             priority_duplicates.sort(key=attrgetter('schedule.daysTaken'), reverse=True)
         else:
@@ -163,6 +191,8 @@ class Controller:
             density_duplicates = [gap_duplicates[i] for i in range(0, len(gap_duplicates))
                               if gap_duplicates[0].schedule.max_density
                               == gap_duplicates[i].schedule.max_density]
-            return random.choice(density_duplicates)
+            # cache[combination_key] = [density_duplicates, [], []]
+            return density_duplicates
         else:
-            return random.choice(gap_duplicates)
+            # cache[combination_key] = [gap_duplicates, [], []]
+            return gap_duplicates
