@@ -87,7 +87,7 @@ input[type=checkbox]{
 }
 
 #continueBtn[disabled]{
-    border: 1px solid #999999;
+    border: 1px solid #cccccc;
     background-color: #cccccc;
     color: #666666;
 }
