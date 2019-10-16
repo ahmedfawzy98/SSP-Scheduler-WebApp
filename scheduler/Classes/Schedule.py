@@ -7,27 +7,12 @@ class Schedule:
         self.gap_value = 0
         self.max_density = 0
 
-    def check_clash(self, period):
-        for i in range(period.length()):
-            if self.schedule[period.time.time_day][period.time.time_from + i] is not None:
-                return True
-        return False
-
     def add_period(self, period):
         for i in range(period.length()):
             self.schedule[period.time.time_day][period.time.time_from + i] = period
         if not self.days[period.time.time_day]:
             self.daysTaken += 1
             self.days[period.time.time_day] = True
-
-    def add_to_priority(self, value):
-        self.priorityValue += value
-
-    def has_pref_days(self, days):
-        for day in days:
-            if self.days[day]:
-                return False
-        return True
 
     def calculate_gap(self):
         counting = False
@@ -70,14 +55,3 @@ class Schedule:
                     day_density += 1
             if day_density > self.max_density:
                 self.max_density = day_density
-
-    def clone(self, sch):
-        for i in range(6):
-            for j in range(12):
-                self.schedule[i][j] = sch.schedule[i][j]
-
-        # self.priorityValue = sch.priorityValue
-        self.daysTaken = sch.daysTaken
-        for i in range(6):
-            self.days[i] = sch.days[i]
-

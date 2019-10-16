@@ -6,6 +6,7 @@ import sys
 
 cache = {}
 
+
 class Controller:
     def __init__(self):
         self.schedule = Schedule()
@@ -23,10 +24,11 @@ class Controller:
         self.max_days = False
         self.alt_yes = False
         self.preferred_days = []
+        self.nodes_num = 0
 
     def build_tree(self, node, cNum):
-        if cNum != self.courses_num-1:
-            for inst in self.courses[cNum+1].instructors:
+        if cNum != self.courses_num - 1:
+            for inst in self.courses[cNum + 1].instructors:
                 for group in inst.groups:
                     tutsNum = len(group.tutorials)
                     labsNum = len(group.labs)
@@ -35,43 +37,44 @@ class Controller:
                     for iTut in range(len(tutsInd)):
                         for iLab in range(len(labsInd)):
                             # check if the current group doesn't clash with the current tree branch
-                            if not node.check_clash(group,node.schedule,tutsInd[iTut],labsInd[iLab]):
+                            if not node.check_clash(group, tutsInd[iTut], labsInd[iLab]):
                                 # add the group to the current branch
                                 node.add_child(group, tutsInd[iTut], labsInd[iLab])
+                                self.nodes_num += 1
                                 # update the last added child total schedule's priority
-                                node.children[-1].schedule.add_to_priority(
+                                node.children[-1].add_to_priority(
                                     inst.priority +
                                     node.children[-1].parent.get_total_priority())
 
                                 child = node.children[-1]
                                 # If this branch didn't reach the last prioritized course then continue
-                                if cNum+1 < self.last_prio_course:
+                                if cNum + 1 < self.last_prio_course:
                                     self.build_tree(node.children[-1], cNum + 1)
                                 # If this branch has more priority value than the current best then continue
-                                elif child.schedule.priorityValue > self.best_completed[1]:
+                                elif child.priorityValue > self.best_completed[1]:
                                     self.build_tree(node.children[-1], cNum + 1)
                                 # If this branch has the same priority value as the best but less or equal days continue
-                                elif child.schedule.priorityValue == self.best_completed[1]:
+                                elif child.priorityValue == self.best_completed[1]:
                                     if self.max_days:
-                                        if child.schedule.daysTaken >= self.best_completed[0]:
+                                        if child.daysTaken >= self.best_completed[0]:
                                             self.build_tree(node.children[-1], cNum + 1)
                                     else:
-                                        if child.schedule.daysTaken <= self.best_completed[0]:
+                                        if child.daysTaken <= self.best_completed[0]:
                                             self.build_tree(node.children[-1], cNum + 1)
                                 else:
                                     return
 
         else:
             self.completed.append(node)
-            if node.schedule.priorityValue == self.best_completed[1]:
+            if node.priorityValue == self.best_completed[1]:
                 if self.max_days:
-                    if node.schedule.daysTaken > self.best_completed[0]:
-                        self.best_completed[0] = node.schedule.daysTaken
+                    if node.daysTaken > self.best_completed[0]:
+                        self.best_completed[0] = node.daysTaken
                 else:
-                    if node.schedule.daysTaken < self.best_completed[0]:
-                        self.best_completed[0] = node.schedule.daysTaken
-            elif node.schedule.priorityValue > self.best_completed[1]:
-                self.best_completed = [node.schedule.daysTaken, node.schedule.priorityValue]
+                    if node.daysTaken < self.best_completed[0]:
+                        self.best_completed[0] = node.daysTaken
+            elif node.priorityValue > self.best_completed[1]:
+                self.best_completed = [node.daysTaken, node.priorityValue]
             return
 
     def create_schedules(self):
@@ -109,7 +112,6 @@ class Controller:
                 combination_key += course.instructors[0].name
                 combination_key += str(course.instructors[0].priority)
         if combination_key in cache:
-            print(sys.getsizeof(cache[combination_key]))
             self.schedule = random.choice(cache[combination_key][0])
             alt_index = cache[combination_key][0].index(self.schedule)
             self.alternatives = cache[combination_key][1][alt_index]
@@ -117,7 +119,8 @@ class Controller:
             return
         root = Node(None)
         self.build_tree(root, -1)
-        perfect_list = self.filtered_completed(combination_key)
+        print(self.nodes_num)
+        perfect_list = self.filtered_completed()
         perfect_schedules_list = [perfect.schedule for perfect in perfect_list]
         cache[combination_key] = [perfect_schedules_list, [], []]
 
@@ -138,21 +141,18 @@ class Controller:
                         # add the first found all-available schedule and its priority duplicates to completedPriorityD
                         self.priority_duplicates = [self.completed[j + k] for k in range(0, len(self.completed) - j - 1)
                                                     if (self.completed[j].get_total_priority()
-                                                           == self.completed[j+k].get_total_priority()
-                                                               and self.completed[j+k].all_available())]
+                                                        == self.completed[j + k].get_total_priority()
+                                                        and self.completed[j + k].all_available())]
                         break
                 if len(self.priority_duplicates) != 0:
                     self.priority_duplicates.sort(key=attrgetter('schedule.daysTaken'))
-                    # self.alternatives.append(self.priority_duplicates[0].schedule)
+                    self.priority_duplicates[0].build_schedule()
                     cache[combination_key][1][index].append(self.priority_duplicates[0].schedule)
                     if index == 0:
-                        # self.alt_courses.append(self.courses[len(self.courses) - 1 - i].name)
                         cache[combination_key][2].append(self.courses[len(self.courses) - 1 - i].name)
                 else:
-                    # self.alternatives.append(None)
                     cache[combination_key][1][index].append(None)
                     if index == 0:
-                        # self.alt_courses.append(self.courses[len(self.courses) - 1 - i].name)
                         cache[combination_key][2].append(self.courses[len(self.courses) - 1 - i].name)
                 perfect.data.available = True
 
@@ -166,33 +166,30 @@ class Controller:
             self.schedule = None
             return
 
-
-    def filtered_completed(self, combination_key):
-        self.completed.sort(key=attrgetter('schedule.priorityValue'), reverse=True)
+    def filtered_completed(self):
+        self.completed.sort(key=attrgetter('priorityValue'), reverse=True)
         best_priority = self.completed[0].get_total_priority()
         priority_duplicates = list(filter(lambda cm: cm.get_total_priority() == best_priority, self.completed))
         if self.max_days:
-            priority_duplicates.sort(key=attrgetter('schedule.daysTaken'), reverse=True)
+            priority_duplicates.sort(key=attrgetter('daysTaken'), reverse=True)
         else:
-            priority_duplicates.sort(key=attrgetter('schedule.daysTaken'))
+            priority_duplicates.sort(key=attrgetter('daysTaken'))
         days_duplicates = [priority_duplicates[i] for i in range(0, len(priority_duplicates))
-                                if priority_duplicates[0].schedule.daysTaken
-                                == priority_duplicates[i].schedule.daysTaken]
+                           if priority_duplicates[0].daysTaken == priority_duplicates[i].daysTaken]
         preferred_days = [days_duplicates[i] for i in range(0, len(days_duplicates))
-                               if days_duplicates[i].schedule.has_pref_days(self.offdays)]
+                          if days_duplicates[i].has_pref_days(self.offdays)]
+        list(map(lambda node: node.build_schedule(), preferred_days))
         list(map(lambda x: x.schedule.calculate_gap(), preferred_days))
         list(map(lambda x: x.schedule.calc_max_density(), preferred_days))
         preferred_days.sort(key=attrgetter('schedule.gap_value'))
         gap_duplicates = [preferred_days[i] for i in range(0, len(preferred_days))
-                               if preferred_days[0].schedule.gap_value
-                               == preferred_days[i].schedule.gap_value]
+                          if preferred_days[0].schedule.gap_value
+                          == preferred_days[i].schedule.gap_value]
         if self.max_days:
             gap_duplicates.sort(key=attrgetter('schedule.max_density'))
             density_duplicates = [gap_duplicates[i] for i in range(0, len(gap_duplicates))
-                              if gap_duplicates[0].schedule.max_density
-                              == gap_duplicates[i].schedule.max_density]
-            # cache[combination_key] = [density_duplicates, [], []]
+                                  if gap_duplicates[0].schedule.max_density
+                                  == gap_duplicates[i].schedule.max_density]
             return density_duplicates
         else:
-            # cache[combination_key] = [gap_duplicates, [], []]
             return gap_duplicates
