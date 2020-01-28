@@ -84,9 +84,8 @@ def index(request):
                                     "<a href=\"/courses\">here</a>." if credit_hours < 12 else "Too many credit hours taken. At maximum 21 credit hours is allowed " \
                                     "<a href=\"/courses\">here</a>."
                 return render(request, "illegal.html", context= dict)
-            for course in courses:
-                if len(list(Instructor.objects.all().filter(course__pk=course.id))) == 1:
-                    courses.remove(course)
+            # Filtering courses that has only one instructor
+            courses = [course for course in courses if len(list(course.instructor_set.all())) > 1]
             dict["courses"] = courses
             instructors = {}
             for course in courses:
