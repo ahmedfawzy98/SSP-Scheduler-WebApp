@@ -108,6 +108,7 @@ class Controller:
             if course.priority > 0:
                 combination_key += course.instructors[0].name
                 combination_key += str(course.instructors[0].priority)
+            
         if combination_key in cache:
             print(sys.getsizeof(cache[combination_key]))
             self.schedule = random.choice(cache[combination_key][0])
@@ -117,7 +118,11 @@ class Controller:
             return
         root = Node(None)
         self.build_tree(root, -1)
-        perfect_list = self.filtered_completed(combination_key)
+        if len(self.completed) > 0:
+            perfect_list = self.filtered_completed(combination_key)
+        else:
+            self.schedule = None
+            return
         perfect_schedules_list = [perfect.schedule for perfect in perfect_list]
         cache[combination_key] = [perfect_schedules_list, [], []]
 
