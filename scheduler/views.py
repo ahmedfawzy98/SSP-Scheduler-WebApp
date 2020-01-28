@@ -111,8 +111,10 @@ def generate_schedules(request):
     dict = {}
     controller = Controller()
     courses = [course for course in allcourses if course.name in request.session['courses']]
+    start_time = time.time()
     for course in courses:
         course.build()
+    print("Reading database: %s seconds ---" % (time.time() - start_time))
     dict["courses"] = courses
     dict["coursesNum"] = len(courses)
     for course in courses:
