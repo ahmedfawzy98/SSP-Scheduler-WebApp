@@ -124,7 +124,7 @@
                                         {% endfor %}
                                     </select>
                                   </div>
-                                  <div class="pr-form-group">
+                                  <div class="pr-form-group" style="display: none;">
                                     <label for="{{ course.name }}Pr">Priority</label>
                                       <br>
                                     <div class="btn-group pr-select btn-block" role="group" aria-label="Basic example">
@@ -229,7 +229,6 @@
 <script>
 
     $(document).ready(function () {
-        $(".pr-select").parent().hide();
         $(function () {
           $('[data-toggle="tooltip"]').tooltip()
         });
