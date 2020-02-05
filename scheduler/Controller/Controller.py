@@ -108,9 +108,12 @@ class Controller:
             if course.priority > 0:
                 combination_key += course.instructors[0].name
                 combination_key += str(course.instructors[0].priority)
+        combination_key += str(self.max_days)
+        combination_key += str(self.offdays)
+        combination_key += str(self.alt_yes)
             
         if combination_key in cache:
-            print(sys.getsizeof(cache[combination_key]))
+            # print(sys.getsizeof(cache[combination_key]))
             self.schedule = random.choice(cache[combination_key][0])
             alt_index = cache[combination_key][0].index(self.schedule)
             self.alternatives = cache[combination_key][1][alt_index]
