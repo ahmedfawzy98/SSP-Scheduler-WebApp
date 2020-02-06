@@ -8,6 +8,8 @@ import copy
 from django.template.loader import render_to_string
 from scheduler.models import *
 from django.db.models import Q
+from django.views.decorators.http import require_http_methods
+
 
 import time
 
@@ -107,6 +109,7 @@ def index(request):
 
 
 # @gzip_page
+@require_http_methods(["POST"])
 def generate_schedules(request):
     allcourses = list(Course.objects.all().filter(Q(department=request.session['department']) | Q(term=11)))
     priority = []

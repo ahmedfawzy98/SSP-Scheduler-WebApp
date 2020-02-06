@@ -19,7 +19,7 @@ from django.conf.urls import url
 from scheduler import views
 
 urlpatterns = [
-    path('admin/', admin.site.urls),
+    #path('admin/', admin.site.urls),
     path('', views.select_department, name='select_department'),
     path('courses/', views.select_courses, name='select_courses'),
     path('schedule/', views.index, name='index'),
