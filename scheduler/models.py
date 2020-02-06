@@ -64,6 +64,7 @@ class Lecture(models.Model):
     periodType = models.CharField(max_length=256, default=None, blank=True, null=True)
     group = models.ForeignKey(Group, on_delete=models.CASCADE, default=None, blank=True, null=True)
     time = None
+    groupNum = None
 
     def length(self):
         return self.time.time_to - self.time.time_from + 1
@@ -76,6 +77,7 @@ class Lecture(models.Model):
 
     def build(self):
         self.time = list(self.time_set.all())[0]
+        self.groupNum = self.group.groupNum
 
 
 class ExLecture(models.Model):
@@ -83,6 +85,7 @@ class ExLecture(models.Model):
     lecture = models.ForeignKey(Lecture, on_delete=models.CASCADE, default=None, blank=True, null=True)
     periodType = 'Lecture'
     time = None
+    groupNum = None
 
     def length(self):
         return self.time.time_to - self.time.time_from + 1
@@ -95,6 +98,7 @@ class ExLecture(models.Model):
 
     def build(self):
         self.time = list(self.time_set.all())[0]
+        self.groupNum = self.lecture.group.groupNum
 
 
 class Tutorial(models.Model):

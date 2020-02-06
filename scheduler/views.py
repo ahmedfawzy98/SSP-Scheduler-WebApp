@@ -26,7 +26,9 @@ def select_courses(request):
     courses = Course.objects.all().filter(Q(department=request.session['department']) | Q(term=11))
     term_numbers = list(dict.fromkeys([x.term for x in courses]))
     term_numbers.sort()
-    return render(request, 'index.html', context={"courses": courses, 'term_numbers': term_numbers})
+    response = render(request, 'index.html', context={"courses": courses, 'term_numbers': term_numbers})
+    response["Cache-Control"] = "no-cache, no-store, must-revalidate"
+    return response
 
 
 def index(request):
@@ -179,13 +181,19 @@ def generate_schedules(request):
                     if sch[i][j].periodType == "Lecture":
                         schedules_html[ind][i][j] = "<td bgcolor='#FFE9E7' colspan='" + str(
                             sch[i][j].length()) + "'>" + sch[i][j].courseName() + "<hr>" + sch[i][
-                                                       j].instName() + "</td>"
+                                                       j].instName() +" - G"+ str(sch[i][j].groupNum) + "</td>"
                     elif sch[i][j].periodType == "Tut":
-                        schedules_html[ind][i][j] = "<td bgcolor='#d1e7f7' >" + sch[i][
-                            j].courseName() + "<hr>" + sch[i][j].instName() + "</td>"
+                        # schedules_html[ind][i][j] = "<td bgcolor='#d1e7f7' >" + sch[i][
+                        #     j].courseName() + "<hr>" + sch[i][j].instName() + "</td>"
+                        schedules_html[ind][i][j] = "<td bgcolor='#d1e7f7' colspan='" + str(
+                            sch[i][j].length()) + "'>" + sch[i][j].courseName() + "<hr>" + sch[i][
+                                                       j].instName() + "</td>"
                     else:
-                        schedules_html[ind][i][j] = "<td bgcolor='#BDFFFF'>" + sch[i][
-                            j].courseName() + "<hr>" + sch[i][j].instName() + "</td>"
+                        # schedules_html[ind][i][j] = "<td bgcolor='#BDFFFF'>" + sch[i][
+                        #     j].courseName() + "<hr>" + sch[i][j].instName() + "</td>"
+                        schedules_html[ind][i][j] = "<td bgcolor='#BDFFFF' colspan='" + str(
+                            sch[i][j].length()) + "'>" + sch[i][j].courseName() + "<hr>" + sch[i][
+                                                       j].instName() + "</td>"
                     for jj in range(1, sch[i][j].length()):
                         schedules_html[ind][i][j + jj] = ""
                     j += sch[i][j].length()

@@ -111,7 +111,9 @@ class Controller:
         combination_key += str(self.max_days)
         combination_key += str(self.offdays)
         combination_key += str(self.alt_yes)
-            
+        
+        
+
         if combination_key in cache:
             # print(sys.getsizeof(cache[combination_key]))
             self.schedule = random.choice(cache[combination_key][0])
@@ -128,6 +130,9 @@ class Controller:
             return
         perfect_schedules_list = [perfect.schedule for perfect in perfect_list]
         cache[combination_key] = [perfect_schedules_list, [], []]
+
+        if len(cache) > 200:
+            cache.clear()
 
         ###
         # Alternative schedules code
