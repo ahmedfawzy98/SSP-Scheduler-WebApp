@@ -131,9 +131,6 @@ class Controller:
         perfect_schedules_list = [perfect.schedule for perfect in perfect_list]
         cache[combination_key] = [perfect_schedules_list, [], []]
 
-        if len(cache) > 200:
-            cache.clear()
-
         ###
         # Alternative schedules code
         ###
