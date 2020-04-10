@@ -1,5 +1,5 @@
 # SSP-Scheduler
-SSP-Scheduler is a website help in creating the desired schedules with all wanted preferences in no time.<br>
+SSP-Scheduler is a website that helps in creating the desired schedules with all wanted preferences in no time.<br>
 [SSP-Scheduler](http://google.com)
 
 ## Table of Contents
@@ -25,7 +25,7 @@ So main motives that derived us to develop this application:
 [Bootstarp](https://getbootstrap.com)
 
 ## Features
-* Priorities of instructors from avoid this instructor to give this instructor highest priority.
+* Priorities of instructors from avoid this instructor to give this instructor the highest priority.
 * Schedule density minimum or maximum days during the week.
 * Prefered days off that scheduler will try to keep them empty.
 * Alternative schedule for each course in the best schedule to provide backup schedules in case of not able to register the best schedule
