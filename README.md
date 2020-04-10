@@ -1,6 +1,6 @@
 # SSP-Scheduler
 SSP-Scheduler is a website that helps in creating the desired schedules with all wanted preferences in no time.<br>
-[SSP-Scheduler](http://google.com)
+[SSP-Scheduler](https://sspscheduler.xyz/)
 
 ## Table of Contents
 * [Motivation](#motivation)
