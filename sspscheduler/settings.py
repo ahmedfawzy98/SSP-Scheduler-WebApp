@@ -27,7 +27,7 @@ SECRET_KEY = 'ed@xj@wo5^lpn%y_er8&y@+u%p0gf)uv0odf5hh6%e80-k$3n0'
 # DEBUG = False # for production/deployment environment
 DEBUG = True # for development environment
 
-ALLOWED_HOSTS = ['134.209.205.87','127.0.0.1']
+ALLOWED_HOSTS = ['127.0.0.1']
 
 
 # Application definition
