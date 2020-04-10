@@ -28,7 +28,7 @@
 {#cards section#}
 <div class="container">
     <div class="row mb-3">
-        <div class="col-md-12">
+        <div class="col-md-6">
             <form method="post" action="courses/">
                 {% csrf_token %}
                 <div class="card">
@@ -36,6 +36,19 @@
                         <div class="card-body">
                             <h2 class="card-title">CCE</h2>
                             <p class="card-subtitle">Computer and Communication Engineering</p>
+                        </div>
+                    </button>
+                </div>
+            </form>
+        </div>
+        <div class="col-md-6">
+            <form method="post" action="courses/">
+                {% csrf_token %}
+                <div class="card">
+                    <button class="btn btn-outline-dark text-center" type="submit" name="department" value="GPE" disabled>
+                        <div class="card-body">
+                            <h2 class="card-title">GPE</h2>
+                            <p class="card-subtitle">Gas and Petrochemicals Engineering</p>
                         </div>
                     </button>
                 </div>
@@ -71,20 +84,8 @@
         </div>
     </div>
     <div class="row mb-3">
-        <div class="col-md-6">
-            <form method="post" action="courses/">
-                {% csrf_token %}
-                <div class="card">
-                    <button class="btn btn-outline-dark text-center" type="submit" name="department" value="GPE" disabled>
-                        <div class="card-body">
-                            <h2 class="card-title">GPE</h2>
-                            <p class="card-subtitle">Gas and Petrochemicals Engineering</p>
-                        </div>
-                    </button>
-                </div>
-            </form>
-        </div>
-        <div class="col-md-6">
+        
+        <div class="col-md-12">
             <form method="post" action="courses/">
                 {% csrf_token %}
                 <div class="card">
