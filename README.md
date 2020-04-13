@@ -45,6 +45,12 @@ python manage.py runserver
 [Bootstarp](https://getbootstrap.com)\
 [jQuery](https://jquery.com/)
 
+## TODO
+* Creating a C/C++ library for schedules generation.
+* Using multithreading to improve the generation performance.
+* Auto schedule registration functionality.
+
+
 ## Related projects
 [Database-Filler](https://github.com/ahmedfawzy98/Database-filler) is a sub-project that responsible for feeding the SSP-Scheduler with the needed data to work with.\
 [SSP-Scheduler old](https://github.com/amohamed97/SSPScheduler) is the first version of this project that built with Java.
