@@ -8,7 +8,7 @@ SSP-Scheduler is a web application that helps students in creating their desired
   - [Features](#features)
   - [Run locally](#run-the-app-locally)
   - [Built with](#built-with)
-  - [Sub-projects](#sub-projects)
+  - [Related projects](#related-projects)
 
 ## Motivation
 By developing this application we solved a big problem for us, we were spending a lot of time at the beginning of each semester in creating our schedules with our preferences like shrinking the gaps between learning slots during the day, choosing specific instructors and many others.\
@@ -52,6 +52,7 @@ python manage.py runserver
 [jQuery](https://jquery.com/)
 
 
-## Sub-projects
-[Database-Filler](https://github.com/ahmedfawzy98/Database-filler)
+## Related projects
+[Database-Filler](https://github.com/ahmedfawzy98/Database-filler) is a sub-project that responsible for feeding the SSP-Scheduler with the needed data to work with.\
+[SSP-Scheduler old](https://github.com/amohamed97/SSPScheduler) is the first version of this project that built with Java.
 
