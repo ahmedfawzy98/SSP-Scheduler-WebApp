@@ -1,6 +1,5 @@
-# [SSP-Scheduler](https://www.sspscheduler.xyz)
+# SSP-Scheduler
 SSP-Scheduler is a web application that helps students in creating their desired schedules with many preferences in no time.
-
 
 ## Table of Contents
   - [Motivation](#motivation)
@@ -31,26 +30,20 @@ So the main motives that derived us to develop this application was:
 
 ## Run the app locally
 ### Initial Setup
-
 Install dependencies:
-
 ```
 pip install -r requirements.txt
 ```
 
 ### Run App
-
 ```
 python manage.py runserver
 ```
-
-
 
 ## Built with
 [Django](https://www.djangoproject.com)\
 [Bootstarp](https://getbootstrap.com)\
 [jQuery](https://jquery.com/)
-
 
 ## Related projects
 [Database-Filler](https://github.com/ahmedfawzy98/Database-filler) is a sub-project that responsible for feeding the SSP-Scheduler with the needed data to work with.\
