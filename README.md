@@ -17,7 +17,7 @@ So the main motives that derived us to develop this application was:
 * Level up our problem-solving, coding and software development skills and push them further.
 
 ## Demo
-**You can use the app using [this link](https://www.sspscheduler.xyz)**
+**You can use the app using [this link](https://sspscheduler.herokuapp.com/)**
 
 ![](static/images/scheduler.gif)
 
